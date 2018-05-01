@@ -1,9 +1,3 @@
-# REWIND - Gramophone
-
-## Description
-
-## Installation
-
 La cartella "gramophone" contiene tutti i file necessari a far funzionare il 
 grammofono con XAMPP (MySQL + Apache).
 
@@ -19,5 +13,3 @@ Installazione:
   allegato.
   
 FINE.
-
-## How it works

@@ -1,0 +1,109 @@
+/* ----------Equalizer----------*/
+
+div#equalizerDeck{
+	
+	position: relative;
+	margin-left: 10px;
+	margin-top: 10px; 
+	width: 920px;
+	height: 550px; 
+	border-style:solid;
+	border-width: 5px;
+	border-color: #000000;
+	border-radius: 10px;
+	background-image: url("../images/Albiswerk.png") ;	
+}
+
+div#activeButton{
+	width: 600px;
+	height: 70px; 
+}
+
+#eqButton{
+	float:right;
+	width: 50px;
+	height:50px;
+	margin-top: 10px;
+	margin-right: 30px;
+	border-radius: 100%;
+	font-size: 80%;
+	padding: 11px;
+	border-color: red;
+	border-bottom-width: 2px;
+	border-style: solid;
+	background-color: black;
+}
+
+div#equalizer{
+	/*margin-top: 80px;*/
+	height: 550px;
+}
+
+.eqChannelsEven{
+	margin-top: 85px; /*21*/
+	float: left;
+	width:29px;
+	height: 400px;
+}
+
+.eqChannelsOdd{
+	margin-top: 85px;
+	float: left;
+	width:29px;
+	height: 400px;
+}
+
+div#channel0{
+	margin-left: 100px;*/
+}
+
+input[type=range]:active::-moz-range-thumb{
+	background: none;
+}
+input[type=range]:active::-webkit-slider-thumb{
+	background: none;
+}
+
+.rangeChannels{
+	width: 354px;
+	height: 0px;
+	margin-left: 28px;
+	margin-top:0px;
+	/*vertical-align:middle;	
+	-webkit-appearance: none;
+	/*-moz-range-thumb: url("http://localhost/phi/jumiadd/handle.png");
+	-webkit-slider-thumb: url("http://localhost/phi/jumiadd/handle.png");*/
+	background-color: none;
+    border-radius: 15px;
+	transform-origin: left bottom;
+	-webkit-transform-origin: left bottom;
+	-ms-transform-origin: left bottom;
+	transform: rotate(90deg);
+	-ms-transform: rotate(90deg); /* IE 9 */
+	-webkit-transform: rotate(90deg); /* Safari and Chrome */
+}
+
+input[type='range'].rangeChannels {
+ -webkit-appearance: none; 
+ background-color: none;
+}
+/* --- webkit --- */
+input[type='range'].rangeChannels::-webkit-slider-thumb {
+ width: 54px; height: 26px; -webkit-appearance: none;
+ background-image: url("../images/handleAlb.png");
+ background-size: contain;
+}
+/* --- gecko --- */
+input[type='range'].rangeChannels::-moz-range-thumb {
+ width: 54px; height: 26px; border-radius: 0; border: 0;
+ background-image: url("../images/handleAlb.png");
+ background-size: contain;
+}
+/* --- gecko --- */
+input[type='range'].rangeChannels::-moz-range-track {
+ width: 0;
+}
+
+#eqMenu{
+	height: 570px;
+}

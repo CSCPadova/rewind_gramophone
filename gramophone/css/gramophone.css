@@ -1,0 +1,364 @@
+@CHARSET "UTF-8";
+
+body{
+	min-width: 960px;
+}
+
+.item-page{
+	width: 960px;
+}
+
+div#info{
+	height:50px;
+	width: 50px;
+	margin-left: 880px;
+	margin-top:20px;
+	background-image: url("../images/info.png") ;
+	cursor: pointer;
+	position: absolute;
+	z-index: 90;
+}
+/* ----------PLAYER---------- */
+
+div#player{
+	
+	position: relative;
+	margin-left: 30px;
+	width: 900px;
+	height: 700px; 
+	border-style:solid;
+	border-width: 10px;
+	border-color:/*#1F1F1F;*/#000000;
+	background-image: url("../images/base.png") ;
+}
+
+div#disco{
+	float: left;
+	height: 550px;
+	width: 900px;
+}
+
+div#vinylContainer{
+	float:left;
+	height: 550px;
+	width: 900px;
+	/*margin-top: 20px;
+	margin-left: 20px;*/
+}
+
+/*div#vinylLight{
+	position:relative;
+	margin-top: 145px;
+	margin-left: 195px;
+	height: 410px;
+	width: 410px;
+	background-image: url("../images/vinyl_lights.png") ;
+	background-size: 410px;
+	background-repeat:no-repeat;
+	background-position:center;
+	z-index: 4;
+}*/
+
+div#vinyl{
+	display: none;
+	float: left;
+	margin-top: 145px;
+	margin-left: 45px;
+	height: 410px;
+	width: 410px;
+	background-image: url("../images/vinyl.png") ;
+	
+	background-size: 410px;
+	background-repeat:no-repeat;
+	background-position:center;
+	vertical-align: middle;
+	border-radius:100%;
+	z-index: 3;
+}
+
+div.discoRotation{
+	-moz-animation:0.83s rotate;-o-animation:0.83s rotate; 
+ 	-webkit-animation:0.83s rotate;-ms-animation:0.83s rotate;       
+ 	animation:0.83s rotate;
+ 	-moz-animation-iteration-count:infinite;
+ 	-webkit-animation-iteration-count:infinite; 
+ 	-o-animation-iteration-count:infinite;
+ 	-ms-animation-iteration-count:infinite;
+ 	animation-iteration-count:infinite;
+ 	-moz-animation-timing-function:linear;
+ 	-webkit-animation-timing-function:linear;
+ 	-o-animation-timing-function:linear;
+ 	-ms-animation-timing-function:linear;
+ 	animation-timing-function:linear;
+ 	-webkit-animation-play-state: paused;
+ 	animation-play-state: paused;
+}
+
+p#label{
+	border-width: 0px;
+	padding: 0px;
+	height: 100px;
+	width: 100px;
+	margin-top: 300px;
+	margin-left: 370px;
+	text-align: center;
+	font-size: 12px;
+	font-variant: small-caps;
+	line-height: 35px;
+	font-weight: bold;
+}
+
+div#arm{
+	position: relative;
+	margin-left: 625px;
+	margin-top:150px;
+	width: 150px;
+	height: 500px;
+	/*background-color: black;*/
+	background-image: url("../images/arm.png");
+	background-repeat:no-repeat;
+	background-position:center top; 
+	z-index: 5;
+	-webkit-transform-origin: 125px top; /* h-offset, v-offset */
+    -moz-transform-origin: 125px top;
+    -o-transform-origin: 125px top;
+    -ms-transform-origin: 125px top;
+    transform-origin: 125px top;
+    transform: rotate(95deg);
+	-ms-transform: rotate(95deg); /* IE 9 */
+	-webkit-transform: rotate(95deg); /* Safari and Chrome */
+    
+}
+
+div#changeRotation{
+	float:left;
+	width: 900px;
+	height:60px;
+	margin-left: 348px;
+	margin-top: 19px;
+}
+
+#changeRotationInput{
+	width: 104px;
+	height: 0px;
+	-webkit-appearance: none;
+	background-color: none;
+    border-radius: 15px;
+    cursor: move;
+}
+
+input[type=range]:active::-moz-range-thumb{
+	background: none;
+}
+input[type=range]:active::-webkit-slider-thumb{
+	background: none;
+}
+
+input[type='range']#changeRotationInput {
+ -webkit-appearance: none; 
+ background-color: none;
+}
+/* --- webkit --- */
+input[type='range']#changeRotationInput::-webkit-slider-thumb {
+ width: 24px; height: 48px; -webkit-appearance: none;
+ background-image: url("../images/rotCur.png");
+ background-size: contain;
+}
+/* --- gecko --- */
+input[type='range']#changeRotationInput::-moz-range-thumb {
+ width: 24px; height: 48px; border-radius: 0; border: 0;
+ background-image: url("../images/rotCur.png");
+ background-size: contain;
+}
+/* --- gecko --- */
+input[type='range']#changeRotationInput::-moz-range-track {
+ width: 0;
+}
+
+div#temp{
+	display: none;
+}
+
+div.comands{
+	width: 200px;
+	height: 60px;
+	background-color: #CCCCCC;
+	text-align: center;
+}
+
+ div#playDiv{
+	float: left;
+	margin-top: 300px;
+	margin-left:145px;
+	width: 5px;
+	height: 5px;
+	background-color:transparent;
+} 
+
+#playRange{
+	margin-left: 28px;
+	width: 100px;
+	height: 0px;
+	-webkit-appearance: none;
+	vertical-align:middle;	
+	background-color: none;
+    border-radius: 15px;
+	transform-origin: left bottom;
+	-webkit-transform-origin: left bottom;
+	-ms-transform-origin: left bottom;
+	transform: rotate(90deg);
+	-ms-transform: rotate(90deg); /* IE 9 */
+	-webkit-transform: rotate(90deg); /* Safari and Chrome */
+	cursor: move;
+}
+
+#pauseRange{
+	/* margin-left: 28px;
+	width: 100px;
+	height: 0px;
+	-webkit-appearance: none;
+	background-color: transparent;
+	vertical-align:middle;	
+    border-radius: 15px;
+	transform-origin: left bottom;
+	-webkit-transform-origin: left bottom;
+	-ms-transform-origin: left bottom;
+	transform: rotate(90deg); */
+	-ms-transform: rotate(90deg); /* IE 9 */
+	-webkit-transform: rotate(90deg); /* Safari and Chrome */
+	/* cursor: move; */
+	background-color:transparent;
+	color:transparent;
+	display:none;
+}
+
+/* --- webkit --- */
+input[type='range']#pauseRange::-webkit-slider-thumb {
+ width: 50px; height: 50px; -webkit-appearance: none;
+ /* background-image: url("../images/pause.png"); */
+
+}
+/* --- gecko --- */
+input[type='range']#pauseRange::-moz-range-thumb {
+ width: 50px; height: 50px; border-radius: 0; border: 0;
+/*  background-image: url("../images/pause.png"); */
+
+}
+/* --- gecko --- */
+input[type='range']#pauseRange::-moz-range-track {
+ width: 0;
+}
+
+/* --- webkit --- */
+input[type='range']#playRange::-webkit-slider-thumb {
+ width: 50px; height: 50px; -webkit-appearance: none;
+ background-image: url("../images/play.png");
+ background-color: transparent;
+}
+/* --- gecko --- */
+input[type='range']#playRange::-moz-range-thumb {
+ width: 50px; height: 50px; border-radius: 0; border: 0;
+ -moz-appearance: none;
+ background-image: url("../images/play.png");
+ background-color: transparent;
+}
+/* --- gecko --- */
+input[type='range']#playRange::-moz-range-track {
+  background-color: transparent;
+ width: 0;
+}
+
+/*BUFFERING*/
+
+#rotate{
+	 width:120px;
+	 height:120px;
+	 border:2px solid #ccc;
+	 border-radius:100%;
+	 border-color:#008f87 #ccc #ccc #ccc;
+	 -moz-animation:2s rotate;-o-animation:2s rotate; 
+	 -webkit-animation:2s rotate;-ms-animation:2s rotate;       
+	 animation:2s rotate;
+	 -moz-animation-iteration-count:infinite;
+	 -webkit-animation-iteration-count:infinite; 
+	 -o-animation-iteration-count:infinite;
+	 -ms-animation-iteration-count:infinite;
+	 animation-iteration-count:infinite;
+	 -moz-animation-timing-function:linear;
+	 -webkit-animation-timing-function:linear;
+	 -o-animation-timing-function:linear;
+	 -ms-animation-timing-function:linear;
+	 animation-timing-function:linear;
+ }
+@keyframes rotate{
+	from{transform:rotate(0deg);} 
+	to{transform:rotate(360deg);}
+}
+	@-moz-keyframes rotate{
+	from{-moz-transform:rotate(0deg);} 
+	to{-moz-transform:rotate(360deg);}
+}
+@-webkit-keyframes rotate{
+	from{-webkit-transform:rotate(0deg);} 
+	to{-webkit-transform:rotate(360deg);}
+}
+@-o-keyframes rotate{
+	from{-o-transform:rotate(0deg);} 
+	to{-o-transform:rotate(360deg);}
+}
+@-ms-keyframes rotate{
+	from{-ms-transform:rotate(0deg);} 
+	to{-ms-transform:rotate(360deg);}
+}
+
+/* ---INITITIAL ANIMATION---*/
+.initialArmAnimation{
+	-moz-animation:2s rotate;-o-animation:2s rotate; 
+	-webkit-animation:2s rotate;-ms-animation:2s rotate;       
+	animation:2s rotate;
+	animation-name:init;
+	-webkit-animation-name:init;
+	 /*-moz-animation-iteration-count:1;
+	 -webkit-animation-iteration-count:1; 
+	 -o-animation-iteration-count:1;
+	 -ms-animation-iteration-count:1;
+	 animation-iteration-count:1;*/
+	 -moz-animation-timing-function:linear;
+	 -webkit-animation-timing-function:linear;
+	 -o-animation-timing-function:linear;
+	 -ms-animation-timing-function:linear;
+	 animation-timing-function:linear;
+	/* -webkit-animation-play-state: paused;
+ 	animation-play-state: paused;*/
+ 	-webkit-transform-origin: center top; /* h-offset, v-offset */
+    -moz-transform-origin: center top;
+    -o-transform-origin: center top;
+    -ms-transform-origin: center top;
+    transform-origin: center top;
+    -webkit-animation-fill-mode:forwards; /*Chrome 16+, Safari 4+*/
+   -moz-animation-fill-mode:forwards; /*FF 5+*/
+   -o-animation-fill-mode:forwards; /*Not implemented yet*/
+   -ms-animation-fill-mode:forwards; /*IE 10+*/
+   animation-fill-mode:forwards;
+}
+
+@keyframes init{
+	from{transform:rotate(95deg);} 
+	to{transform:rotate(89deg);}
+}
+@-moz-keyframes init{
+	from{-moz-transform:rotate(95deg);} 
+	to{-moz-transform:rotate(89deg);}
+}
+@-webkit-keyframes init{
+	from{-webkit-transform:rotate(95deg);} 
+	to{-webkit-transform:rotate(89deg);}
+}
+@-o-keyframes init{
+	from{-o-transform:rotate(95deg);} 
+	to{-o-transform:rotate(89deg);}
+}
+@-ms-keyframes init{
+	from{-ms-transform:rotate(95deg);} 
+	to{-ms-transform:rotate(89deg);}
+}

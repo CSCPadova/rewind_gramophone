@@ -1,0 +1,171 @@
+/*----------titles----------*/
+
+.title{
+	display: none;
+}
+
+.openPartTitle{
+	width: 940px;
+	margin-left: 10px;
+}
+
+div.partTitle{
+	margin-left: 30px;
+	width: 920px;
+	height: 50px;
+	margin-top: 15px;
+	color: white;
+	background-color: black;
+	font-variant: small-caps;
+	font-size: 30px;
+	/*padding-top: 5px;
+	/*
+	border-color: black;
+	border-width: 5px;
+	border-style: solid;*/
+	/*border-radius: 5px;*/
+	cursor:pointer;
+}
+
+.menuPart{
+	display: none;
+	width:940px;
+	margin-left: 10px;
+	margin-top: 10px;
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-bottom-left-radius: 10px;
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	border-top-width: 0px;
+	border-right-width: 0px;
+}
+
+.openPart{
+	
+	margin-top:15px;
+	
+	margin-left: 862px;
+	width: 37px;
+	height: 20px;
+	background-image: url("../images/goDownWhite.png");
+}
+
+.pads{
+	
+	margin-left: 850px;
+	width: 37px;
+	height: 2px;
+	
+}
+
+.titleMenuDiv{
+	margin-top:15px;
+	margin-left: 15px;
+	float:left;
+}
+
+.menuControlPart{
+	display: none;
+	margin-left: 5px;
+	margin-top: 5px;
+	/*
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-bottom-left-radius: 10px;
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	border-top-width: 0px;
+	border-right-width: 0px;*/
+}
+
+.controlsSubTitle {
+	width: 896px;
+	height: 40px;
+	margin-top: 15px;
+	margin-left: 45px;
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 5px;
+	cursor:pointer;
+	color: black;
+	background-color: white;
+	font-variant: small-caps;
+	font-size: 15px;
+}
+
+.controlsSubMenu{
+	width:890px;
+	display: none;
+	margin-left: 50px;
+	margin-top: 5px;
+	-webkit-border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	border-bottom-left-radius: 10px;
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	border-top-width: 0px;
+	border-right-width: 0px;
+}
+
+.openSubPart{
+	margin-top:15px;
+	margin-left: 840px;
+	width: 37px;
+	height: 20px;
+	background-image: url("../images/goDownBlack.png");
+}
+
+.titleSubMenuDiv{
+	margin-top:10px;
+	margin-left: 15px;
+	float:left;
+}
+
+.eqPreset{
+	height: 30px;
+	margin-top: 10px;
+	margin-left: 10px;
+	border-bottom: 1px solid black;
+	font-variant: small-caps;
+}
+
+.customRangeContainer{
+	float:left;
+	width: 250px;
+	text-align: center;
+	margin-top: 10px;
+}
+
+#changeEqualizationFilter{
+	width: 900px;
+	height: 130px;
+	margin-top: 10px;
+	margin-left: 10px;
+	font-variant: small-caps;
+	
+}
+
+.rotPreset{
+	height: 30px;
+	margin-top: 10px;
+	margin-left: 10px;
+	border-bottom: 1px solid black;
+	font-variant: small-caps;
+}
+
+.hornPreset{
+	height: 30px;
+	margin-top: 10px;
+	margin-left: 10px;
+	border-bottom: 1px solid black;
+	font-variant: small-caps;
+}
+
+.lastPreset{
+	border-bottom: 0px; 
+}

@@ -1,0 +1,107 @@
+/*----------SONGDB----------*/
+
+div#dbMenu{
+	position: relative;
+}
+
+div#songDb{ 
+	position: relative;
+}
+
+.trackLoaderContainer{
+	font-variant:small-caps;
+	text-align: center;
+	margin-left:10px;
+	width: 920px;
+	height: 100px;
+	/*border-bottom-width: 5px;
+	border-top-width:5px; /*5
+	border-left-width: 5px;
+	border-right-width: 5px;
+	border-color: black;
+	border-style: solid;*/
+	margin-bottom: 10px;
+	-webkit-border-top-left-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	border-top-left-radius: 10px;
+}
+
+
+
+.firstRow{
+	height: 40px;
+	width: 920px;
+	/*border-bottom-width: 1px;
+	border-top-width: 0px;
+	border-color: black;
+	border-style: solid;*/
+	
+}
+
+.firstR{
+	height: 40px;
+	float: right;
+	width: 735px;
+	line-height: 40px;
+	/*border-right-width: 0px;
+	border-color: black;
+	border-style: solid;*/
+	background-color: silver;
+	
+}
+
+div.trackLoaderButton{
+	width: 185px;
+	height: 40px;
+	background-color: black;
+	color:white;
+	cursor: pointer;
+	line-height: 40px;
+	
+	/*border-right-width: 1px;
+	border-color: black;
+	border-style: solid;*/
+}
+
+div.trackLoaderButton:HOVER{
+	font-size: 120%;
+}
+
+
+tr.secondRow{
+	height: 30px;
+}
+
+tr.secondRow td{
+	width: 184px;
+	/*border-width:1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-color: black;
+	border-style: solid;*/
+	
+}
+
+tr.thirdRow{
+	height: 30px;
+}
+
+tr.thirdRow td{
+	width: 184px;
+	width: 184px;
+	/*border-width:1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-color: black;
+	border-style: solid;*/
+}
+
+/*----db2------*/
+#db2Menu{
+	width: 880px;
+	margin-bottom: 10px;
+}
+
+#songDB2Title{
+	margin-bottom: 10px;
+}

@@ -1,0 +1,60 @@
+@CHARSET "ISO-8859-1";
+
+
+
+.styled-select select{
+background: transparent;
+	width: 268px;
+   	padding: 5px;
+   	font-size: 16px;
+   	border: 1px solid #ccc;
+   	height: 34px;
+}
+
+.styled-select {
+	width: 240px;
+   	height: 34px;
+   	overflow: hidden;
+   	background: url(../images/download.png) no-repeat right #FFFFFF;
+}
+
+h2.download{
+	height: 22px;
+	font-family: arial;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+h3.download{
+	height: 20px;
+	font-family: arial;
+	font-size: 16px;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.simple-box-mod1 {
+	text-align: center;
+    background-color: #1F1F1F;
+    border: 1px solid #E7E7E7;
+    color: #777777;
+    margin: 15px 0;
+    padding: 8px 35px 8px 14px;
+    font-family: 'CabinMedium',sans-serif;
+    text-transform: uppercase;
+    transition: all 400ms linear 0s;
+    cursor: pointer;
+    line-height: normal;
+    font-size: 100%;
+    vertical-align: middle;
+    
+}
+
+body{
+	min-width: 540px;
+}
+
+video{
+	width: 450px;
+	height: 253px;
+}
