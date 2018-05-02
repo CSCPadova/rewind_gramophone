@@ -2,7 +2,7 @@
 
 ## Description
 
-Simulazione grammofono tramite Web Audio Api 
+Simulazione grammofono tramite Web Audio API 
 
 ## Installation
 
