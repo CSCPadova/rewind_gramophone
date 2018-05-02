@@ -20,3 +20,7 @@ grammofono con XAMPP (MySQL + Apache).
   
 
 ## How it works
+
+Per visualizzare il grammofono è necessario collegarsi al seguente link:
+
+* http://localhost/gramophone/gramoPlayer.php
