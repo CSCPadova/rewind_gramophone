@@ -2,22 +2,21 @@
 
 ## Description
 
+Simulazione grammofono tramite Web Audio Api 
+
 ## Installation
 
 La cartella "gramophone" contiene tutti i file necessari a far funzionare il 
 grammofono con XAMPP (MySQL + Apache).
 
-Installazione:
--------------
 
-> Posizionare la cartella: "gramophone", all'interno della cartella: "htdocs"
+1. Posizionare la cartella: "gramophone", all'interno della cartella: "htdocs"
   di XAMPP.
   
-> creare un nuovo database tramite phpmyadmin di nome: "im"
+2. Creare un nuovo database tramite phpmyadmin di nome: "im"
 
-> creare una nuova tabella di nome: "phi_gram" utilizzando il file: "dump.sql"
+3. Creare una nuova tabella di nome: "phi_gram" utilizzando il file: "dump.sql"
   allegato.
   
-FINE.
 
 ## How it works
