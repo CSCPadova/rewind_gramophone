@@ -28,11 +28,13 @@ GramophoneTools.prototype.play = function(){
 		{
 			pauseToPlay();
 			gram.playDisk();
+			
 		}
 		else
 		{
 			playToPause();
 			stopArmAnimation();
+			
 		}
 		
 	
@@ -333,6 +335,7 @@ playToPause = function(){
 	$a("#play").rotate({animateTo:0});
 	this.playState = false;
 	console.log("pause");
+	timer.pause();
 
 };
 

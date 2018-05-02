@@ -226,6 +226,7 @@ Gramophone.prototype.playDisk = function(){
 					}, 2000);
 					console.log("1 start angle"+this.STARTANGLE+ "current angle:"+this.armCurrentAngle);
 				this.moveArm(this.STARTANGLE, this.STARTDISKANGLE, 2000,0);
+					timer.start();
 			}
 			else{
 				
@@ -235,6 +236,7 @@ Gramophone.prototype.playDisk = function(){
 				
 				// call play function
 				   this.play();
+				   	timer.start();
 				
 			}
 		}

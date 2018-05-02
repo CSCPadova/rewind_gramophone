@@ -362,3 +362,10 @@ input[type='range']#playRange::-moz-range-track {
 	from{-ms-transform:rotate(95deg);} 
 	to{-ms-transform:rotate(89deg);}
 }
+
+#timer{
+	position:relative;
+	top:10px;
+	text-align:center;
+	font-size: 21px;
+}

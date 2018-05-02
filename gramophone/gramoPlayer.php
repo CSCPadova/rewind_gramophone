@@ -21,6 +21,9 @@
 <script type = "text/javascript" src = "./jquery/jquery-1.12.4.js"></script>
 <script type = "text/javascript" src = "./jquery/jquery-ui.js"></script>
 <script type = "text/javascript" src = "./jquery/jQueryRotateCompressed.js"></script>
+
+<script src="./js/easytimer/easytimer.min.js"></script>
+
 <link rel="stylesheet" href="./css/jquery-ui.css">
 <script type = "text/javascript" src = "./js/jquery.arctext.js"></script>
 <!-- <script type="text/javascript" src="http://tympanus.net/Development/Arctext/js/jquery.arctext.js"></script> -->
@@ -44,6 +47,8 @@
 		document.write("Il browser non supporta Web Audio Api.");
 	}
 	var gramTools = new GramophoneTools();
+	var timer = new Timer();
+	
 
  </script>
  <noscript>
@@ -56,6 +61,16 @@
   $( function() {
     var handle = $("#custom-handle");
 	var handleCh1 = $("#handle-ch1");
+	
+	
+	
+	timer.addEventListener('secondsUpdated', function (e) {
+		var $st = jQuery.noConflict();
+		$st('#timer').html(timer.getTimeValues().toString());
+		console.log(timer.getTimeValues().toString());
+	});
+	
+	
 	
 	console.log("ciao");
     $("#slider").slider({
@@ -636,6 +651,13 @@
 	<div class = "controlsSubTitle">
 		<div class ="titleSubMenuDiv" >Volume</div> 
 		<input id = "vol" type="range" onchange = "gram.changeVolume(this);" value="100" max="100" min="0"></div>
+		
+	<div class = "controlsSubTitle">
+		<div class ="titleSubMenuDiv" >Timer</div> 	
+	<!-- 			Timer				 -->
+		<div id="timer">
+			<div class="values timer">00:00:00</div>
+		</div>
 	</div>
 </div>
 
