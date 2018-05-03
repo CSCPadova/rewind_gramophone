@@ -361,6 +361,8 @@ Gramophone.prototype.play = function(){
 	// start timeout: when the timeout expired call a stop function
 	this.stopTimeout = 	setTimeout(function(){
 		that.audioSource.stop();
+		timer.reset
+		timer.stop();
 		}, remainingTime);
 	
 	if(gramTools.equalizerFlag ){

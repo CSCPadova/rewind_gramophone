@@ -1,5 +1,5 @@
 
-  $( function() {
+  $(document).ready( function() {
     var handle = $("#custom-handle");
 	var handleCh1 = $("#handle-ch1");
 	
