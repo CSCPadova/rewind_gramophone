@@ -363,9 +363,48 @@ input[type='range']#playRange::-moz-range-track {
 	to{-ms-transform:rotate(89deg);}
 }
 
-#timer{
+
+
+/*TIME*/
+
+@font-face {
+    font-family: 'digital_dreamregular';
+    src: url('DIGITALDREAM-webfont.eot');
+    src: url('DIGITALDREAM-webfont.eot?#iefix') format('embedded-opentype'),
+         url('DIGITALDREAM-webfont.woff') format('woff'),
+         url('DIGITALDREAM-webfont.ttf') format('truetype'),
+         url('DIGITALDREAM-webfont.svg#digital_dreamregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#time{
+	
+	
+	position: relative;
+	top:60px;
+}
+
+
+#timer {
 	position:relative;
 	top:10px;
+	left:-104px;
 	text-align:center;
-	font-size: 21px;
+	color: red;
+	font-size: 16px ;/*50px;*/
+	font-family: 'digital_dreamregular', Arial, sans-serif;
 }
+
+/* RPM SPEED */
+
+#rpm_speed {
+	position:relative;
+	float:right;
+	left: -290px;
+	top:-10px;
+	text-align:center;
+	font-size: 23px ;/*50px;*/
+	font-family: Arial, sans-serif;
+}
+

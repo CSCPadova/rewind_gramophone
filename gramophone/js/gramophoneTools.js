@@ -325,17 +325,42 @@ stopVinylRotation = function(){
 	$a("#vinyl").css("animation-play-state", "paused");
 };
 
+
 playToPause = function(){
 	/* var $a = jQuery.noConflict();
 	$a("#playDiv").html("<input id = \"pauseRange\" type = \"range\" onchange = \"gram.playDisk()\" " +
 	"value = \"1\" max = \"1\" min = \"0\" step = \"1\">"); */
 	
 	var $a = jQuery.noConflict();
-	$a("#play").animate({right: "+10px", marginTop: "50px"});
-	$a("#play").rotate({animateTo:0});
+	
+	//$a("#play").rotate({animateTo:0});
+	$a("#play").animate({right: "-10px", marginTop: "50px"});
+	setTimeout(function (){	
+		var $a = jQuery.noConflict();
+		$a("#play").rotate({animateTo:0});
+	},500);
 	this.playState = false;
+	
 	console.log("pause");
-	timer.pause();
+	if (gram.isTrackLoaded){
+		
+		if(gram.elapsedTime != 0)
+		{
+			
+			console.log('timer.pause - from playToPause remainingTime: '+gram.remainingTime+' elapsedTime: '+gram.elapsedTime);
+		}
+		else
+		{
+			if(gram.elapsedTime == 0)
+			{
+				
+				console.log('end - from playToPause  '+gram.remainingTime+' elapsedTime: '+gram.elapsedTime);
+				gram.playFinish = false;
+			}
+		}
+	
+	
+	}
 
 };
 

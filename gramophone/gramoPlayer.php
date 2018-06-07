@@ -1,11 +1,15 @@
 <?php 
 
+// This section must be removed since we change Mysql DB with SQLite once
+
 	if(class_exists( 'ConstantVDS') != true){
 		include 'constantsContainer.php';
 	}	
 	include 'staticTools.php';
 	include 'playlist.php';
 	include 'player.php';
+	
+// End section to remove
 ?>
 <head>
 <style>
@@ -22,7 +26,7 @@
 <script type = "text/javascript" src = "./jquery/jquery-ui.js"></script>
 <script type = "text/javascript" src = "./jquery/jQueryRotateCompressed.js"></script>
 
-<script src="./js/easytimer/easytimer.min.js"></script>
+<script src="./js/timerlistener.js"></script>
 
 <link rel="stylesheet" href="./css/jquery-ui.css">
 <script type = "text/javascript" src = "./js/jquery.arctext.js"></script>
@@ -48,10 +52,11 @@
 		document.write("Il browser non supporta Web Audio Api.");
 	}
 	var gramTools = new GramophoneTools();
-	var timer = new Timer();
 	
 
  </script>
+ 
+ 
  <noscript>
 		<h1> Il browser non supporta javascript!!!</h1>
 </noscript>
@@ -210,10 +215,12 @@
 		<input id = "vol" type="range" onchange = "gram.changeVolume(this);" value="100" max="100" min="0"></div>
 		
 	<div class = "controlsSubTitle">
-		<div class ="titleSubMenuDiv" >Timer</div> 	
+		<div class ="titleSubMenuDiv" >Timer / Speed (RPM)</div> 	
 	<!-- 			Timer				 -->
 		<div id="timer">
 			<div class="values timer">00:00:00</div>
+		</div>
+		<div id="rpm_speed">
 		</div>
 	</div>
 </div>

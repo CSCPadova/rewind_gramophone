@@ -22,6 +22,8 @@ function Gramophone (context){
 	this.QFACTORPRESETVALUE = 5.76;
 	this.presetGain = 0;
 	this.trackName = "";
+	this.remainingTime = 0;
+	this.elapsedTime = 0;
 	
 	// Nodes
 	this.audioSource = null;
@@ -57,6 +59,8 @@ function Gramophone (context){
 	this.isInInitialPosition = true;
 	this.isArmEnabled = true;
 	this.isPause = false;
+	this.playFinish = false;
+	
 	
 	// Filter type
 	this.equalizationPresetType = 0;	// 0 if there is not effect
@@ -65,10 +69,17 @@ function Gramophone (context){
 	// Timeout
 	this.stopTimeout = null;
 	
+	
+
+	//State
+	this.state = "STOP";
+	
 };
 
 // <-----Load----->
 Gramophone.prototype.loadDisk = function(path, nameTrack, speed){
+	
+	
 	var $st = jQuery.noConflict();
 	
 	// go to  gramophone
@@ -84,6 +95,7 @@ Gramophone.prototype.loadDisk = function(path, nameTrack, speed){
 	if(this.isPlaying){
 		// stop the track
 		this.audioSource.stop();
+		console.log('loaddisk');
 		this.audioSource.disconnect(0);
 		// playRange in pause position
 		playToPause();
@@ -95,6 +107,7 @@ Gramophone.prototype.loadDisk = function(path, nameTrack, speed){
 		window.clearTimeout(this.stopTimeout);
 		// update flags
 		this.isPlaying = false;
+		this.state = "STOP";
 	}
 	
 	if(!this.isInInitialPosition){
@@ -129,6 +142,7 @@ Gramophone.prototype.loadDisk = function(path, nameTrack, speed){
 	// false = is not required to compensate the rotation of the disk
 	changeVinylRotation(speed, false, 0);
 	$st('#slider').slider('value', speed);
+	$st('#rpm_speed').html("/ "+parseFloat(speed).toFixed(2)+" RPM");
 	
 	// set track attributes
 	this.originalSpeed = speed;	
@@ -216,6 +230,7 @@ Gramophone.prototype.playDisk = function(){
 				setTimeout(function(){
 					// update flag
 					that.isInInitialPosition = false;
+					that.state = "PLAY";
 					// enable commands
 					enableAllCommands();
 					//enable arm movement
@@ -225,8 +240,14 @@ Gramophone.prototype.playDisk = function(){
 					
 					}, 2000);
 					console.log("1 start angle"+this.STARTANGLE+ "current angle:"+this.armCurrentAngle);
-				this.moveArm(this.STARTANGLE, this.STARTDISKANGLE, 2000,0);
-					timer.start();
+					this.moveArm(this.STARTANGLE, this.STARTDISKANGLE, 2000,0);
+					
+					
+					
+					
+					console.log("State: "+this.state+ " from playDisk() function rg.249");
+		
+		
 			}
 			else{
 				
@@ -236,7 +257,11 @@ Gramophone.prototype.playDisk = function(){
 				
 				// call play function
 				   this.play();
-				   	timer.start();
+				   
+					
+				/* // update flag
+				this.state = "PLAY";
+				console.log("State: "+this.state+ " from playDisk() function rg.265"); */
 				
 			}
 		}
@@ -245,6 +270,10 @@ Gramophone.prototype.playDisk = function(){
 			// update flags => state 3
 			this.isPause = true;
 			this.isPlaying = false;
+			// update flag
+				this.state = "PAUSE";
+			console.log("State: "+this.state+ " from playDisk() function rg.276");
+			console.log('entered in playDisk pause');
 			// change playdiv image
 			playToPause();
 			// stop track esecution
@@ -327,10 +356,16 @@ Gramophone.prototype.play = function(){
 	this.audioSource.loop = false;
 	var that = this;
 	this.audioSource.onended = function(){
+		console.log("end");
+		that.playFinish = true;
 		that.stopSong();
+		
 	};
-	// update startTime
-	this.startTime = this.context.currentTime;
+	
+	
+		// update startTime
+		this.startTime = this.context.currentTime;
+	
 	
 	// save playbackrate
 	
@@ -341,6 +376,8 @@ Gramophone.prototype.play = function(){
 	// update flag (go to 4° state)
 	this.isPlaying = true;
 	this.isPause = false;
+	this.state = "PLAY";
+	console.log("State: "+this.state+ " from play() function rg.378");
 	
 	console.log("durata: "+this.audioSource.buffer.duration+ "playback rate: "+this.playBackRate);
 	this.STOPTIME = this.audioSource.buffer.duration;
@@ -348,12 +385,16 @@ Gramophone.prototype.play = function(){
 	
 	// calculate animation timing
 	var remainingTime = (this.STOPTIME  - (this.startOffset % this.audioSource.buffer.duration)) / this.playBackRate * 1000;
+	this.remainingTime = remainingTime;
 	
-	console.log("remainingTime:"+remainingTime);
+	
+	console.log("remainingTime: "+remainingTime+ ", buffer.duration: "+this.audioSource.buffer.duration+ ", elapsedTime: "+this.elapsedTime);
+	
+	console.log("armCurrentAngle: "+this.armCurrentAngle+ "from r.g. 393");
 	// start arm movement
-	//this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
+	this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
 	var $a = jQuery.noConflict();
-	$a("#arm").css({"transform":"rotate(88deg)", "transition-duration": "1s"});
+	//$a("#arm").css({"transform":"rotate(88deg)", "transition-duration": "1s"});
 	// debug
 	var message = "remainingTime: " + remainingTime + "\n playback rate:" 
 			+ this.playBackRate + "\n currentime: " + this.context.currentTime;
@@ -361,8 +402,11 @@ Gramophone.prototype.play = function(){
 	// start timeout: when the timeout expired call a stop function
 	this.stopTimeout = 	setTimeout(function(){
 		that.audioSource.stop();
-		timer.reset
-		timer.stop();
+		
+		console.log("end");
+		this.playFinish = true;
+		this.state = "STOP";
+		console.log("State: "+this.state+ " from play() function rg.406");
 		}, remainingTime);
 	
 	if(gramTools.equalizerFlag ){
@@ -385,12 +429,17 @@ Gramophone.prototype.stopSong = function(){
 		// stop timeout
 		window.clearTimeout(this.stopTimeout);
 		// move the play range to pause condition
+		
+		this.elapsedTime = 0;
+		
 		playToPause();
 		// stop vinyl rotation
 		stopVinylRotation();
 		// update flag  and offset
 		this.isPlaying = false;	
 		this.startOffset = 0;
+		this.state = "STOP";
+		console.log("State: "+this.state+ " from stopSong() function rg.439");
 		
 		var that = this;
 		setTimeout(function(){
@@ -728,11 +777,18 @@ Gramophone.prototype.changeRotation = function(element,type){
 			this.audioSource.playbackRate.value = fraction;
 			// calculate new remainingTime
 			var remainingTime = (this.STOPTIME - (this.startOffset % this.audioSource.buffer.duration) ) / this.playBackRate *1000;
+			this.remainingTime = remainingTime;
+			
+			console.log("remainingTime:"+this.remainingTime+" elapsedTime: "+this.elapsedTime+ "buffer: "+this.audioSource.buffer.duration);
 			// restart arm movement
 			this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
 			// restart timeout
 			this.stopTimeout = window.setTimeout(function(){
+				console.log('entered');
 				this.audioSource.stop();
+				
+				console.log("end");
+				this.playFinish = true;
 				}, remainingTime);
 		}
 		// state 2 or 3
@@ -959,7 +1015,7 @@ Gramophone.prototype.moveArm = function(startAngle, finishAngle, animationTime, 
 	    // we use a pseudo object for the animation
 	    // (starts from `0` to `angle`), you can name it as you want
 	   
-	    $s("#temp").animate({deg: (95 - finishAngle)}, {
+	  /*   $s("#temp").animate({deg: (95 - finishAngle)}, {
 	        duration: animationTime,
 	        step: function(now) {
 	            // in the step-callback (that is fired each step of the animation),
@@ -979,7 +1035,16 @@ Gramophone.prototype.moveArm = function(startAngle, finishAngle, animationTime, 
                 $elem.css("-webkit-animation-timing-function","linear"); 
                 
             }
-	    });
+	    }); */
+		
+		//UPDATE 07.06.2018:  with the following code since it's more sintetic
+		
+		var $a = jQuery.noConflict();
+	$a("#arm").css({"transform":"rotate("+finishAngle+"deg)", "transition-duration": ""+Math.round(animationTime/1000)+"s", "transition-timing-function": "linear"});
+	$a("#temp").stop(true,false);
+	
+		//END UPDATE
+	
 	}
 	//backward movement
 	else{

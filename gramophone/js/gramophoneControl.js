@@ -1,26 +1,22 @@
-
   $(document).ready( function() {
     var handle = $("#custom-handle");
 	var handleCh1 = $("#handle-ch1");
+	var rpm_speed_handle = $("#rpm_speed");
 	
-	
-	
-	timer.addEventListener('secondsUpdated', function (e) {
-		var $st = jQuery.noConflict();
-		$st('#timer').html(timer.getTimeValues().toString());
-		console.log(timer.getTimeValues().toString());
-	});
 	
 	
     $("#slider").slider({
 	  min: 70.0,
       max: 80.0,
+	  step: 0.1,
       create: function() {
         handle.text( $( this ).slider( "value" ) );
       },
       slide: function( event, ui ) {
-        console.log( ui.value );
+        console.log("speed:"+ ui.value );
 		gram.changeRotation(ui.value, 1);
+		rpm_speed_handle.html("/ "+ui.value.toFixed(2)+" RPM");
+		
       }
     });
 	
@@ -434,5 +430,101 @@
 		gram.changeCh(100-ui.value, 23, 1);
       }
     });
+	
+	
+/* ARM drag movement 07.06.2018*/
+	
+var box=$("#arm");
+var boxCenter=[box.offset().left+box.width()/2, box.offset().top+box.height()/2];
+
+var active = false;
+
+
+box.mousedown(function(){
+
+		// flag that remember the click event (mousedown) on the arm
+		active = true;
+	
+		var $a = jQuery.noConflict();
+		//stop arm animation
+		$a("#temp").stop(true,false);
+		console.log(active);
+		// disable all commands
+		disableAllCommands();
+		// disable arm movement
+		gram.isArmEnabled = false;
+	
+		
+		gram.elapsedTime = 0;
+		
+		// stop vinyl rotation
+		stopVinylRotation();
+		// update flag  and offset
+		gram.isPlaying = false;	
+		gram.startOffset = 0;
+		gram.state = "STOP"; 
+		
+		//stop audio
+		gram.audioSource.stop();
+
+
+});
+
+$(document).mousemove(function(e){    
+    
+      if(active){  
+	var angle = Math.atan2(e.pageX- boxCenter[0], (e.pageY- boxCenter[1]) )*(180/Math.PI);
+
+	if(angle<=gram.STARTDISKANGLE && angle >= gram.STOPDISKANGLE)
+	{
+		box.css({ "-webkit-transform": 'rotate(' + angle + 'deg)'});    
+		box.css({ '-moz-transform': 'rotate(' + angle + 'deg)'});
+		box.css({ 'transform': 'rotate(' + angle + 'deg)'});
+		gram.armCurrentAngle = angle;
+		
+		
+	}		
+    
+   
+    
+    }
+    
+});
+
+$(document).mouseup(function(){
+	if(active)
+	{
+	console.log('start audio');
+	if(gram.audioSource != null)
+	{
+		
+		
+		
+		var ratio = Math.abs(gram.armCurrentAngle - gram.STARTDISKANGLE)/(gram.STARTDISKANGLE - gram.STOPDISKANGLE);
+		
+		//calculate the offset (in seconds) from which the track starts
+		gram.startOffset = ratio*gram.audioSource.buffer.duration;
+		
+		console.log("startOffset:"+gram.startOffset);
+		
+		disableAllCommands();
+		
+		//start gramophone to play
+		gram.play();
+		
+		// start the disk rotation
+		startVinylRotation();
+		
+		// start play animation leverage
+		pauseToPlay();
+		
+	}
+	}
+	
+	
+	active = false;
+});
+
+
 });
 	

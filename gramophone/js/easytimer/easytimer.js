@@ -137,12 +137,17 @@
    * Can update time values with different time intervals: tenth of seconds,
    * seconds, minutes and hours.]
    */
-  function Timer() {
+  function Timer(speedRatio) {
     /*
     * PRIVATE variables and Functions
     */
     var counters = new TimeCounter();
     var totalCounters = new TimeCounter();
+	
+	//console.log("easytimer - speedRatio:"+speedRatio);
+	
+	var elapsedT = 0;
+	var stopTime = 0;
 
     var intervalId = void 0;
     var eventEmitter = hasDOM() ? document.createElement('span') : hasEventEmitter() ? new events.EventEmitter() : undefined;
@@ -209,6 +214,7 @@
     }
 
     function stopTimer() {
+	  console.log("stopTimer function");
       clearInterval(intervalId);
       intervalId = undefined;
       running = false;
@@ -233,7 +239,7 @@
         return;
       }
 
-      intervalId = setInterval(updateTimerAndDispatchEvents, interval);
+      intervalId = setInterval(updateTimerAndDispatchEvents, 100);
 
       running = true;
       paused = false;
@@ -244,7 +250,7 @@
     }
 
     function updateTimerAndDispatchEvents() {
-      var currentTime = roundTimestamp(Date.now());
+     /*  var currentTime = Date.now();
       var valuesUpdated = updateTimer();
 
       dispatchEvents(valuesUpdated);
@@ -253,14 +259,43 @@
       if (isTargetAchieved(currentTime)) {
         stop();
         dispatchEvent('targetAchieved', eventData);
-      }
+      } */
     }
+	
+	function setTime(ElapsedTime){
+		
+	
+	  var valuesUpdated = {};
+		
+	  valuesUpdated[SECOND_TENTHS] = updateSecondTenths(ElapsedTime);
+      valuesUpdated[SECONDS] = updateSeconds(ElapsedTime);
+      valuesUpdated[MINUTES] = updateMinutes(ElapsedTime);
+      valuesUpdated[HOURS] = updateHours(ElapsedTime);
+      valuesUpdated[DAYS] = updateDays(ElapsedTime);
+	  
+	  return valuesUpdated;
+		
+		
+	}
 
-    function updateTimer() {
-      var currentTime = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : roundTimestamp(Date.now());
+       function updateTimer() {
+      var currentTime = Date.now();
+   
+				   
+	
+						   
+	console.log("currentTime: "+currentTime);
 
-      var ellapsedTime = timerTypeFactor > 0 ? currentTime - startingDate : startingDate - currentTime;
+      var ellapsedTime = (currentTime - startingDate);
+	  
+   
+																		 
       var valuesUpdated = {};
+   
+   
+											
+   
+														   
 
       valuesUpdated[SECOND_TENTHS] = updateSecondTenths(ellapsedTime);
       valuesUpdated[SECONDS] = updateSeconds(ellapsedTime);
@@ -272,7 +307,8 @@
     }
 
     function roundTimestamp(timestamp) {
-      return Math.floor(timestamp / unitsInMilliseconds[precision]) * unitsInMilliseconds[precision];
+      //return Math.floor(timestamp*1000 / unitsInMilliseconds[precision]) * unitsInMilliseconds[precision] /1000;
+	  return timestamp / unitsInMilliseconds[precision] * unitsInMilliseconds[precision];
     }
 
     function dispatchEvents(valuesUpdated) {
@@ -464,6 +500,12 @@
       stopTimer();
       paused = true;
       dispatchEvent('paused', eventData);
+	  
+	  console.log("pause function");
+	  
+	  //added
+	  stopTime = roundTimestamp(Date.now());
+	  
     }
 
     /**
@@ -541,6 +583,19 @@
     function getConfig() {
       return timerConfig;
     }
+	
+	/**
+     * 
+     * 
+     */
+	function changeSpeed(sr){
+		var currentTime = roundTimestamp(Date.now());
+		elapsedT += (currentTime - startingDate)*speedRatio;
+		//console.log('elapsedT: '+elapsedT);
+		startingDate = currentTime;
+		speedRatio = sr;
+	}
+	
     /**
      * Public API
      * Definition of Timer instance public functions
@@ -565,8 +620,12 @@
       this.getConfig = getConfig;
 
       this.addEventListener = addEventListener;
+	  
+	  this.changeSpeed = changeSpeed;
 
       this.removeEventListener = removeEventListener;
+	  
+	   this.setTime = setTime;
     }
   }
 
