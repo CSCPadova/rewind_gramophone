@@ -62,6 +62,7 @@
 </noscript>
 
 </head>
+<body>
 <div>
 <!-- debug -->
 <div id = "debug" style = "display: none"> X: 0 <br> Y:0</div>
@@ -406,35 +407,28 @@
 <div id = "dbMenu" class = "menuPart">
 
 	<div id = "songdb">
-	<?php 
-	
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "im";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
-
-$sql = "SELECT * FROM phi_gram";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    // output data of each row
-    while($r_results = $result->fetch_assoc()) {
-		
-		?>
+			<?php 
+			try{
+				//echo "before";
+				$db = new SQLite3('im.db');
+				//echo "after open";
+				$results = $db->query('select * from phi_gram');
+				while ($r_results = $results->fetchArray()) {
+				//	print_r($r_results);
+				if (file_exists('./'.$r_results['path_vinyl'])){
+			?>
 			<div class = "trackLoaderContainer" >
 				<div class = "firstRow">
-					<div class = "firstR">
+					<div class = "firstR" id="title<?php echo $r_results['id_vinyl']?>">
 						<?php echo stripslashes($r_results['artista']);?> - <?php echo stripslashes($r_results['titolo']);?> (<?php echo stripslashes($r_results['data']);?>)</td>
 					</div>
-					<div class = "trackLoaderButton"  onclick="gram.loadDisk('<?php echo $r_results['path_vinyl']?>','<?php echo $r_results['titolo']?>','<?php echo $r_results['velocita']?>')">Load Disk
+					<div class = "delrow" id="dr<?php echo $r_results['id_vinyl']?>" onclick="deleterow('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete All
 					</div>
+					<div class = "delfile" id="df<?php echo $r_results['id_vinyl']?>" onclick="deletefile('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete File
+					</div>
+					<div class = "trackLoaderButton" id="<?php echo $r_results['id_vinyl']?>" onclick="gram.loadDisk('<?php echo $r_results['path_vinyl']?>','<?php echo stripslashes($r_results['titolo'])?>','<?php echo $r_results['velocita']?>')">Load Disk
+					</div>
+					
 				</div>
 				
 				<table class = "dbTable">	
@@ -445,7 +439,7 @@ if ($result->num_rows > 0) {
 						<td>Tipo Puntina</td>
 						<td>Equalizzazione</td>
 					</tr>
-					<tr class = "thirdRow">
+					<tr class = "thirdRow" id="data<?php echo $r_results['id_vinyl']?>">
 						<td><?php echo $r_results['grammofono'];?></td>
 						<td><?php echo $r_results['velocita'];?></td>
 						<td><?php echo $r_results['dim_peso'];?></td>
@@ -455,12 +449,142 @@ if ($result->num_rows > 0) {
 				</table>
 			</div>
 			
-	<?php 
-			
-		}
-	}
-		
-	?>
+			<?php 	}
+						else {
+							?>
+							<div class = "trackUploadContainer" >
+								<div class = "firstRow">
+									<div class = "firstRUp" id="title<?php echo $r_results['id_vinyl']?>">
+										<?php echo stripslashes($r_results['artista']);?> - <?php echo stripslashes($r_results['titolo']);?> (<?php echo stripslashes($r_results['data']);?>)</td>
+									</div>
+									<div class = "delrow" id="dr<?php echo $r_results['id_vinyl']?>" onclick="deleterow('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete All
+									</div>
+									<div class = "errorLoader" id="<?php echo $r_results['id_vinyl']?>" missing="<?php echo $r_results['path_vinyl']?>"> <?php echo basename($r_results['path_vinyl'])?> not found 
+									</div>
+									
+								</div>
+								<div class = "uploadRow">
+									<form action="upload.php" class="form-file" id="fr<?php echo $r_results['id_vinyl']?>" method="post" enctype="multipart/form-data">
+										Select file to upload (mp3,flac,wav):
+										<input type="file" class="input-file" name="newTrack" id="in<?php echo $r_results['id_vinyl']?>">
+										<input type="submit" class="button-file" id="bt<?php echo $r_results['id_vinyl']?>" value="Upload Track" name="submit">
+									</form>
+
+								</div>
+								<table class = "dbTable">	
+									<tr class = "secondRow">
+										<td>Grammofono</td>
+										<td>Velocita'(rpm)</td>
+										<td>Dim. e Peso Puntina</td>
+										<td>Tipo Puntina</td>
+										<td>Equalizzazione</td>
+									</tr>
+									<tr class = "thirdRow" id="data<?php echo $r_results['id_vinyl']?>">
+										<td><?php echo $r_results['grammofono'];?></td>
+										<td><?php echo $r_results['velocita'];?></td>
+										<td><?php echo $r_results['dim_peso'];?></td>
+										<td><?php echo $r_results['puntina'];?></td>
+										<td><?php echo $r_results['equalizzazione'];?></td>
+									</tr>
+								</table>
+					</div>
+							<?php
+						}
+					}
+				} 
+				catch(PDOException $e) {
+					echo $e->getMessage();
+					}
+			?>
 	</div>
 </div>
+<div id = "songDB2Title" class = "partTitle" onclick="gramTools.openTool(4)">
+	<div class ="titleMenuDiv" >Import files</div>
+	<div class = "pads" ></div>
+	<div id = "openDB2" class = "openPart" ></div>
+</div>
+
+<div id = "db2Menu" class = "menuPart">
+	<div class = "importSubTitle" onclick="gramTools.openTool(8)">
+		<div class ="titleSubMenuDiv" >Add single track</div>
+		<div id = "singleTrackTitle" class = "openSubPart" ></div>
+	</div>
+	<div id = "singleTrack" class = "importSubMenu">
+		<form action="/action_page.php" id="carform">
+			<table class="formTable">
+				<tr><th>Title:<td><input type="text" name="title" class="td100" required></tr>
+				<tr><th>Author:<td><input type="text" name="author" class="td100" required></tr>
+				<tr><th>Year:<td><input type="number" name="author" class="td100" required></tr>
+				<tr><th>Speed:<td>
+				<select name="speedselect" class="td100">
+				  <option value="70">70.00 Columbia</option>
+				  <option value="71.29">71.29 Victor e Hmv</option>
+				  <option value="76.59">76.59 Acoustic Victor</option>
+				  <option value="78.26">78.26 Electric Record</option>
+				  <option value="80">80.00 Acoustic Columbia and Vertical Recording</option>
+				</select> </tr>
+				<tr><th>Gramophone<td>
+				<select name="grammofonoselect" class="td100">
+				  <option value="grammofono">Grammofono</option>
+				  <option value="giradischi">Giradischi</option>
+				</select> </tr>
+				<tr><th>Puntina<td>
+				<select name="puntinaselect" class="td100">
+				  <option value="Tronco-ellittica">Tronco-ellittica</option>
+				  <option value="Soft Tone">Soft Tone</option>
+				</select> </tr>
+				<tr><th>Dim. e peso Puntina<td>
+				<select name="dimselect" class="td100">
+				  <option value="3.5 mil - 4 g">3.5 mil - 4 g</option>
+				  <option value="-">-</option>
+				</select> </tr>
+				<tr><th>Equalization<td>
+				<select name="eqselect" class="td100">
+				  <option value="flat">Flat</option>
+				  <option value="-">-</option>
+				</select></tr>
+				<tr><th>Copy Type<td>
+				<select name="tiposelect" class="td100">
+				  <option value="Copia conservativa">Copia conservativa</option>
+				  <option value="Lettura">Lettura</option>
+				</select></tr>
+				<tr><th>Select file (mp3,flac,wav):<td><input type="file" class="input-file" name="importSingle" id="importSingle" required></tr>
+				<tr><td colspan=2 ><input type="submit" class="td100"></tr>
+			</table>
+		</form>
+	
+	</div>
+	
+	<div class = "importSubTitle" onclick="gramTools.openTool(9)">
+		<div class ="titleSubMenuDiv" >Json import/export</div>
+		<div id = "jsonTitle" class = "openSubPart" ></div>
+	</div>
+	<div id = "json" class = "importSubMenu">
+		<?php 
+			$results = $db->query('select * from phi_gram');
+			$tracks=array();
+
+			while ($r_results = $results->fetchArray()) {
+				$myObj=new stdClass();
+				$myObj->id_vinyl = $r_results['id_vinyl'];
+				$myObj->path_vinyl = stripslashes ($r_results['path_vinyl']);
+				$myObj->titolo = stripslashes ($r_results['titolo']);
+				$myObj->artista = $r_results['artista'];
+				$myObj->data = $r_results['data'];
+				$myObj->grammofono = $r_results['grammofono'];
+				$myObj->velocita = $r_results['velocita'];
+				$myObj->dim_peso = $r_results['dim_peso'];
+				$myObj->puntina = $r_results['puntina'];
+				$myObj->equalizzazione = $r_results['equalizzazione'];
+				$myObj->tipo_copia = $r_results['tipo_copia'];
+				array_push($tracks,$myObj);				
+			}
+			$myJSON = json_encode($tracks);
+			echo $myJSON;
+		?>
+	</div>
+	
+</div>
+<script type = "text/javascript" src = "./js/uploader.js"></script>
+</body>
 

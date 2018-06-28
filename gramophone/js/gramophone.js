@@ -77,11 +77,13 @@ function Gramophone (context){
 };
 
 // <-----Load----->
-Gramophone.prototype.loadDisk = function(path, nameTrack, speed){
+Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 	
 	
 	var $st = jQuery.noConflict();
-	
+	var path=completePath.substring(0, completePath.indexOf('.')-1);
+	//alert(completePath);
+	//alert(path);
 	// go to  gramophone
 	$st(document).scrollTop($st("#player").offset().top);
 	
@@ -152,10 +154,12 @@ Gramophone.prototype.loadDisk = function(path, nameTrack, speed){
 	
 	// Load buffer asynchronously
 	var request = new XMLHttpRequest();
-	if(true) //$st.browser == "webkit"
-		request.open("GET", './' + path + ".mp3", true);
+	var ext=completePath.substring(completePath.indexOf('.'),completePath.length);
+	
+	if (ext==".mp3" || ext==".flac" || ext==".wav")
+		request.open("GET", './' + completePath,true);
 	else 
-		request.open("GET", './' + path + ".ogg", true);
+		alert(ext + "is not a valid extension");
 	
 	request.responseType = "arraybuffer";
 	var thoseTools = gramTools;

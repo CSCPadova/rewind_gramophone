@@ -96,7 +96,21 @@ div.partTitle{
 	font-variant: small-caps;
 	font-size: 15px;
 }
-
+.importSubTitle {
+	width: 896px;
+	height: 40px;
+	margin-top: 15px;
+	margin-left: 45px;
+	border-color: black;
+	border-width: 2px;
+	border-style: solid;
+	border-radius: 5px;
+	cursor:pointer;
+	color: black;
+	background-color: white;
+	font-variant: small-caps;
+	font-size: 15px;
+}
 .controlsSubMenu{
 	width:890px;
 	display: none;

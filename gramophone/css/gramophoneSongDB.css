@@ -14,34 +14,49 @@ div#songDb{
 	margin-left:10px;
 	width: 920px;
 	height: 100px;
-	/*border-bottom-width: 5px;
-	border-top-width:5px; /*5
-	border-left-width: 5px;
-	border-right-width: 5px;
-	border-color: black;
-	border-style: solid;*/
+	margin-bottom: 10px;
+	-webkit-border-top-left-radius: 10px;
+	-moz-border-radius-topleft: 10px;
+	border-top-left-radius: 10px;
+}
+.trackUploadContainer{
+	font-variant:small-caps;
+	text-align: center;
+	margin-left:10px;
+	width: 920px;
+	height: 155px;
 	margin-bottom: 10px;
 	-webkit-border-top-left-radius: 10px;
 	-moz-border-radius-topleft: 10px;
 	border-top-left-radius: 10px;
 }
 
-
+.uploadRow{
+	margin-top:15px;
+}
 
 .firstRow{
 	height: 40px;
 	width: 920px;
-	/*border-bottom-width: 1px;
-	border-top-width: 0px;
-	border-color: black;
-	border-style: solid;*/
 	
 }
 
 .firstR{
 	height: 40px;
 	float: right;
-	width: 735px;
+	width: 555px;
+	line-height: 40px;
+	/*border-right-width: 0px;
+	border-color: black;
+	border-style: solid;*/
+	background-color: silver;
+	
+}
+
+.firstRUp{
+	height: 40px;
+	float: right;
+	width: 555px;
 	line-height: 40px;
 	/*border-right-width: 0px;
 	border-color: black;
@@ -61,6 +76,34 @@ div.trackLoaderButton{
 	/*border-right-width: 1px;
 	border-color: black;
 	border-style: solid;*/
+}
+
+div.errorLoader{
+	width: 275px;
+	height: 40px;
+	background-color: #990000;
+	color:white;
+	line-height: 40px;
+}
+
+div.delfile{
+	width: 90px;
+	height: 40px;
+	background-color: #3d3d5c;
+	color:white;
+	cursor: pointer;
+	line-height: 40px;
+	float:right;
+}
+
+div.delrow{
+	width: 90px;
+	height: 40px;
+	background-color: #666699;
+	color:white;
+	cursor: pointer;
+	line-height: 40px;
+	float:right;
 }
 
 div.trackLoaderButton:HOVER{
@@ -104,4 +147,24 @@ tr.thirdRow td{
 
 #songDB2Title{
 	margin-bottom: 10px;
+}
+
+#carform{
+	align-content: center;	
+}
+
+.importSubMenu{
+	padding:20px;
+	margin-left: 45px;
+}
+
+.formTable{
+	align:center;
+	text-align:left;
+}
+
+.td100{
+	width:100%;
+	margin-top:5px;
+	margin-bottom:5px;
 }

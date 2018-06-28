@@ -9,7 +9,8 @@ function GramophoneTools(){
 	this.rotationFlag = false;
 	this.equalizationFlag = false;
 	this.hornFlag = false;
-	
+	this.singleTrack = false;
+	this.json = false;
 	this.info = false;
 	this.playState = false;
 };
@@ -141,6 +142,29 @@ GramophoneTools.prototype.openTool = function (tool){
 			else
 				this.hornFlag = true;
 			break;
+			
+		case 8:
+			$part = null;
+			$part = $ot("#singleTrack");
+			$title = $ot("#singleTrackTitle");
+			flag = this.singleTrack;
+			if(this.singleTrack)
+				this.singleTrack = false;
+			else
+				this.singleTrack = true;
+			break;
+		
+		case 9:
+			$part = null;
+			$part = $ot("#json");
+			$title = $ot("#jsonTitle");
+			flag = this.json;
+			if(this.json)
+				this.json = false;
+			else
+				this.json = true;
+			break;
+		
 		
 		default:
 			alert("menu open error");
