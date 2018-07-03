@@ -85,6 +85,142 @@ for (i = 0; i < x.length; i++) {
 		}		
 	});
 }
+document.getElementById("singleform").addEventListener('submit', function(event) {
+		event.preventDefault();
+		var title=document.getElementById("singletitle").value;
+		var author=document.getElementById("singleauthor").value;
+		var year=document.getElementById("singleyear").value;
+		var speed=document.getElementById("singlespeed").value;
+		var gramophone=document.getElementById("singlegramophone").value;
+		var puntina=document.getElementById("singlepuntina").value;
+		var dim=document.getElementById("singledim").value;
+		var eq=document.getElementById("singleeq").value;
+		var type=document.getElementById("singletype").value;
+		console.log(title+" - "+author+" - "+year+" - "+speed+" - "+gramophone+" - "+puntina+" - "+dim+" - "+eq+" - "+type);
+		if (year>2100 || year<1900){
+			alert ("wrong year format");
+			return;
+		}
+		var fileSelect = document.getElementById('singleimport');
+		var file = fileSelect.files[0];
+		console.log(file);
+		if (typeof file === 'undefined' || !file){
+			alert ("File not valid");
+			return;
+		}
+		if (!file.type.match('audio.*')) {
+			alert ("The selected file is not an audio file");
+			return;
+		}
+		var formData = new FormData();
+		formData.append("request","singleTrack");
+		formData.append("title",title);
+		formData.append("author",author);
+		formData.append("year",year);
+		formData.append("speed",speed);
+		formData.append("gramophone",gramophone);
+		formData.append("puntina",puntina);
+		formData.append("dim",dim);
+		formData.append("eq",eq);
+		formData.append("type",type);
+		formData.append('newTrack', file, file.name);
+		console.log(formData);
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', "upload.php", true);
+		xhr.onload = function () {
+			if (xhr.status === 200) {
+				var id=xhr.responseText*1;
+				//alert(id);
+				addTrackDiv(id,title,author,year,speed,gramophone,dim,puntina,eq,file.name);
+			} else if(xhr.status === 415){
+				alert('Please insert only allowed input formats');
+			} else if(xhr.status === 409){
+				alert('File already exists on server');
+			} else if(xhr.status === 401){
+				alert('File already exists in the database. Please change File Name');
+			} else if(xhr.status === 501){
+				alert('This track is already present in the database. Please check the current tracklist.');
+			}
+			else if(xhr.status === 451){
+				alert('Max file duration is 3\'.20\"');
+				fileSelect.value="";
+			}
+			else {
+				alert('Bad request, please check data');
+			}
+		};
+		xhr.send(formData);
+		
+});
+
+function addTrackDiv(id,title,author,year,speed,gramophone,dim,puntina,eq,filename){
+	console.log("addTrackDiv");
+	var container=document.getElementById("songdb");
+		var extdiv=document.createElement("div");
+		extdiv.classList.add("trackLoaderContainer");
+		var firstRow=document.createElement("div");
+			firstRow.classList.add("firstRow");
+			var firstR=document.createElement("div");
+				firstR.classList.add("firstR");
+				firstR.setAttribute("id","title"+id);
+				firstR.innerText=author+" - "+title+ "("+year+")";
+			var delrow=document.createElement("div");
+				delrow.classList.add("delrow");
+				delrow.setAttribute("id","dr"+id);
+				delrow.setAttribute("onclick","deleterow('"+id+"','"+filename+"')");
+				delrow.innerText="Delete All";
+			var delfile=document.createElement("div");
+				delfile.classList.add("delfile");
+				delfile.setAttribute("id","df"+id);
+				delfile.setAttribute("onclick","deletefile('"+id+"','"+filename+"')");
+				delfile.innerText="Delete File";
+			var trackLoaderButton=document.createElement("div");
+				trackLoaderButton.classList.add("trackLoaderButton");
+				trackLoaderButton.setAttribute("id",id);
+				trackLoaderButton.setAttribute("onclick","gram.loadDisk('db/audio/gram/"+filename+"','"+title+"','"+speed+"')");
+				trackLoaderButton.innerText="Load Disk";
+		firstRow.appendChild(firstR);
+		firstRow.appendChild(delrow);
+		firstRow.appendChild(delfile);
+		firstRow.appendChild(trackLoaderButton);
+		extdiv.appendChild(firstRow);
+			var table=document.createElement("table");
+			table.classList.add("dbTable");
+				var secondRow=document.createElement("tr");
+					secondRow.classList.add("secondRow");
+					secondRow.innerHTML=("<td>Grammofono</td><td>Velocita'(rpm)</td><td>Dim. e Peso Puntina</td><td>Tipo Puntina</td><td>Equalizzazione</td>");
+				var thirdRow=document.createElement("tr");
+					thirdRow.classList.add("thirdRow");
+					thirdRow.setAttribute("id","data"+id);
+					thirdRow.innerHTML=("<td>"+gramophone+"</td><td>"+speed+"</td><td>"+dim+"</td><td>"+puntina+"</td><td>"+eq+"</td>");
+			table.appendChild(secondRow);
+			table.appendChild(thirdRow);
+		extdiv.appendChild(table);
+	container.appendChild(extdiv);
+}
+
+document.getElementById("resetdb").addEventListener('click', function(event) {
+	
+	if(confirm("Are you sure to reset database? Audio files and track information will be lost.")){
+	var formData = new FormData();
+	formData.append("request","reset");
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', "upload.php", true);
+	xhr.onload = function () {
+			if (xhr.status === 200) {
+				document.getElementById("songdb").innerHTML="";
+			}
+			else if(xhr.status === 453){
+				alert('Error in resetting the database');
+				fileSelect.value="";
+			}
+			else {
+				alert('Unexpected error');
+			}
+	}	
+	xhr.send(formData);
+	}
+});
 
 function deletefile(id, filename){
 	console.log("inside deletefile "+ filename);

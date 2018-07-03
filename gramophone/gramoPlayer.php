@@ -420,7 +420,7 @@
 			<div class = "trackLoaderContainer" >
 				<div class = "firstRow">
 					<div class = "firstR" id="title<?php echo $r_results['id_vinyl']?>">
-						<?php echo stripslashes($r_results['artista']);?> - <?php echo stripslashes($r_results['titolo']);?> (<?php echo stripslashes($r_results['data']);?>)</td>
+						<?php echo stripslashes($r_results['artista']);?> - <?php echo stripslashes($r_results['titolo']);?> (<?php echo stripslashes($r_results['data']);?>)
 					</div>
 					<div class = "delrow" id="dr<?php echo $r_results['id_vinyl']?>" onclick="deleterow('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete All
 					</div>
@@ -455,7 +455,7 @@
 							<div class = "trackUploadContainer" >
 								<div class = "firstRow">
 									<div class = "firstRUp" id="title<?php echo $r_results['id_vinyl']?>">
-										<?php echo stripslashes($r_results['artista']);?> - <?php echo stripslashes($r_results['titolo']);?> (<?php echo stripslashes($r_results['data']);?>)</td>
+										<?php echo stripslashes($r_results['artista']);?> - <?php echo stripslashes($r_results['titolo']);?> (<?php echo stripslashes($r_results['data']);?>)
 									</div>
 									<div class = "delrow" id="dr<?php echo $r_results['id_vinyl']?>" onclick="deleterow('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete All
 									</div>
@@ -504,19 +504,19 @@
 	<div id = "openDB2" class = "openPart" ></div>
 </div>
 
-<div id = "db2Menu" class = "menuPart">
+<div id = "db2Menu" class = "menuControlPart">
 	<div class = "importSubTitle" onclick="gramTools.openTool(8)">
-		<div class ="titleSubMenuDiv" >Add single track</div>
+		<div class ="titleSubMenuDiv" >Import single track</div>
 		<div id = "singleTrackTitle" class = "openSubPart" ></div>
 	</div>
 	<div id = "singleTrack" class = "importSubMenu">
-		<form action="/action_page.php" id="carform">
-			<table class="formTable">
-				<tr><th>Title:<td><input type="text" name="title" class="td100" required></tr>
-				<tr><th>Author:<td><input type="text" name="author" class="td100" required></tr>
-				<tr><th>Year:<td><input type="number" name="author" class="td100" required></tr>
+		<form action="upload.php" id="singleform">
+			<table class="formTable" id="singleTable">
+				<tr><th>Title:<td><input id="singletitle" type="text" name="title" class="td100" required></tr>
+				<tr><th>Author:<td><input id="singleauthor" type="text" name="author" class="td100" required></tr>
+				<tr><th>Year:<td><input id="singleyear" type="number" name="author" class="td100" required></tr>
 				<tr><th>Speed:<td>
-				<select name="speedselect" class="td100">
+				<select id="singlespeed" name="speedselect" class="td100">
 				  <option value="70">70.00 Columbia</option>
 				  <option value="71.29">71.29 Victor e Hmv</option>
 				  <option value="76.59">76.59 Acoustic Victor</option>
@@ -524,64 +524,57 @@
 				  <option value="80">80.00 Acoustic Columbia and Vertical Recording</option>
 				</select> </tr>
 				<tr><th>Gramophone<td>
-				<select name="grammofonoselect" class="td100">
+				<select id="singlegramophone" name="grammofonoselect" class="td100">
 				  <option value="grammofono">Grammofono</option>
 				  <option value="giradischi">Giradischi</option>
 				</select> </tr>
 				<tr><th>Puntina<td>
-				<select name="puntinaselect" class="td100">
+				<select id="singlepuntina" name="puntinaselect" class="td100">
 				  <option value="Tronco-ellittica">Tronco-ellittica</option>
 				  <option value="Soft Tone">Soft Tone</option>
 				</select> </tr>
 				<tr><th>Dim. e peso Puntina<td>
-				<select name="dimselect" class="td100">
+				<select id="singledim" name="dimselect" class="td100">
 				  <option value="3.5 mil - 4 g">3.5 mil - 4 g</option>
 				  <option value="-">-</option>
 				</select> </tr>
 				<tr><th>Equalization<td>
-				<select name="eqselect" class="td100">
+				<select id="singleeq" name="eqselect" class="td100">
 				  <option value="flat">Flat</option>
 				  <option value="-">-</option>
 				</select></tr>
 				<tr><th>Copy Type<td>
-				<select name="tiposelect" class="td100">
+				<select id="singletype" name="typeselect" class="td100">
 				  <option value="Copia conservativa">Copia conservativa</option>
 				  <option value="Lettura">Lettura</option>
 				</select></tr>
-				<tr><th>Select file (mp3,flac,wav):<td><input type="file" class="input-file" name="importSingle" id="importSingle" required></tr>
-				<tr><td colspan=2 ><input type="submit" class="td100"></tr>
+				<tr><th>Select file (mp3,flac,wav):<td><input type="file" class="input-file" name="singleimport" id="singleimport" required></tr>
+				<tr><td colspan=2 ><input id="singlesubmit" type="submit" class="td100" value="Upload Track"></tr>
 			</table>
 		</form>
 	
 	</div>
 	
 	<div class = "importSubTitle" onclick="gramTools.openTool(9)">
-		<div class ="titleSubMenuDiv" >Json import/export</div>
+		<div class ="titleSubMenuDiv" >Import/Export Tracklist</div>
 		<div id = "jsonTitle" class = "openSubPart" ></div>
 	</div>
 	<div id = "json" class = "importSubMenu">
-		<?php 
-			$results = $db->query('select * from phi_gram');
-			$tracks=array();
-
-			while ($r_results = $results->fetchArray()) {
-				$myObj=new stdClass();
-				$myObj->id_vinyl = $r_results['id_vinyl'];
-				$myObj->path_vinyl = stripslashes ($r_results['path_vinyl']);
-				$myObj->titolo = stripslashes ($r_results['titolo']);
-				$myObj->artista = $r_results['artista'];
-				$myObj->data = $r_results['data'];
-				$myObj->grammofono = $r_results['grammofono'];
-				$myObj->velocita = $r_results['velocita'];
-				$myObj->dim_peso = $r_results['dim_peso'];
-				$myObj->puntina = $r_results['puntina'];
-				$myObj->equalizzazione = $r_results['equalizzazione'];
-				$myObj->tipo_copia = $r_results['tipo_copia'];
-				array_push($tracks,$myObj);				
-			}
-			$myJSON = json_encode($tracks);
-			echo $myJSON;
-		?>
+	<form method="post" action="upload.php">
+		<input type="hidden" name="request" value="downloadjson">
+		<input id="exportjson" type="submit" class="td100" value="Download Tracklist (.json)">
+	</form>
+	<form method="post" action="downloadzip.php">
+		<input type="hidden" name="request" value="downloadfiles">
+		<input id="exportfiles" type="submit" class="td100" value="Download Tracks (.zip)">
+	</form>
+	<input id="resetdb" type="submit" class="td100" value="Reset database">
+	<form action="uploadlist.php" target="_blank" id="jsonform" method="post" enctype="multipart/form-data" >
+		Select .json file to upload: 
+		<input type="hidden" name="request" value="loadjson">
+		<input type="file" name="jsonimport" id="jsonimport" required>
+		<input type="submit" id="jsonbutton" value="Upload Tracks" name="jsonbutton">
+	</form>
 	</div>
 	
 </div>

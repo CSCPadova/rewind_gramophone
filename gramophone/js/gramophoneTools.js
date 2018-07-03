@@ -182,7 +182,7 @@ GramophoneTools.prototype.openTool = function (tool){
 			}
 					);
 		}
-		$part.slideUp(1000);
+		$part.slideUp(500);
 		console.log("tool"+tool);
 		
 		if(tool < 5)
@@ -207,7 +207,7 @@ GramophoneTools.prototype.openTool = function (tool){
 				
 			});
 		}
-		$part.slideDown(1000);
+		$part.slideDown(500);
 		console.log("tool"+tool);
 		
 		if(tool < 5)

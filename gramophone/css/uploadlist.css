@@ -1,0 +1,33 @@
+@CHARSET "UTF-8";
+
+body{
+	width: 80%;
+	margin: auto;
+	overflow: auto;
+}
+table , th{
+	border: 2px solid black;
+	border-collapse: collapse;
+}
+td{
+	border: 1px solid black;
+}
+#contenttable{
+	width:100%;
+	border:2px solid black;
+}
+#contenttable th{
+	text-align:center;
+}
+
+.title{
+	
+}
+.content{
+	
+}
+
+.missing{
+	background-color:rgba(255,0,0,0.3);
+	color:red;
+}

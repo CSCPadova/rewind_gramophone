@@ -153,10 +153,6 @@ tr.thirdRow td{
 	align-content: center;	
 }
 
-.importSubMenu{
-	padding:20px;
-	margin-left: 45px;
-}
 
 .formTable{
 	align:center;
@@ -167,4 +163,8 @@ tr.thirdRow td{
 	width:100%;
 	margin-top:5px;
 	margin-bottom:5px;
+}
+#singleTable{
+	margin:auto;
+	margin-top:15px;
 }
