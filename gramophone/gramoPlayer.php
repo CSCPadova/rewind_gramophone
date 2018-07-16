@@ -20,7 +20,6 @@
    @import url(./css/gramophoneSongDB.css); 
    @import url(./css/gramophoneClass.css);
 </style>
-  
 
 <script type = "text/javascript" src = "./jquery/jquery-1.12.4.js"></script>
 <script type = "text/javascript" src = "./jquery/jquery-ui.js"></script>
@@ -29,8 +28,6 @@
 <script src="./js/timerlistener.js"></script>
 
 <link rel="stylesheet" href="./css/jquery-ui.css">
-<script type = "text/javascript" src = "./js/jquery.arctext.js"></script>
-<!-- <script type="text/javascript" src="http://tympanus.net/Development/Arctext/js/jquery.arctext.js"></script> -->
 <script type = "text/javascript" src = "./js/gramophone.js"></script>
 <script type = "text/javascript" src = "./js/gramophoneControl.js"></script>
 <script type = "text/javascript" src = "./js/gramophoneTools.js"></script>
@@ -84,6 +81,7 @@
 			</div>
 			<!-- <div id = "vinylLight"></div> -->
 			<div id = "arm"></div>
+			
 			
 		</div>
 	</div>

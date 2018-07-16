@@ -19,7 +19,7 @@
 		
 				//console.log("start .timer: "+gram.startTime+ "cur time: "+gram.context.currentTime);
 		
-				console.log("playbackrate:"+gram.playBackRate);
+				//console.log("playbackrate:"+gram.playBackRate);
 				
 				if(gram.startOffset > 0 && gram.elapsedTime == 0)
 				{
@@ -27,7 +27,7 @@
 				}
 				time = (gram.elapsedTime + 100*gram.playBackRate);
 				
-				console.log("elapsedTime:"+gram.elapsedTime+"time:"+time);
+				//console.log("elapsedTime:"+gram.elapsedTime+"time:"+time);
 				
 				
 				
@@ -76,6 +76,10 @@
 			time = 0;
 			gram.elapsedTime = time;
 			$st('#timer').html("00:00:00");
+			var rpm_speed_handle = $st("#rpm_speed");
+			var rpm_speed = $st("#slider").slider( "value" );
+			rpm_speed_handle.html("/ "+rpm_speed.toFixed(2)+" RPM");
+			
 		}
 		else
 		{
