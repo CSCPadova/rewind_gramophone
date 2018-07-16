@@ -419,10 +419,10 @@
 			?>
 			<div class = "trackLoaderContainer" >
 				<div class = "firstRow">
+					
+					<div class = "delrow" id="dr<?php echo $r_results['id_vinyl']?>" onclick="deleterow('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')"></div>
 					<div class = "firstR" id="title<?php echo $r_results['id_vinyl']?>">
 						<?php echo stripslashes($r_results['artista']);?> - <?php echo stripslashes($r_results['titolo']);?> (<?php echo stripslashes($r_results['data']);?>)
-					</div>
-					<div class = "delrow" id="dr<?php echo $r_results['id_vinyl']?>" onclick="deleterow('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete All
 					</div>
 					<div class = "delfile" id="df<?php echo $r_results['id_vinyl']?>" onclick="deletefile('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete File
 					</div>
@@ -454,11 +454,11 @@
 							?>
 							<div class = "trackUploadContainer" >
 								<div class = "firstRow">
+									<div class = "delrow" id="dr<?php echo $r_results['id_vinyl']?>" onclick="deleterow('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')"></div>
 									<div class = "firstRUp" id="title<?php echo $r_results['id_vinyl']?>">
 										<?php echo stripslashes($r_results['artista']);?> - <?php echo stripslashes($r_results['titolo']);?> (<?php echo stripslashes($r_results['data']);?>)
 									</div>
-									<div class = "delrow" id="dr<?php echo $r_results['id_vinyl']?>" onclick="deleterow('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete All
-									</div>
+									
 									<div class = "errorLoader" id="<?php echo $r_results['id_vinyl']?>" missing="<?php echo $r_results['path_vinyl']?>"> <?php echo basename($r_results['path_vinyl'])?> not found 
 									</div>
 									
@@ -499,7 +499,7 @@
 	</div>
 </div>
 <div id = "songDB2Title" class = "partTitle" onclick="gramTools.openTool(4)">
-	<div class ="titleMenuDiv" >Import files</div>
+	<div class ="titleMenuDiv" >Upload/Download Area</div>
 	<div class = "pads" ></div>
 	<div id = "openDB2" class = "openPart" ></div>
 </div>
@@ -556,25 +556,38 @@
 	</div>
 	
 	<div class = "importSubTitle" onclick="gramTools.openTool(9)">
-		<div class ="titleSubMenuDiv" >Import/Export Tracklist</div>
+		<div class ="titleSubMenuDiv" >Import/Export Multiple Tracks</div>
 		<div id = "jsonTitle" class = "openSubPart" ></div>
 	</div>
 	<div id = "json" class = "importSubMenu">
-	<form method="post" action="upload.php">
-		<input type="hidden" name="request" value="downloadjson">
-		<input id="exportjson" type="submit" class="td100" value="Download Tracklist (.json)">
-	</form>
-	<form method="post" action="downloadzip.php">
+	<div class="importexportdiv">
+		<form method="post" class="w100" action="upload.php">
+			<input type="hidden" name="request" value="downloadjson">
+			<input id="exportjson" type="submit" class="w100" value="Download Tracklist (.json)">
+		</form>
+	</div>
+	<div class="importexportdiv">	
+		<form method="post" class="w100" action="downloadzip.php">
 		<input type="hidden" name="request" value="downloadfiles">
-		<input id="exportfiles" type="submit" class="td100" value="Download Tracks (.zip)">
+		<input id="exportfiles" type="submit" class="w100" value="Download Tracks (.zip)">
 	</form>
-	<input id="resetdb" type="submit" class="td100" value="Reset database">
-	<form action="uploadlist.php" target="_blank" id="jsonform" method="post" enctype="multipart/form-data" >
-		Select .json file to upload: 
+	</div>
+	<div class="importexportdiv">	
+	<input id="resetdb" type="submit" class="w100" value="Reset database">
+	</div>
+	<div class="importexportdiv">	
+	<input id="uploadjson" class="w100" type="button" disabled="disabled" value="Upload Tracklist from json file">
+	<form action="uploadlist.php" class="w100" id="jsonform" method="post" enctype="multipart/form-data" >
+		<table class="jsontable" width="100%">
+		<tr><td width="30%" id="jsontd">
+		Select .json file to upload:</td>
+		<td width="30%" class="jsontd"> 
 		<input type="hidden" name="request" value="loadjson">
-		<input type="file" name="jsonimport" id="jsonimport" required>
-		<input type="submit" id="jsonbutton" value="Upload Tracks" name="jsonbutton">
+		<input type="file" name="jsonimport" id="jsonimport" required></td>
+		<td width="40%" class="jsontd">
+		<input type="submit" id="jsonbutton" value="Upload Tracks" name="jsonbutton"></td></tr></table>
 	</form>
+	</div>
 	</div>
 	
 </div>

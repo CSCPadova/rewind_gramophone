@@ -168,7 +168,7 @@ function addTrackDiv(id,title,author,year,speed,gramophone,dim,puntina,eq,filena
 				delrow.classList.add("delrow");
 				delrow.setAttribute("id","dr"+id);
 				delrow.setAttribute("onclick","deleterow('"+id+"','"+filename+"')");
-				delrow.innerText="Delete All";
+				//delrow.innerText="Delete All";
 			var delfile=document.createElement("div");
 				delfile.classList.add("delfile");
 				delfile.setAttribute("id","df"+id);
@@ -179,8 +179,9 @@ function addTrackDiv(id,title,author,year,speed,gramophone,dim,puntina,eq,filena
 				trackLoaderButton.setAttribute("id",id);
 				trackLoaderButton.setAttribute("onclick","gram.loadDisk('db/audio/gram/"+filename+"','"+title+"','"+speed+"')");
 				trackLoaderButton.innerText="Load Disk";
-		firstRow.appendChild(firstR);
 		firstRow.appendChild(delrow);
+		firstRow.appendChild(firstR);
+		
 		firstRow.appendChild(delfile);
 		firstRow.appendChild(trackLoaderButton);
 		extdiv.appendChild(firstRow);

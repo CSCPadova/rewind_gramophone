@@ -113,6 +113,7 @@
 				$puntina=$_POST["puntina"];
 				$eq=$_POST["eq"];
 				$type=$_POST["type"];	
+				$title=str_replace("'", "\''", $title);
 				$q="select * from phi_gram where path_vinyl='".$target_file."'";
 				//echo ($q);
 				$results = $db->query($q);
@@ -171,6 +172,7 @@
 					else{
 						
 						try{
+							
 							$sql="INSERT INTO 'phi_gram' ('path_vinyl', 'titolo', 'artista', 'data', 'grammofono', 'velocita', 'dim_peso', 'puntina', 'equalizzazione', 'tipo_copia') VALUES ('".$target_file."', '".$title."', '".$author."', ".$year.", '".$gramophone."',".$speed.", '".$dim."', '".$puntina."', '".$eq."', '".$type."')";
 							//echo ($sql);
 							$db->exec($sql);

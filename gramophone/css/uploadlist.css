@@ -1,5 +1,23 @@
 @CHARSET "UTF-8";
 
+a{
+	color:white;
+	text-decoration: none;
+}
+
+a:hover{
+	font-size:110%;
+	color:white;
+	text-decoration: none;
+}
+
+a:visited{
+	color:white;
+	text-decoration: none;
+}
+
+
+
 body{
 	width: 80%;
 	margin: auto;
@@ -11,6 +29,8 @@ table , th{
 }
 td{
 	border: 1px solid black;
+	padding-left:5px;
+	padding-right:5px;
 }
 #contenttable{
 	width:100%;
@@ -20,6 +40,9 @@ td{
 	text-align:center;
 }
 
+.header{
+	overflow: auto;
+}
 .title{
 	
 }
@@ -30,4 +53,40 @@ td{
 .missing{
 	background-color:rgba(255,0,0,0.3);
 	color:red;
+}
+
+.title{
+	height: 50px;
+	margin-top: 15px;
+	color: white;
+	background-color: black;
+	font-variant: small-caps;
+	font-size: 30px;
+	line-height:50px;
+	text-align:center;
+	width:70%;
+	float:left;
+}
+#back{
+	height: 50px;
+	margin-top: 15px;
+	color: white;
+	background-color: #666699;
+	font-variant: small-caps;
+	font-size: 30px;
+	line-height:50px;
+	text-align:center;
+	width:30%;
+	float:right;
+}
+#contenttable{
+	margin-top:20px;
+}
+
+.warn{
+	background-color:rgba(255,50,0,0.2);
+}
+
+.success{
+	background-color:rgba(50,255,0,0.2)
 }
