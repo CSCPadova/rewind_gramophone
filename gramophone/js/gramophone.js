@@ -71,8 +71,11 @@ function Gramophone (context){
 	
 	
 
-	//State
+	//State Machine and Transition Flags
+	this.previousState = "STOP";
 	this.state = "STOP";
+	this.armClick = false;
+	
 	
 };
 
@@ -109,6 +112,8 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 		window.clearTimeout(this.stopTimeout);
 		// update flags
 		this.isPlaying = false;
+		
+		this.previousState = this.state;
 		this.state = "STOP";
 	}
 	
@@ -234,7 +239,9 @@ Gramophone.prototype.playDisk = function(){
 				setTimeout(function(){
 					// update flag
 					that.isInInitialPosition = false;
-					that.state = "PLAY";
+					
+					/* this.previousState = this.state;
+					that.state = "PLAY"; */
 					// enable commands
 					enableAllCommands();
 					//enable arm movement
@@ -243,13 +250,13 @@ Gramophone.prototype.playDisk = function(){
 					that.play();
 					
 					}, 2000);
-					console.log("1 start angle"+this.STARTANGLE+ "current angle:"+this.armCurrentAngle);
+					//console.log("1 start angle"+this.STARTANGLE+ "current angle:"+this.armCurrentAngle);
 					this.moveArm(this.STARTANGLE, this.STARTDISKANGLE, 2000,0);
 					
 					
 					
 					
-					console.log("State: "+this.state+ " from playDisk() function rg.249");
+					console.log("State: "+this.state+ " previousState: "+this.previousState+" from playDisk() function rg.249");
 		
 		
 			}
@@ -275,7 +282,9 @@ Gramophone.prototype.playDisk = function(){
 			this.isPause = true;
 			this.isPlaying = false;
 			// update flag
-				this.state = "PAUSE";
+			this.previousState = this.state;
+			this.state = "PAUSE";
+			
 			console.log("State: "+this.state+ " from playDisk() function rg.276");
 			console.log('entered in playDisk pause');
 			// change playdiv image
@@ -362,7 +371,11 @@ Gramophone.prototype.play = function(){
 	this.audioSource.onended = function(){
 		console.log("end");
 		that.playFinish = true;
-		that.stopSong();
+		//that.armCurrentAngle = that.STARTANGLE;
+		if(!gram.armClick)
+		{
+			that.stopSong();
+		}
 		
 	};
 	
@@ -380,10 +393,11 @@ Gramophone.prototype.play = function(){
 	// update flag (go to 4° state)
 	this.isPlaying = true;
 	this.isPause = false;
+	this.previousState = this.state;
 	this.state = "PLAY";
-	console.log("State: "+this.state+ " from play() function rg.378");
+	console.log("State: "+this.state+ " previousState: "+this.previousState+" from play() function rg.378");
 	
-	console.log("durata: "+this.audioSource.buffer.duration+ "playback rate: "+this.playBackRate);
+	//console.log("durata: "+this.audioSource.buffer.duration+ "playback rate: "+this.playBackRate);
 	this.STOPTIME = this.audioSource.buffer.duration;
 	
 	
@@ -394,23 +408,28 @@ Gramophone.prototype.play = function(){
 	
 	console.log("remainingTime: "+remainingTime+ ", buffer.duration: "+this.audioSource.buffer.duration+ ", elapsedTime: "+this.elapsedTime);
 	
-	console.log("armCurrentAngle: "+this.armCurrentAngle+ "from r.g. 393");
+	//console.log("armCurrentAngle: "+this.armCurrentAngle+ "from r.g. 393");
 	// start arm movement
 	this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
 	var $a = jQuery.noConflict();
-	//$a("#arm").css({"transform":"rotate(88deg)", "transition-duration": "1s"});
+	
 	// debug
 	var message = "remainingTime: " + remainingTime + "\n playback rate:" 
 			+ this.playBackRate + "\n currentime: " + this.context.currentTime;
 	debugTest(message);
 	// start timeout: when the timeout expired call a stop function
 	this.stopTimeout = 	setTimeout(function(){
-		that.audioSource.stop();
-		
-		console.log("end");
-		this.playFinish = true;
-		this.state = "STOP";
-		console.log("State: "+this.state+ " from play() function rg.406");
+			if(remainingTime == 0)
+			{
+				that.audioSource.stop();
+				
+				console.log("end");
+				this.playFinish = true;
+				this.previousState = this.state;
+				this.state = "STOP";
+				this.armCurrentAngle = this.STARTANGLE;
+				console.log("State: "+this.state+ " from play() function rg.406");
+			}
 		}, remainingTime);
 	
 	if(gramTools.equalizerFlag ){
@@ -442,6 +461,7 @@ Gramophone.prototype.stopSong = function(){
 		// update flag  and offset
 		this.isPlaying = false;	
 		this.startOffset = 0;
+		this.previousState = this.state;
 		this.state = "STOP";
 		console.log("State: "+this.state+ " from stopSong() function rg.439");
 		
@@ -455,6 +475,7 @@ Gramophone.prototype.stopSong = function(){
 			}, 1500);
 		// move the arm to the initial place
 		this.moveArm(this.armCurrentAngle, this.STARTANGLE, 1000, 0);
+		
 	}
 };
 
@@ -770,7 +791,7 @@ Gramophone.prototype.changeRotation = function(element,type){
 		// state 4
 		if(this.isPlaying){
 			// stop arm movement
-			stopArmAnimation();
+			//stopArmAnimation();
 			// stop timeout
 			window.clearTimeout(this.stopTimeout);
 			// update offset with old playbackrate
@@ -789,7 +810,10 @@ Gramophone.prototype.changeRotation = function(element,type){
 			// restart timeout
 			this.stopTimeout = window.setTimeout(function(){
 				console.log('entered');
-				this.audioSource.stop();
+				if(this.audioSource != null)
+				{
+					this.audioSource.stop();
+				}
 				
 				console.log("end");
 				this.playFinish = true;
@@ -807,25 +831,26 @@ Gramophone.prototype.changePresetRotation = function(type){
 	var speed = 0;
 	switch(type){
 	case 0:
-		speed = this.originalSpeed;
+		speed = parseFloat(this.originalSpeed);
 		break;
 	case 2:
-		speed = 70;
+		speed = 70.00;
 		break;
 	case 3:
 		speed = 71.29;
+		
 		break;
 	case 4:
 		speed = 76.59;
 		break;
 	case 5:
-		speed = 80;
+		speed = 80.00;
 		break;
 	case 6:
 		speed = 78.26;
 		break;
 	case 1:
-		speed = this.originalSpeed;
+		speed = parseFloat(this.originalSpeed);
 		break;
 	
 	default:
@@ -836,6 +861,7 @@ Gramophone.prototype.changePresetRotation = function(type){
 	/* $rot('#changeRotation').html("<input id = \"changeRotationInput\" type=\"range\" onchange = \"gram.changeRotation(this,0);\" value=\""+speed+"\" max=\"80\" min=\"70\">"); */
 	
 	$rot('#slider').slider('value', speed);
+	$rot("#rpm_speed").html("/ "+speed.toFixed(2)+" RPM");
 	// change the playback rate 
 	this.changeRotation(speed,1);
 };
@@ -1043,9 +1069,19 @@ Gramophone.prototype.moveArm = function(startAngle, finishAngle, animationTime, 
 		
 		//UPDATE 07.06.2018:  with the following code since it's more sintetic
 		
+	//
+	console.log("previousState: "+this.previousState+" rg. 1063 gramophone.js - angle: "+this.armCurrentAngle);
+	if(this.previousState == "PAUSE")
+	{
+		
+		$s("#arm").css({"transform":"rotate("+this.armCurrentAngle+"deg)", "transition-duration": "500ms"});
+	}
+	setTimeout(function (){	
 		var $a = jQuery.noConflict();
-	$a("#arm").css({"transform":"rotate("+finishAngle+"deg)", "transition-duration": ""+Math.round(animationTime/1000)+"s", "transition-timing-function": "linear"});
-	$a("#temp").stop(true,false);
+		$a("#arm").css({"transform":"rotate("+finishAngle+"deg)", "transition-duration": ""+Math.round(animationTime/1000)+"s", "transition-timing-function": "linear"});
+	},500);
+	
+	$s("#temp").stop(true,false);
 	
 		//END UPDATE
 	

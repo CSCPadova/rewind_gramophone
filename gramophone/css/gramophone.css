@@ -197,7 +197,7 @@ div.comands{
 	background-color:transparent;
 } 
 
-#playRange{
+/* #playRange{
 	margin-left: 28px;
 	width: 100px;
 	height: 0px;
@@ -209,10 +209,10 @@ div.comands{
 	-webkit-transform-origin: left bottom;
 	-ms-transform-origin: left bottom;
 	transform: rotate(90deg);
-	-ms-transform: rotate(90deg); /* IE 9 */
-	-webkit-transform: rotate(90deg); /* Safari and Chrome */
+	-ms-transform: rotate(90deg); 
+	-webkit-transform: rotate(90deg); 
 	cursor: move;
-}
+} */
 
 #pauseRange{
 	/* margin-left: 28px;
@@ -387,15 +387,16 @@ input[type='range']#playRange::-moz-range-track {
 	top:60px;
 }
 
+/* TIMER */
 
 #timer {
 	position:relative;
-	top:10px;
-	left:-104px;
+	top: 6px;
+	left:-152px;
 	text-align:center;
-	color: red;
-	font-size: 16px ;/*50px;*/
-	font-family: 'digital_dreamregular', Arial, sans-serif;
+	color: #1f1e1e;
+	font-size: 25px ;/*50px;*/
+	font-family: Arial, sans-serif; /*'digital_dreamregular',Arial,sans-serif */
 }
 
 /* RPM SPEED */
@@ -403,10 +404,10 @@ input[type='range']#playRange::-moz-range-track {
 #rpm_speed {
 	position:relative;
 	float:right;
-	left: -290px;
-	top:-10px;
+	left: -329px;
+	top:-23px;
 	text-align:center;
-	font-size: 23px ;/*50px;*/
+	font-size: 25px ;/*50px;*/
 	font-family: Arial, sans-serif;
 }
 

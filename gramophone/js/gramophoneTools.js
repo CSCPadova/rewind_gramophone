@@ -21,10 +21,7 @@ GramophoneTools.prototype.play = function(){
 	
 	var $a  = jQuery.noConflict();
 	
-	//console.log(this.playState);
 	
-	
-		
 		if(!this.playState)
 		{
 			pauseToPlay();
@@ -172,52 +169,63 @@ GramophoneTools.prototype.openTool = function (tool){
 	}
 	// the window is open => i will close the window
 	if(flag){
+		if(tool < 5)
+		{
+			$title.css({"background-image" : "url(\"./images/goDownWhite.png\")", "display" : "none"});
+		}
 		if($upPart != null){
-			$upPart.delay(1000).animate({
+			$upPart.animate({
 				width: "920px",
-				marginLeft: "+=0px"
+				marginLeft: "+=40px"
 			}, 
-			100,
+			200,
 			function(){	
+				if(tool < 5)
+				{
+					$title.css({"display" : "block", "position" : "relative", "right" : "0px"});
+				}
+				else
+				{
+					$title.css("background-image", "url(\"./images/goDownBlack.png\")");
+				}
 			}
 					);
 		}
 		$part.slideUp(500);
 		console.log("tool"+tool);
 		
-		if(tool < 5)
-		{
-			$title.css("background-image", "url(\"./images/goDownWhite.png\")");
-		}
-		else
-		{
-			$title.css("background-image", "url(\"./images/goDownBlack.png\")");
-		}
+		
 		
 	}
 	//the windows is closed
 	else{
 		if($upPart != null){
+			if(tool < 5)
+			{
+				$title.css({"background-image" : "url(\"./images/goUpWhite.png\")", "display" : "none"});
+			}
+			
 			$upPart.animate({
-				width: "920px",
-				marginLeft: "-=0px"
+				width: "962px",
+				marginLeft: "-=40px"
 			}, 
-			100,
+			200,
 			function(){
-				
+				if(tool < 5)
+				{
+					$title.css({"display" : "block", "position" : "relative", "right" : "-40px" });
+				}
+				else
+				{
+					$title.css("background-image", "url(\"./images/goUpBlack.png\")");
+				}
 			});
 		}
-		$part.slideDown(500);
-		console.log("tool"+tool);
 		
-		if(tool < 5)
-		{
-			$title.css("background-image", "url(\"./images/goUpWhite.png\")");
-		}
-		else
-		{
-			$title.css("background-image", "url(\"./images/goUpBlack.png\")");
-		}
+		$part.slideDown(500);
+		//console.log("tool"+tool);
+		
+		
 	}
 };
 
@@ -351,14 +359,11 @@ stopVinylRotation = function(){
 
 
 playToPause = function(){
-	/* var $a = jQuery.noConflict();
-	$a("#playDiv").html("<input id = \"pauseRange\" type = \"range\" onchange = \"gram.playDisk()\" " +
-	"value = \"1\" max = \"1\" min = \"0\" step = \"1\">"); */
+	
 	
 	var $a = jQuery.noConflict();
 	
-	//$a("#play").rotate({animateTo:0});
-	$a("#play").animate({right: "-10px", marginTop: "50px"});
+	
 	setTimeout(function (){	
 		var $a = jQuery.noConflict();
 		$a("#play").rotate({animateTo:0});
@@ -371,14 +376,14 @@ playToPause = function(){
 		if(gram.elapsedTime != 0)
 		{
 			
-			console.log('timer.pause - from playToPause remainingTime: '+gram.remainingTime+' elapsedTime: '+gram.elapsedTime);
+			//console.log('timer.pause - from playToPause remainingTime: '+gram.remainingTime+' elapsedTime: '+gram.elapsedTime);
 		}
 		else
 		{
 			if(gram.elapsedTime == 0)
 			{
 				
-				console.log('end - from playToPause  '+gram.remainingTime+' elapsedTime: '+gram.elapsedTime);
+				//console.log('end - from playToPause  '+gram.remainingTime+' elapsedTime: '+gram.elapsedTime);
 				gram.playFinish = false;
 			}
 		}
@@ -389,13 +394,10 @@ playToPause = function(){
 };
 
 pauseToPlay = function(){
-	/* var $a = jQuery.noConflict();
-	$a("#playDiv").html("<input id = \"playRange\" type = \"range\" onchange = \"gram.playDisk()\" " +
-			"value = \"0\" max = \"1\" min = \"0\" step = \"1\">"); */
 			
 	var $a = jQuery.noConflict();		
-	$a("#play").animate({right: "+10px", marginTop: "0px"});
-	$a("#play").rotate({animateTo:45});
+
+	$a("#play").rotate({animateTo:75, center: ["100%", "0%"]});
 	this.playState = true;
 	console.log("play");
 
@@ -403,10 +405,17 @@ pauseToPlay = function(){
 
 stopArmAnimation = function(){
 	var $a = jQuery.noConflict();
-	//$a("#arm").css({"transform": "rotate(95deg)", "transition-duration": "2s"});
-	//gram.moveArm(5, 95, 1000, 1);
-	$a("#arm").css({"transform":"rotate(95deg)", "transition-duration": "1s"});
-	$a("#temp").stop(true,false);
+	
+	
+	var degreeAtPause = getRotationDegrees($a("#arm"));
+	console.log('degreeAtPause: '+degreeAtPause);
+	if(!gram.armClick)
+	{
+		gram.armCurrentAngle = degreeAtPause;
+		$a("#arm").css({"transform":"rotate(95deg)", "transition-duration": "1s"});
+		$a("#temp").stop(true,false);
+	}
+	 
 	
 };
 
@@ -444,4 +453,19 @@ function stripslashes(str) {
     str = str.replace(/\\0/g, '\0');
     str = str.replace(/\\\\/g, '\\');
     return str;
+}
+
+function getRotationDegrees(obj) {
+    var matrix = obj.css("-webkit-transform") ||
+    obj.css("-moz-transform")    ||
+    obj.css("-ms-transform")     ||
+    obj.css("-o-transform")      ||
+    obj.css("transform");
+    if(matrix !== 'none') {
+        var values = matrix.split('(')[1].split(')')[0].split(',');
+        var a = values[0];
+        var b = values[1];
+        var angle = Math.round(Math.atan2(b, a) * (180/Math.PI));
+    } else { var angle = 0; }
+    return (angle < 0) ? angle + 360 : angle;
 }

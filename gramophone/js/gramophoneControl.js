@@ -3,6 +3,9 @@
 	var handleCh1 = $("#handle-ch1");
 	var rpm_speed_handle = $("#rpm_speed");
 	
+	var center_ratio_x = 0.726464047;
+	var center_ratio_y = 0.161616162;
+	
 	
 	
     $("#slider").slider({
@@ -435,20 +438,24 @@
 /* ARM drag movement 07.06.2018*/
 	
 var box=$("#arm");
-var boxCenter=[box.offset().left+box.width()/2, box.offset().top+box.height()/2];
-
-var active = false;
+//var boxCenter=[box.offset().left+box.width(), box.offset().top+box.height()/2];
+var boxPos = box.position();
+//console.log(boxPos);
+//console.log("boxwidth:"+box.width());
+//var boxCenter = [2*box.height()+boxPos.left+625,boxPos.top+150+box.width()];
+var boxCenter = [$( window ).width()*center_ratio_x, $( window ).height()*center_ratio_y];
+//console.log("boxcenter:"+boxCenter);
 
 
 box.mousedown(function(){
 
 		// flag that remember the click event (mousedown) on the arm
-		active = true;
+		gram.armClick = true;
 	
 		var $a = jQuery.noConflict();
 		//stop arm animation
-		$a("#temp").stop(true,false);
-		console.log(active);
+		//$a("#temp").stop(true,false);
+		console.log("mousedown on arm: "+gram.armClick);
 		// disable all commands
 		disableAllCommands();
 		// disable arm movement
@@ -462,21 +469,28 @@ box.mousedown(function(){
 		// update flag  and offset
 		gram.isPlaying = false;	
 		gram.startOffset = 0;
-		gram.state = "STOP"; 
+		gram.previousState = gram.state;
+		gram.state = "PAUSE"; 
 		
 		//stop audio
-		gram.audioSource.stop();
-
+		if(gram.audioSource != null)
+		{
+			gram.audioSource.stop();
+			gram.audioSource.disconnect();
+		}
 
 });
 
 $(document).mousemove(function(e){    
     
-      if(active){  
-	var angle = Math.atan2(e.pageX- boxCenter[0], (e.pageY- boxCenter[1]) )*(180/Math.PI);
+      if(gram.armClick){  
+	  //console.log("e.pageX: "+(e.pageX)+" e.pageY: "+(e.pageY));
+	  
+	var angle = Math.atan2(Math.abs(e.pageX- boxCenter[0]), (e.pageY- boxCenter[1]) )*(180/Math.PI);
 
 	if(angle<=gram.STARTDISKANGLE && angle >= gram.STOPDISKANGLE)
 	{
+		box.css({ 'transition': '0.1s'});
 		box.css({ "-webkit-transform": 'rotate(' + angle + 'deg)'});    
 		box.css({ '-moz-transform': 'rotate(' + angle + 'deg)'});
 		box.css({ 'transform': 'rotate(' + angle + 'deg)'});
@@ -491,8 +505,8 @@ $(document).mousemove(function(e){
     
 });
 
-$(document).mouseup(function(){
-	if(active)
+ $(document).mouseup(function(){
+	if(gram.armClick)
 	{
 	console.log('start audio');
 	if(gram.audioSource != null)
@@ -505,7 +519,7 @@ $(document).mouseup(function(){
 		//calculate the offset (in seconds) from which the track starts
 		gram.startOffset = ratio*gram.audioSource.buffer.duration;
 		
-		console.log("startOffset:"+gram.startOffset);
+		//console.log("startOffset:"+gram.startOffset);
 		
 		disableAllCommands();
 		
@@ -518,12 +532,33 @@ $(document).mouseup(function(){
 		// start play animation leverage
 		pauseToPlay();
 		
+		enableAllCommands();
+		
+	}
+	else if (gram.isTrackLoaded)
+	{
+		gram.audioSource = context.createBufferSource();
+		gram.audioSource.buffer = currentBuffer;
+		
+		var ratio = Math.abs(gram.armCurrentAngle - gram.STARTDISKANGLE)/(gram.STARTDISKANGLE - gram.STOPDISKANGLE);
+		
+		//calculate the offset (in seconds) from which the track starts
+		gram.startOffset = ratio*gram.audioSource.buffer.duration;
+		
+		//start gramophone to play
+		gram.playDisk();
+	}
+	else
+	{
+		console.log(gram.armCurrentAngle);
+		gram.moveArm(gram.armCurrentAngle, gram.STARTANGLE, 1000,0);
+		gram.armCurrentAngle = gram.STARTDISKANGLE;
 	}
 	}
 	
 	
-	active = false;
-});
+	gram.armClick = false;
+}); 
 
 
 });

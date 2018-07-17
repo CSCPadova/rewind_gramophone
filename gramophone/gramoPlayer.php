@@ -1,16 +1,3 @@
-<?php 
-
-// This section must be removed since we change Mysql DB with SQLite once
-
-	if(class_exists( 'ConstantVDS') != true){
-		include 'constantsContainer.php';
-	}	
-	include 'staticTools.php';
-	include 'playlist.php';
-	include 'player.php';
-	
-// End section to remove
-?>
 <head>
 <style>
    @import url(./css/gramophone.css);
@@ -20,7 +7,6 @@
    @import url(./css/gramophoneSongDB.css); 
    @import url(./css/gramophoneClass.css);
 </style>
-  
 
 <script type = "text/javascript" src = "./jquery/jquery-1.12.4.js"></script>
 <script type = "text/javascript" src = "./jquery/jquery-ui.js"></script>
@@ -29,8 +15,6 @@
 <script src="./js/timerlistener.js"></script>
 
 <link rel="stylesheet" href="./css/jquery-ui.css">
-<script type = "text/javascript" src = "./js/jquery.arctext.js"></script>
-<!-- <script type="text/javascript" src="http://tympanus.net/Development/Arctext/js/jquery.arctext.js"></script> -->
 <script type = "text/javascript" src = "./js/gramophone.js"></script>
 <script type = "text/javascript" src = "./js/gramophoneControl.js"></script>
 <script type = "text/javascript" src = "./js/gramophoneTools.js"></script>
@@ -84,6 +68,7 @@
 			</div>
 			<!-- <div id = "vinylLight"></div> -->
 			<div id = "arm"></div>
+			
 			
 		</div>
 	</div>
@@ -313,79 +298,7 @@
 			<div id="slider-ch24">
 				<div id="handle-ch24" class="slider-handle-ch1"></div>
 			</div>
-			<!-- <div id = "channel0" class = "eqChannelsEven">
-				<input id = "ch0" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,0);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel1" class = "eqChannelsOdd">
-				<input id = "ch1" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,1);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel2" class = "eqChannelsEven">
-				<input id = "ch2" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,2);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel3" class = "eqChannelsOdd">
-				<input id = "ch3" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,3);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel4" class = "eqChannelsEven">
-				<input id = "ch4" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,4);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel5" class = "eqChannelsOdd">
-				<input id = "ch5" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,5);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel6" class = "eqChannelsEven">
-				<input id = "ch6" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,6);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel7" class = "eqChannelsOdd">
-				<input id = "ch7" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,7);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel8" class = "eqChannelsEven">
-				<input id = "ch8" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,8);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel9" class = "eqChannelsOdd">
-				<input id = "ch9" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,9);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel10" class = "eqChannelsEven">
-				<input id = "ch10" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,10);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel11" class = "eqChannelsOdd">
-				<input id = "ch11" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,11);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel12" class = "eqChannelsEven">
-				<input id = "ch12" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,12);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel13" class = "eqChannelsOdd">
-				<input id = "ch13" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,13);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel14" class = "eqChannelsEven">
-				<input id = "ch14" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,14);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel15" class = "eqChannelsOdd">
-				<input id = "ch15" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,15);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel16" class = "eqChannelsEven">
-				<input id = "ch16" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,16);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel17" class = "eqChannelsOdd">
-				<input id = "ch17" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,17);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel18" class = "eqChannelsEven">
-				<input id = "ch18" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,18);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel19" class = "eqChannelsOdd">
-				<input id = "ch19" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,19);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel20" class = "eqChannelsEven">
-				<input id = "ch20" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,20);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel21" class = "eqChannelsOdd">
-				<input id = "ch21" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,21);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel22" class = "eqChannelsEven">
-				<input id = "ch22" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,22);" value="0" max="60" min="0">
-			</div>
-			<div id = "channel23" class = "eqChannelsOdd">
-				<input id = "ch23" class = "rangeChannels" type="range" onchange = "gram.changeCh(this,23);" value="0" max="60" min="0">
-			</div>
-		</div> -->
+			
 		<div id = "activeButton" style = "display: none">
 			<button id = "eqButton" onclick="gram.activeEqualizer()" >ON</button>
 		</div>

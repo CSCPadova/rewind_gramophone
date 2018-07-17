@@ -1,0 +1,63 @@
+
+[
+    {
+        "path_vinyl": "1.wav",
+        "titolo": "Nofrio e la finta americana",
+        "artista": "Giovanni De Rosalia",
+        "data": 1919,
+        "grammofono": "giradischi",
+        "velocita": 76.6,
+        "dim_peso": "3.5 mil - 4 g",
+        "puntina": "Tronco - ellittica",
+        "equalizzazione": "flat",
+        "tipo_copia": "copia conservativa"
+    },
+    {
+        "path_vinyl": "2.flac",
+        "titolo": "Chi campa deritto campa aflitto",
+        "artista": "Eduardo Migliaccio",
+        "data": 1928,
+        "grammofono": "giradischi",
+        "velocita": 78.26,
+        "dim_peso": "3.5 mil - 4 g",
+        "puntina": "Tronco - ellittica",
+        "equalizzazione": "flat",
+        "tipo_copia": "copia conservativa"
+    },
+    {
+        "path_vinyl": "53.wav",
+        "titolo": "Fronne e limone",
+        "artista": "Pasquale Abete",
+        "data": 1921,
+        "grammofono": "giradischi",
+        "velocita": 80,
+        "dim_peso": "3.5 mil - 4 g",
+        "puntina": "Tronco - ellittica",
+        "equalizzazione": "flat",
+        "tipo_copia": "copia conservativa"
+    },
+    {
+        "path_vinyl": "4.flac",
+        "titolo": "Povero \\'nnucente",
+        "artista": "Michele Scialpi",
+        "data": 1921,
+        "grammofono": "giradischi",
+        "velocita": 80,
+        "dim_peso": "3.5 mil - 4 g",
+        "puntina": "Tronco - ellittica",
+        "equalizzazione": "flat",
+        "tipo_copia": "copia conservativa"
+    },
+    {
+        "path_vinyl": "i7.mp3",
+        "titolo": "nuovo 'otitolo?",
+        "artista": "io",
+        "data": 1999,
+        "grammofono": "grammofono",
+        "velocita": 70,
+        "dim_peso": "3.5 mil - 4 g",
+        "puntina": "Tronco-ellittica",
+        "equalizzazione": "flat",
+        "tipo_copia": "Copia conservativa"
+    }
+]
