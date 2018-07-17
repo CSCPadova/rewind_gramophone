@@ -325,10 +325,13 @@
 				//echo "before";
 				$db = new SQLite3('im.db');
 				//echo "after open";
+				$trackcount = $db->querySingle("SELECT COUNT(*) as count FROM phi_gram");
 				$results = $db->query('select * from phi_gram');
 				while ($r_results = $results->fetchArray()) {
 				//	print_r($r_results);
 				if (file_exists('./'.$r_results['path_vinyl'])){
+					$titlemod=stripslashes($r_results['titolo']);
+					$titlemod=str_replace('\'', '', $titlemod);
 			?>
 			<div class = "trackLoaderContainer" >
 				<div class = "firstRow">
@@ -339,18 +342,18 @@
 					</div>
 					<div class = "delfile" id="df<?php echo $r_results['id_vinyl']?>" onclick="deletefile('<?php echo $r_results['id_vinyl']?>','<?php echo basename($r_results['path_vinyl'])?>')">Delete File
 					</div>
-					<div class = "trackLoaderButton" id="<?php echo $r_results['id_vinyl']?>" onclick="gram.loadDisk('<?php echo $r_results['path_vinyl']?>','<?php echo stripslashes($r_results['titolo'])?>','<?php echo $r_results['velocita']?>')">Load Disk
+					<div class = "trackLoaderButton" id="<?php echo $r_results['id_vinyl']?>" onclick="gram.loadDisk('<?php echo $r_results['path_vinyl']?>','<?php echo $titlemod?>','<?php echo $r_results['velocita']?>')">Load Disk
 					</div>
 					
 				</div>
 				
 				<table class = "dbTable">	
 					<tr class = "secondRow">
-						<td>Grammofono</td>
-						<td>Velocita'(rpm)</td>
-						<td>Dim. e Peso Puntina</td>
-						<td>Tipo Puntina</td>
-						<td>Equalizzazione</td>
+						<td>Player</td>
+						<td>Speed (rpm)</td>
+						<td>Stylus dim - weight</td>
+						<td>Stylus Type</td>
+						<td>Equalization</td>
 					</tr>
 					<tr class = "thirdRow" id="data<?php echo $r_results['id_vinyl']?>">
 						<td><?php echo $r_results['grammofono'];?></td>
@@ -386,11 +389,11 @@
 								</div>
 								<table class = "dbTable">	
 									<tr class = "secondRow">
-										<td>Grammofono</td>
-										<td>Velocita'(rpm)</td>
-										<td>Dim. e Peso Puntina</td>
-										<td>Tipo Puntina</td>
-										<td>Equalizzazione</td>
+										<td>Player</td>
+										<td>Speed (rpm)</td>
+										<td>Stylus dim - weight</td>
+										<td>Stylus Type</td>
+										<td>Equalization</td>
 									</tr>
 									<tr class = "thirdRow" id="data<?php echo $r_results['id_vinyl']?>">
 										<td><?php echo $r_results['grammofono'];?></td>
@@ -409,6 +412,7 @@
 					echo $e->getMessage();
 					}
 			?>
+	<div id="notracks"> Tracklist is empty </div>
 	</div>
 </div>
 <div id = "songDB2Title" class = "partTitle" onclick="gramTools.openTool(4)">
@@ -436,19 +440,23 @@
 				  <option value="78.26">78.26 Electric Record</option>
 				  <option value="80">80.00 Acoustic Columbia and Vertical Recording</option>
 				</select> </tr>
-				<tr><th>Gramophone<td>
+				<tr><th>Player<td>
 				<select id="singlegramophone" name="grammofonoselect" class="td100">
-				  <option value="grammofono">Grammofono</option>
-				  <option value="giradischi">Giradischi</option>
+				  <option value="gramophone">Gramophone</option>
+				  <option value="record player">Record Player</option>
 				</select> </tr>
-				<tr><th>Puntina<td>
+				<tr><th>Stylus Type<td>
 				<select id="singlepuntina" name="puntinaselect" class="td100">
-				  <option value="Tronco-ellittica">Tronco-ellittica</option>
+				  <option value="elliptical">Elliptical</option>
+				  <option value="conical">Conical</option>
 				  <option value="Soft Tone">Soft Tone</option>
+				  <option value="Medium Tone">Medium Tone</option>
+				  <option value="Hard Tone">Hard Tone</option>
 				</select> </tr>
-				<tr><th>Dim. e peso Puntina<td>
+				<tr><th>Stylus dim. - weight<td>
 				<select id="singledim" name="dimselect" class="td100">
 				  <option value="3.5 mil - 4 g">3.5 mil - 4 g</option>
+				  <option value="1 mil - 3 g">1 mil - 3 g</option>
 				  <option value="-">-</option>
 				</select> </tr>
 				<tr><th>Equalization<td>
@@ -458,8 +466,8 @@
 				</select></tr>
 				<tr><th>Copy Type<td>
 				<select id="singletype" name="typeselect" class="td100">
-				  <option value="Copia conservativa">Copia conservativa</option>
-				  <option value="Lettura">Lettura</option>
+				  <option value="Conservative copy">Conservative copy</option>
+				  <option value="Access copy">Access copy</option>
 				</select></tr>
 				<tr><th>Select file (mp3,flac,wav):<td><input type="file" class="input-file" name="singleimport" id="singleimport" required></tr>
 				<tr><td colspan=2 ><input id="singlesubmit" type="submit" class="td100" value="Upload Track"></tr>
@@ -504,6 +512,13 @@
 	</div>
 	
 </div>
+<script type="text/javascript">
+			var trackcount=<?php echo($trackcount)?>;
+			//alert(trackcount);
+			if(trackcount==0){
+				document.getElementById('notracks').style.display = "block";
+			}
+</script>
 <script type = "text/javascript" src = "./js/uploader.js"></script>
 </body>
 

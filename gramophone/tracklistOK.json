@@ -1,0 +1,39 @@
+
+[
+    {
+        "path_vinyl": "povero nnucente.mp3",
+        "title": "povero 'nnucente",
+        "author": "Michele Scialpi",
+        "year": 1921,
+        "player": "record player",
+        "speed": 78.26,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Access copy"
+    },
+    {
+        "path_vinyl": "Li fimmini.mp3",
+        "title": "Li fimmini cu lu lipstick",
+        "author": "Leonardo Dia",
+        "year": 1929,
+        "player": "record player",
+        "speed": 78.26,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Access copy"
+    },
+	{
+        "path_vinyl": "Fronne.mp3",
+        "title": "Fronne 'e limone",
+        "author": "Pasquale Abete",
+        "year": 1921,
+        "player": "record player",
+        "speed": 80,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Access copy"
+    }
+]

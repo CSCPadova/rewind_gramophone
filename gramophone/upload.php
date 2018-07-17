@@ -202,15 +202,15 @@
 					$myObj=new stdClass();
 					//$myObj->id_vinyl = $r_results['id_vinyl'];
 					$myObj->path_vinyl = stripslashes (basename($r_results['path_vinyl']));
-					$myObj->titolo = stripslashes ($r_results['titolo']);
-					$myObj->artista = $r_results['artista'];
-					$myObj->data = $r_results['data'];
-					$myObj->grammofono = $r_results['grammofono'];
-					$myObj->velocita = $r_results['velocita'];
-					$myObj->dim_peso = $r_results['dim_peso'];
-					$myObj->puntina = $r_results['puntina'];
-					$myObj->equalizzazione = $r_results['equalizzazione'];
-					$myObj->tipo_copia = $r_results['tipo_copia'];
+					$myObj->title = stripslashes ($r_results['titolo']);
+					$myObj->author = $r_results['artista'];
+					$myObj->year = $r_results['data'];
+					$myObj->player = $r_results['grammofono'];
+					$myObj->speed = $r_results['velocita'];
+					$myObj->stylus_dim_weight = $r_results['dim_peso'];
+					$myObj->stylus_type = $r_results['puntina'];
+					$myObj->equalization = $r_results['equalizzazione'];
+					$myObj->copy_type = $r_results['tipo_copia'];
 					array_push($tracks,$myObj);	 
 				}
 					$myJSON = json_encode($tracks, JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT);	

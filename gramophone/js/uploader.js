@@ -132,6 +132,11 @@ document.getElementById("singleform").addEventListener('submit', function(event)
 				var id=xhr.responseText*1;
 				//alert(id);
 				addTrackDiv(id,title,author,year,speed,gramophone,dim,puntina,eq,file.name);
+				if(trackcount==0){
+					document.getElementById('notracks').style.display = "none";
+					trackcount=trackcount+1;
+					//alert(trackcount);
+				}
 			} else if(xhr.status === 415){
 				alert('Please insert only allowed input formats');
 			} else if(xhr.status === 409){
@@ -155,6 +160,7 @@ document.getElementById("singleform").addEventListener('submit', function(event)
 
 function addTrackDiv(id,title,author,year,speed,gramophone,dim,puntina,eq,filename){
 	console.log("addTrackDiv");
+	
 	var container=document.getElementById("songdb");
 		var extdiv=document.createElement("div");
 		extdiv.classList.add("trackLoaderContainer");
@@ -175,9 +181,11 @@ function addTrackDiv(id,title,author,year,speed,gramophone,dim,puntina,eq,filena
 				delfile.setAttribute("onclick","deletefile('"+id+"','"+filename+"')");
 				delfile.innerText="Delete File";
 			var trackLoaderButton=document.createElement("div");
+				var titlemod=str = title.replace(/\\/g, '');
+				titlemod= titlemod.replace(/'/g,"");
 				trackLoaderButton.classList.add("trackLoaderButton");
 				trackLoaderButton.setAttribute("id",id);
-				trackLoaderButton.setAttribute("onclick","gram.loadDisk('db/audio/gram/"+filename+"','"+title+"','"+speed+"')");
+				trackLoaderButton.setAttribute("onclick","gram.loadDisk('db/audio/gram/"+filename+"','"+titlemod+"','"+speed+"')");
 				trackLoaderButton.innerText="Load Disk";
 		firstRow.appendChild(delrow);
 		firstRow.appendChild(firstR);
@@ -189,7 +197,7 @@ function addTrackDiv(id,title,author,year,speed,gramophone,dim,puntina,eq,filena
 			table.classList.add("dbTable");
 				var secondRow=document.createElement("tr");
 					secondRow.classList.add("secondRow");
-					secondRow.innerHTML=("<td>Grammofono</td><td>Velocita'(rpm)</td><td>Dim. e Peso Puntina</td><td>Tipo Puntina</td><td>Equalizzazione</td>");
+					secondRow.innerHTML=("<td>Player</td><td>Speed(rpm)</td><td>Stylus dim - weight</td><td>Stylus Type</td><td>Equalization</td>");
 				var thirdRow=document.createElement("tr");
 					thirdRow.classList.add("thirdRow");
 					thirdRow.setAttribute("id","data"+id);
@@ -209,7 +217,13 @@ document.getElementById("resetdb").addEventListener('click', function(event) {
 	xhr.open('POST', "upload.php", true);
 	xhr.onload = function () {
 			if (xhr.status === 200) {
+				trackcount=0;
 				document.getElementById("songdb").innerHTML="";
+				var empty=document.createElement("div");
+				empty.setAttribute("id","notracks");
+				empty.style.display = "block";
+				empty.appendChild(document.createTextNode(" Tracklist is empty "));
+				document.getElementById("songdb").appendChild(empty);
 			}
 			else if(xhr.status === 453){
 				alert('Error in resetting the database');
@@ -369,7 +383,11 @@ function deleterow(id, filename){
 		if (xhr.status === 200) {
 			// File and metadata are deleted, edit page, delete row
 			var extdiv=document.getElementById(id).parentNode.parentNode;
-			extdiv.parentNode.removeChild(extdiv);			
+			extdiv.parentNode.removeChild(extdiv);	
+			trackcount=trackcount-1;
+			if(trackcount==0){
+				document.getElementById('notracks').style.display = "block";
+			}			
 		} else if(xhr.status === 453){
 			alert('Error in deleting metadata');
 		} 
