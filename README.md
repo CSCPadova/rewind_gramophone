@@ -27,7 +27,7 @@ Finally you need to control the PHP configuration in your "php.ini" file. In par
 * Enable the upload file extension by setting "file_uploads" flag to "On" and the "upload_max_filesize" to the chosen upper bound as follows:
     * ```file_uploads=On ```
     * ```upload_max_filesize=XXXM``` (where "XXX" it's the max size for a file in upload, expressed in MB)
-    * ```post_max_size==XXXM``` (where "XXX" it's the max size for a file in POST upload, expressed in MB)
+    * ```post_max_size=XXXM``` (where "XXX" it's the max size for a file in POST upload, expressed in MB)
 
 ## Usage
 As first step, run your web server (e.g. Apache).
