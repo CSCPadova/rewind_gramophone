@@ -11,7 +11,7 @@ This project provides the following features:
 * **Rotation Speed Control**: during  the playback of a track, you can also adjust the disc's rotation speed, i.e. the speed of audio playback, with a dedicated slider or through the available rotation presets;
 * **Equalization Control**: the gramophone is also equipped with an equalizer with which you can arbitrarily change the equalization profile in real time while playing a track;
 * **Arm Control**: you can use the mouse pointer to drag the gramophone's arm over the disc, in order to choose the time at which the playback starts.
-* **Track Loader**: using the track loader you can manage the tracks of your collection: you can choose the next track to play and the tracks to delete, you can also replace the audio file associated with a track with a new audio file specified through the upload interface.
+* **Track Loader**: using the track loader you can manage the tracks of your collection: you can choose the next track to play and the tracks to delete, you can also replace the audio file associated to a track with a new audio file specified through the upload interface.
 * **Upload/Download Area**: the gramophone is also equipped with an "Upload/Download Area" in which you can:
     * Import a single track;
     * Download the tracklist in JSON format;
@@ -40,7 +40,7 @@ Where:
 
 
 ## Credits
-The author of this project is [*Niccolò Pretto*](http://www.dei.unipd.it/~prettoni/).The contributors of this project are:
+The author of this project is [*Niccolò Pretto*](http://www.dei.unipd.it/~prettoni/). The contributors of this project are:
 * _Riccardo Galiazzo_
 * _Fabio Giachelle_
 * _Luca Piazzon_
