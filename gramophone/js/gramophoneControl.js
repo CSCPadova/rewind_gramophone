@@ -3,11 +3,11 @@
 	var handleCh1 = $("#handle-ch1");
 	var rpm_speed_handle = $("#rpm_speed");
 	
+	// ARM center ratios
 	var center_ratio_x = 0.726464047;
 	var center_ratio_y = 0.161616162;
 	
-	
-	
+	// Speed Rotation Slider 
     $("#slider").slider({
 	  min: 70.0,
       max: 80.0,
@@ -24,7 +24,7 @@
     });
 	
 	
-	
+	// Equalizer Albiswerk channel 1
 	$("#slider-ch1").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -42,6 +42,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 2
 	$("#slider-ch2").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -59,6 +60,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 3
 	$("#slider-ch3").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -76,6 +78,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 4
 	$("#slider-ch4").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -93,6 +96,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 5
 	$("#slider-ch5").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -110,7 +114,7 @@
       }
     });
   
-  
+	// Equalizer Albiswerk channel 6
 	$("#slider-ch6").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -128,6 +132,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 7
 	$("#slider-ch7").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -145,6 +150,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 8
 	$("#slider-ch8").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -162,6 +168,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 9
 	$("#slider-ch9").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -179,6 +186,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 10
 	$("#slider-ch10").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -196,6 +204,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 11
 	$("#slider-ch11").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -213,6 +222,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 12
 	$("#slider-ch12").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -230,6 +240,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 13
 	$("#slider-ch13").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -247,6 +258,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 14
 	$("#slider-ch14").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -264,6 +276,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 15
 	$("#slider-ch15").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -281,6 +294,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 16
 	$("#slider-ch16").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -298,6 +312,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 17
 	$("#slider-ch17").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -315,6 +330,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 18
 	$("#slider-ch18").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -332,6 +348,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 19
 	$("#slider-ch19").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -349,6 +366,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 20
 	$("#slider-ch20").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -366,6 +384,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 21
 	$("#slider-ch21").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -383,6 +402,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 22
 	$("#slider-ch22").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -400,6 +420,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 23
 	$("#slider-ch23").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -417,6 +438,7 @@
       }
     });
 	
+	// Equalizer Albiswerk channel 24
 	$("#slider-ch24").slider({
 	  orientation: "vertical",
 	  min: 1,
@@ -438,13 +460,11 @@
 /* ARM drag movement 07.06.2018*/
 	
 var box=$("#arm");
-//var boxCenter=[box.offset().left+box.width(), box.offset().top+box.height()/2];
+
 var boxPos = box.position();
-//console.log(boxPos);
-//console.log("boxwidth:"+box.width());
-//var boxCenter = [2*box.height()+boxPos.left+625,boxPos.top+150+box.width()];
+
 var boxCenter = [$( window ).width()*center_ratio_x, $( window ).height()*center_ratio_y];
-//console.log("boxcenter:"+boxCenter);
+
 
 
 box.mousedown(function(){
@@ -453,8 +473,7 @@ box.mousedown(function(){
 		gram.armClick = true;
 	
 		var $a = jQuery.noConflict();
-		//stop arm animation
-		//$a("#temp").stop(true,false);
+		
 		console.log("mousedown on arm: "+gram.armClick);
 		// disable all commands
 		disableAllCommands();
@@ -476,6 +495,7 @@ box.mousedown(function(){
 		if(gram.audioSource != null)
 		{
 			gram.audioSource.stop();
+			console.log("stopped by arm control");
 			gram.audioSource.disconnect();
 		}
 
@@ -483,8 +503,7 @@ box.mousedown(function(){
 
 $(document).mousemove(function(e){    
     
-      if(gram.armClick){  
-	  //console.log("e.pageX: "+(e.pageX)+" e.pageY: "+(e.pageY));
+      if(gram.armClick){
 	  
 	var angle = Math.atan2(Math.abs(e.pageX- boxCenter[0]), (e.pageY- boxCenter[1]) )*(180/Math.PI);
 
@@ -518,8 +537,6 @@ $(document).mousemove(function(e){
 		
 		//calculate the offset (in seconds) from which the track starts
 		gram.startOffset = ratio*gram.audioSource.buffer.duration;
-		
-		//console.log("startOffset:"+gram.startOffset);
 		
 		disableAllCommands();
 		

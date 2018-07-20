@@ -79,11 +79,12 @@ div.trackLoaderButton{
 }
 
 div.errorLoader{
-	width: 275px;
+	min-width: 275px;
 	height: 40px;
 	background-color: #990000;
 	color:white;
 	line-height: 40px;
+	overflow: auto;
 }
 
 div.delfile{

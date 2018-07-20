@@ -59,14 +59,12 @@
 	<div  id = "disco"> 
 		<div id= "vinylContainer">
 			<div id = "playDiv">
-				<!-- <input id = "pauseRange"  type = "range" onchange = "gram.playDisk()" value = "1" max = "1" min = "0" step = "1"> -->
 				<img id='play' onclick='gramTools.play()' style='margin-top:50px;' src='./images/play.png'> 
 			</div>
 			<div id = "vinyl" class = "discoRotation" > 
 				<p id = "label" ><p>
 				<div id= "temp" ></div>
 			</div>
-			<!-- <div id = "vinylLight"></div> -->
 			<div id = "arm"></div>
 			
 			
@@ -77,7 +75,6 @@
 
 	
 	<div id="changeRotation">
-		<!--<input id = "changeRotationInput" type="range" onchange = "gram.changeRotation(this,0);" value="78" max="80" min="70">-->
 		<div id="slider">
 			<div id="custom-handle" class="ui-slider-handle"></div>
 		</div>
@@ -514,7 +511,7 @@
 </div>
 <script type="text/javascript">
 			var trackcount=<?php echo($trackcount)?>;
-			//alert(trackcount);
+			
 			if(trackcount==0){
 				document.getElementById('notracks').style.display = "block";
 			}

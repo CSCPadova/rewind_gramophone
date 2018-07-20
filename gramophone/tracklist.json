@@ -1,1 +1,86 @@
-[]
+[
+    {
+        "path_vinyl": "povero nnucente.mp3",
+        "title": "povero 'nnucente",
+        "author": "Michele Scialpi",
+        "year": 1921,
+        "player": "record player",
+        "speed": 78.26,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Access copy"
+    },
+    {
+        "path_vinyl": "Li fimmini.mp3",
+        "title": "Li fimmini cu lu lipstick",
+        "author": "Leonardo Dia",
+        "year": 1929,
+        "player": "record player",
+        "speed": 78.26,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Access copy"
+    },
+    {
+        "path_vinyl": "Fronne.mp3",
+        "title": "Fronne 'e limone",
+        "author": "Pasquale Abete",
+        "year": 1921,
+        "player": "record player",
+        "speed": 80,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Access copy"
+    },
+    {
+        "path_vinyl": "Jonny_B_Good.mp3",
+        "title": "Jonny B. Good",
+        "author": "Marty McFLy",
+        "year": 1985,
+        "player": "gramophone",
+        "speed": 78.26,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Conservative copy"
+    },
+    {
+        "path_vinyl": "Eagles - Hotel California.mp3",
+        "title": "Hotel California",
+        "author": "Eagles",
+        "year": 1976,
+        "player": "gramophone",
+        "speed": 78.26,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Conservative copy"
+    },
+    {
+        "path_vinyl": "Avicii Hey Brother.mp3",
+        "title": "Hey Brother",
+        "author": "AVICII",
+        "year": 2013,
+        "player": "gramophone",
+        "speed": 78.26,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Conservative copy"
+    },
+    {
+        "path_vinyl": "Chariots_of_Fire.mp3",
+        "title": "Momenti di Gloria",
+        "author": "Chariots of Fire",
+        "year": 1981,
+        "player": "gramophone",
+        "speed": 78.26,
+        "stylus_dim_weight": "3.5 mil - 4 g",
+        "stylus_type": "elliptical",
+        "equalization": "flat",
+        "copy_type": "Conservative copy"
+    }
+]

@@ -48,18 +48,6 @@ div#vinylContainer{
 	margin-left: 20px;*/
 }
 
-/*div#vinylLight{
-	position:relative;
-	margin-top: 145px;
-	margin-left: 195px;
-	height: 410px;
-	width: 410px;
-	background-image: url("../images/vinyl_lights.png") ;
-	background-size: 410px;
-	background-repeat:no-repeat;
-	background-position:center;
-	z-index: 4;
-}*/
 
 div#vinyl{
 	display: none;
@@ -116,7 +104,6 @@ div#arm{
 	margin-top:150px;
 	width: 150px;
 	height: 500px;
-	/*background-color: black;*/
 	background-image: url("../images/arm.png");
 	background-repeat:no-repeat;
 	background-position:center top; 
@@ -197,38 +184,10 @@ div.comands{
 	background-color:transparent;
 } 
 
-/* #playRange{
-	margin-left: 28px;
-	width: 100px;
-	height: 0px;
-	-webkit-appearance: none;
-	vertical-align:middle;	
-	background-color: none;
-    border-radius: 15px;
-	transform-origin: left bottom;
-	-webkit-transform-origin: left bottom;
-	-ms-transform-origin: left bottom;
-	transform: rotate(90deg);
-	-ms-transform: rotate(90deg); 
-	-webkit-transform: rotate(90deg); 
-	cursor: move;
-} */
 
 #pauseRange{
-	/* margin-left: 28px;
-	width: 100px;
-	height: 0px;
-	-webkit-appearance: none;
-	background-color: transparent;
-	vertical-align:middle;	
-    border-radius: 15px;
-	transform-origin: left bottom;
-	-webkit-transform-origin: left bottom;
-	-ms-transform-origin: left bottom;
-	transform: rotate(90deg); */
 	-ms-transform: rotate(90deg); /* IE 9 */
 	-webkit-transform: rotate(90deg); /* Safari and Chrome */
-	/* cursor: move; */
 	background-color:transparent;
 	color:transparent;
 	display:none;
@@ -320,18 +279,11 @@ input[type='range']#playRange::-moz-range-track {
 	animation:2s rotate;
 	animation-name:init;
 	-webkit-animation-name:init;
-	 /*-moz-animation-iteration-count:1;
-	 -webkit-animation-iteration-count:1; 
-	 -o-animation-iteration-count:1;
-	 -ms-animation-iteration-count:1;
-	 animation-iteration-count:1;*/
 	 -moz-animation-timing-function:linear;
 	 -webkit-animation-timing-function:linear;
 	 -o-animation-timing-function:linear;
 	 -ms-animation-timing-function:linear;
 	 animation-timing-function:linear;
-	/* -webkit-animation-play-state: paused;
- 	animation-play-state: paused;*/
  	-webkit-transform-origin: center top; /* h-offset, v-offset */
     -moz-transform-origin: center top;
     -o-transform-origin: center top;
@@ -367,7 +319,7 @@ input[type='range']#playRange::-moz-range-track {
 
 
 
-/*TIME*/
+/* TIME */
 
 @font-face {
     font-family: 'digital_dreamregular';
@@ -395,7 +347,7 @@ input[type='range']#playRange::-moz-range-track {
 	left:-152px;
 	text-align:center;
 	color: #1f1e1e;
-	font-size: 25px ;/*50px;*/
+	font-size: 25px ;
 	font-family: Arial, sans-serif; /*'digital_dreamregular',Arial,sans-serif */
 }
 
@@ -407,7 +359,14 @@ input[type='range']#playRange::-moz-range-track {
 	left: -329px;
 	top:-23px;
 	text-align:center;
-	font-size: 25px ;/*50px;*/
+	font-size: 25px ;
 	font-family: Arial, sans-serif;
+}
+
+
+/* Albiswerk Web Equalizer: hide attenuation number */
+
+#handle-ch1{
+	display:none;
 }
 

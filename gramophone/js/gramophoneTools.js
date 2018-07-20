@@ -21,15 +21,17 @@ GramophoneTools.prototype.play = function(){
 	
 	var $a  = jQuery.noConflict();
 	
-	
+	// Check playback status
 		if(!this.playState)
-		{
+		{ 
+			// If gramophone status is NOT "PLAY", then turn into "PLAY"
 			pauseToPlay();
 			gram.playDisk();
 			
 		}
 		else
-		{
+		{	
+			// If gramophone status is "PLAY", then turn into "PAUSE"
 			playToPause();
 			stopArmAnimation();
 			
@@ -197,7 +199,7 @@ GramophoneTools.prototype.openTool = function (tool){
 		
 		
 	}
-	//the windows is closed
+	// the windows is closed
 	else{
 		if($upPart != null){
 			if(tool < 5)
@@ -223,7 +225,6 @@ GramophoneTools.prototype.openTool = function (tool){
 		}
 		
 		$part.slideDown(500);
-		//console.log("tool"+tool);
 		
 		
 	}
@@ -342,7 +343,6 @@ enableAllCommands = function(){
 	enableEqualizationPreset();
 	enableRotationPreset();
 	enableLoadDisk();
-	  //enableHornPreset();
 };
 
 startVinylRotation = function(){
@@ -371,25 +371,6 @@ playToPause = function(){
 	this.playState = false;
 	
 	console.log("pause");
-	if (gram.isTrackLoaded){
-		
-		if(gram.elapsedTime != 0)
-		{
-			
-			//console.log('timer.pause - from playToPause remainingTime: '+gram.remainingTime+' elapsedTime: '+gram.elapsedTime);
-		}
-		else
-		{
-			if(gram.elapsedTime == 0)
-			{
-				
-				//console.log('end - from playToPause  '+gram.remainingTime+' elapsedTime: '+gram.elapsedTime);
-				gram.playFinish = false;
-			}
-		}
-	
-	
-	}
 
 };
 
@@ -408,7 +389,7 @@ stopArmAnimation = function(){
 	
 	
 	var degreeAtPause = getRotationDegrees($a("#arm"));
-	console.log('degreeAtPause: '+degreeAtPause);
+
 	if(!gram.armClick)
 	{
 		gram.armCurrentAngle = degreeAtPause;
@@ -423,7 +404,6 @@ changeVinylRotation = function(speed, isRequiredCompensation, oldRotationSpeed){
 	var $a = jQuery.noConflict();
 	var oldTime = 60/oldRotationSpeed;
 	var time = 60/speed;
-	//"s linear 0s normal none infinite rotate "
 	
 	$a(".discoRotation").css("-moz-animation-duration", time + "s");
 	$a(".discoRotation").css("-o-animation-duration", time + "s");

@@ -82,27 +82,33 @@ function Gramophone (context){
 // <-----Load----->
 Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 	
+	if(this.audioSource!= null)
+	{
+		this.audioSource.stop();
+	}
+	
+	
+	this.currentBuffer = null;
+	this.audioSource=null;
+	
 	
 	var $st = jQuery.noConflict();
 	var path=completePath.substring(0, completePath.indexOf('.')-1);
-	//alert(completePath);
-	//alert(path);
+
 	// go to  gramophone
 	$st(document).scrollTop($st("#player").offset().top);
-	
+
 	// disable all commands until the buffering is finished
 	disableAllCommands();
 	
 	// disable arm movement
 	this.isArmEnabled = false;
 	
-	// track is playing
-	if(this.isPlaying){
-		// stop the track
-		this.audioSource.stop();
+	// track is playing or in pause
+	if(this.isPlaying || this.state == "PAUSE"){ 
+		// stop the track			
 		console.log('loaddisk');
-		this.audioSource.disconnect(0);
-		// playRange in pause position
+		
 		playToPause();
 		// stop vinyl rotation
 		stopVinylRotation();
@@ -115,11 +121,16 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 		
 		this.previousState = this.state;
 		this.state = "STOP";
+		
 	}
 	
 	if(!this.isInInitialPosition){
+		
 		// move arm to initial position
 		this.moveArm(this.armCurrentAngle, this.STARTANGLE, 2000, 0);
+	
+		this.armCurrentAngle = this.STARTDISKANGLE;
+		
 		// update flag
 		this.isInInitialPosition = true;
 		this.isPause = false;
@@ -136,15 +147,13 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 	}
 	else{
 		// show vinyl
-		//$st("#vinyl").addClass("discoRotation");
 		$st("#vinyl").show();
 	}
 	
 	// set or reset initial speed values 
 	this.playBackRate = 1;
 	$st("#Rotation0").attr('checked', 'checked');
-	/* $st("#changeRotation").html("<input id  = \"changeRotationInput\" type=\"range\" " +
-			"onchange = \"gram.changeRotation(this,0);\" value=\""+speed+"\" max=\"80\" min=\"70\">"); */
+	
 	
 	// false = is not required to compensate the rotation of the disk
 	changeVinylRotation(speed, false, 0);
@@ -170,6 +179,7 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 	var thoseTools = gramTools;
 	var those = this;
 	request.onload = function() {
+		
 		var that = those;
 		var thatTools = thoseTools;
 		// Asynchronously decode the audio file data in request.response
@@ -191,7 +201,7 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 				  that.isTrackLoaded = true;
 				  // enable arm movement
 				  that.isArmEnabled = true;
-				  
+				  //alert("inside function decoded 202 Gramophone state: "+gram.state);
 				  
 				  if (thatTools.equalizerFlag){
 					  that.activeEqualizer();
@@ -211,6 +221,8 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 	
 	// create the buffering animation
 	startBufferingAnimation();
+	
+	
 };
 
 // <-----Play----->
@@ -239,9 +251,6 @@ Gramophone.prototype.playDisk = function(){
 				setTimeout(function(){
 					// update flag
 					that.isInInitialPosition = false;
-					
-					/* this.previousState = this.state;
-					that.state = "PLAY"; */
 					// enable commands
 					enableAllCommands();
 					//enable arm movement
@@ -250,7 +259,7 @@ Gramophone.prototype.playDisk = function(){
 					that.play();
 					
 					}, 2000);
-					//console.log("1 start angle"+this.STARTANGLE+ "current angle:"+this.armCurrentAngle);
+					
 					this.moveArm(this.STARTANGLE, this.STARTDISKANGLE, 2000,0);
 					
 					
@@ -264,15 +273,8 @@ Gramophone.prototype.playDisk = function(){
 				
 				console.log("2 start angle"+this.STARTANGLE+ "current angle:"+this.armCurrentAngle);
 				
-				//this.moveArm(-90, 88, 6000, 0);
-				
 				// call play function
 				   this.play();
-				   
-					
-				/* // update flag
-				this.state = "PLAY";
-				console.log("State: "+this.state+ " from playDisk() function rg.265"); */
 				
 			}
 		}
@@ -369,9 +371,9 @@ Gramophone.prototype.play = function(){
 	this.audioSource.loop = false;
 	var that = this;
 	this.audioSource.onended = function(){
-		console.log("end");
+		
 		that.playFinish = true;
-		//that.armCurrentAngle = that.STARTANGLE;
+		
 		if(!gram.armClick)
 		{
 			that.stopSong();
@@ -395,42 +397,36 @@ Gramophone.prototype.play = function(){
 	this.isPause = false;
 	this.previousState = this.state;
 	this.state = "PLAY";
-	console.log("State: "+this.state+ " previousState: "+this.previousState+" from play() function rg.378");
 	
-	//console.log("durata: "+this.audioSource.buffer.duration+ "playback rate: "+this.playBackRate);
 	this.STOPTIME = this.audioSource.buffer.duration;
 	
 	
 	// calculate animation timing
 	var remainingTime = (this.STOPTIME  - (this.startOffset % this.audioSource.buffer.duration)) / this.playBackRate * 1000;
+	
 	this.remainingTime = remainingTime;
 	
-	
-	console.log("remainingTime: "+remainingTime+ ", buffer.duration: "+this.audioSource.buffer.duration+ ", elapsedTime: "+this.elapsedTime);
-	
-	//console.log("armCurrentAngle: "+this.armCurrentAngle+ "from r.g. 393");
 	// start arm movement
 	this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
+	
 	var $a = jQuery.noConflict();
 	
 	// debug
 	var message = "remainingTime: " + remainingTime + "\n playback rate:" 
 			+ this.playBackRate + "\n currentime: " + this.context.currentTime;
 	debugTest(message);
+	
 	// start timeout: when the timeout expired call a stop function
 	this.stopTimeout = 	setTimeout(function(){
-			if(remainingTime == 0)
+			if(this.remainingTime == 0)
 			{
-				that.audioSource.stop();
-				
-				console.log("end");
+				this.audioSource.stop();
 				this.playFinish = true;
 				this.previousState = this.state;
 				this.state = "STOP";
 				this.armCurrentAngle = this.STARTANGLE;
-				console.log("State: "+this.state+ " from play() function rg.406");
 			}
-		}, remainingTime);
+		}, this.remainingTime);
 	
 	if(gramTools.equalizerFlag ){
 		this.isEqualizerActive = false;
@@ -438,7 +434,9 @@ Gramophone.prototype.play = function(){
 	else{
 		this.isEqualizerActive = true;
 	}
+	
 	this.activeEqualizer();
+	
 };
 
 Gramophone.prototype.stopSong = function(){
@@ -463,7 +461,7 @@ Gramophone.prototype.stopSong = function(){
 		this.startOffset = 0;
 		this.previousState = this.state;
 		this.state = "STOP";
-		console.log("State: "+this.state+ " from stopSong() function rg.439");
+		
 		
 		var that = this;
 		setTimeout(function(){
@@ -549,7 +547,7 @@ Gramophone.prototype.changePresetValue = function(element, type){
 	}
 	// error
 	else{
-		alert("changePresetValue error");
+		//alert("changePresetValue error");
 	}
 	var $pe = jQuery.noConflict();
 	$pe("#bassTurnoverLabel").text(this.bassTurnover + "Hz");
@@ -582,7 +580,6 @@ Gramophone.prototype.changeAllGainValue = function(){
 			tempMaxGain = notNormalizeGain[i];
 	}
 	
-	//var alertString = "";
 	//this.removeGainToVolume();
 	this.presetGain = ( tempMaxGain - 10);
 	var tempGain = -20 + this.presetGain;
@@ -809,13 +806,14 @@ Gramophone.prototype.changeRotation = function(element,type){
 			this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
 			// restart timeout
 			this.stopTimeout = window.setTimeout(function(){
-				console.log('entered');
-				if(this.audioSource != null)
+				
+				if(this.audioSource != null && this.remainingTime==0)
 				{
+					
 					this.audioSource.stop();
 				}
 				
-				console.log("end");
+				
 				this.playFinish = true;
 				}, remainingTime);
 		}
@@ -857,8 +855,7 @@ Gramophone.prototype.changePresetRotation = function(type){
 		alert("Errore");
 		break;
 	}
-	// change the range input 
-	/* $rot('#changeRotation').html("<input id = \"changeRotationInput\" type=\"range\" onchange = \"gram.changeRotation(this,0);\" value=\""+speed+"\" max=\"80\" min=\"70\">"); */
+	
 	
 	$rot('#slider').slider('value', speed);
 	$rot("#rpm_speed").html("/ "+speed.toFixed(2)+" RPM");
@@ -1042,48 +1039,18 @@ Gramophone.prototype.moveArm = function(startAngle, finishAngle, animationTime, 
 	
 	//foreward movement
 	if(direction == 0){
-	    // we use a pseudo object for the animation
-	    // (starts from `0` to `angle`), you can name it as you want
-	   
-	  /*   $s("#temp").animate({deg: (95 - finishAngle)}, {
-	        duration: animationTime,
-	        step: function(now) {
-	            // in the step-callback (that is fired each step of the animation),
-	            // you can use the `now` paramter which contains the current
-	            // animation-position (`0` up to `angle`)
-        		this.armCurrentAngle = 95 - now;
-	        	var rotateString = "rotate(" +  (95 - now) + "deg)";
-            	$elem.css("transform", rotateString);
-                $elem.css("-webkit-transform", rotateString);
-                $elem.css("-ms-transform", rotateString );
-                $elem.css("-webkit-animation-fill-mode", "forwards");
-                $elem.css("-moz-animation-fill-mode","forwards");
-                $elem.css("-o-animation-fill-mode","forwards");
-                $elem.css("-ms-animation-fill-mode","forwards");
-                $elem.css("animation-fill-mode","forwards");  
-                $elem.css("animation-timing-function","linear"); 
-                $elem.css("-webkit-animation-timing-function","linear"); 
-                
-            }
-	    }); */
 		
-		//UPDATE 07.06.2018:  with the following code since it's more sintetic
-		
-	//
-	console.log("previousState: "+this.previousState+" rg. 1063 gramophone.js - angle: "+this.armCurrentAngle);
-	if(this.previousState == "PAUSE")
-	{
-		
-		$s("#arm").css({"transform":"rotate("+this.armCurrentAngle+"deg)", "transition-duration": "500ms"});
-	}
-	setTimeout(function (){	
-		var $a = jQuery.noConflict();
-		$a("#arm").css({"transform":"rotate("+finishAngle+"deg)", "transition-duration": ""+Math.round(animationTime/1000)+"s", "transition-timing-function": "linear"});
-	},500);
-	
-	$s("#temp").stop(true,false);
-	
-		//END UPDATE
+			if(this.previousState == "PAUSE")
+			{
+				
+				$s("#arm").css({"transform":"rotate("+this.armCurrentAngle+"deg)", "transition-duration": "500ms"});
+			}
+			setTimeout(function (){	
+				var $a = jQuery.noConflict();
+				$a("#arm").css({"transform":"rotate("+finishAngle+"deg)", "transition-duration": ""+Math.round(animationTime/1000)+"s", "transition-timing-function": "linear"});
+			},500);
+			
+			$s("#temp").stop(true,false);
 	
 	}
 	//backward movement

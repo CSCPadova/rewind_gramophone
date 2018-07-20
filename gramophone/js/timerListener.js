@@ -1,35 +1,19 @@
-/*  $( document ).ready(function() {
-	 
-	 timer.addEventListener('secondsUpdated', function (e) {
-		var $st = jQuery.noConflict();
-		$st('#timer').html(timer.getTimeValues().toString());
-		console.log(timer.getTimeValues().toString());
-	});
-	 
- }); */
-
- $( document ).ready(function() {
+$( document ).ready(function() {
 	 var time = 0;
 	 
 	 
 	 
  setInterval(function (){
 		var $st = jQuery.noConflict();
+		
 		if(gram.state == "PLAY"){
 		
-				//console.log("start .timer: "+gram.startTime+ "cur time: "+gram.context.currentTime);
-		
-				//console.log("playbackrate:"+gram.playBackRate);
-				
+				// If gramophone state is "PLAY", then start timer with format: hh:mm:ss				
 				if(gram.startOffset > 0 && gram.elapsedTime == 0)
 				{
 					gram.elapsedTime = gram.startOffset*1000;
 				}
 				time = (gram.elapsedTime + 100*gram.playBackRate);
-				
-				//console.log("elapsedTime:"+gram.elapsedTime+"time:"+time);
-				
-				
 				
 				var hours = Math.floor(((time / 1000) / 60) / 60);
 				var minutes = Math.floor(((time - (hours*60*60*1000)) / 1000) / 60);
@@ -67,7 +51,7 @@
 				}
 				
 				$st('#timer').html(hoursFormatted+":"+minutesFormatted+":"+secondsFormatted);
-				//console.log(hours+":"+minutes+":"+seconds);
+				
 				gram.elapsedTime = time;
 		}
 		else if(gram.state == "STOP")
@@ -83,7 +67,7 @@
 		}
 		else
 		{
-			//PAUSE STATE DO NOTHING
+			// "PAUSE" STATE DO NOTHING
 		}
 	},100);
 	
