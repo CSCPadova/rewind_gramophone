@@ -42,21 +42,21 @@ function Gramophone (context){
 	this.isShelvingEnable = false;
 
 	//two curves: old and new
-	var customOldReadingCurve{
-		bassTurnover = 500;
-		rolloff = -13.7;
-		highTurnoverFrequency = 0;
-		shelving = 50;
-		isShelvingEnable = false;
-	};
+	this.customOldReadingCurve = {
+		bassTurnover : 500,
+		rolloff : -13.7,
+		highTurnoverFrequency : 0,
+		shelving : 50,
+		isShelvingEnable : false
+	}
 
-	var customNewReadingCurve{
-		bassTurnover = 500;
-		rolloff = -13.7;
-		highTurnoverFrequency = 0;
-		shelving = 50;
-		isShelvingEnable = false;
-	};
+	this.customNewReadingCurve = {
+		bassTurnover : 500,
+		rolloff : -13.7,
+		highTurnoverFrequency : 0,
+		shelving : 50,
+		isShelvingEnable : false
+	}
 	
 	// Equalization Preset Node
 	this.equalizationPreset = new Array();
@@ -547,7 +547,6 @@ Gramophone.prototype.getGain = function(freq, lowTurnoverFreq, highTurnoverFreq,
 };
 
 Gramophone.prototype.changePresetValue = function(element, type){
-
 	//change the value of to the curve i want to change: old or new based on the element i'm changing
 	var targetCurve = null;
 	var eqTarget = element.getAttribute("eqTarget");
@@ -557,12 +556,12 @@ Gramophone.prototype.changePresetValue = function(element, type){
 	var shelvingLabel = "#shelvingLabel";
 
 	if(eqTarget == "old"){
-		targetCurve = customOldReadingCurve;
+		targetCurve = this.customOldReadingCurve;
 		bassTurnoverLabel += "Old";
 		rolloffLabel += "Old";
 		shelvingLabel += "Old";
 	}else{
-		targetCurve = customNewReadingCurve;
+		targetCurve = this.customNewReadingCurve;
 		bassTurnoverLabel += "New";
 		rolloffLabel += "New";
 		shelvingLabel += "New";
@@ -572,15 +571,22 @@ Gramophone.prototype.changePresetValue = function(element, type){
 	var rangeValue = element.value;
 	// bass turnover
 	if(type == 0){
+		//this.bassTurnover = rangeValue;
+
 		targetCurve.bassTurnover = rangeValue;
 	}
 	// rolloff
 	else if(type == 1){
+		//this.rolloff = rangeValue;
+		//this.highTurnoverFrequency = this.getTrebleTurnover(this.rolloff);
+
 		targetCurve.rolloff = rangeValue;
-		targetCurve.highTurnoverFrequency = this.getTrebleTurnover(targetCurve.rolloff); 
+		targetCurve.highTurnoverFrequency = this.getTrebleTurnover(targetCurve.rolloff);
 	}
 	// shelving filter
 	else if(type == 2){
+		//this.shelving = rangeValue;
+
 		targetCurve.shelving = rangeValue;
 	}
 	// error
@@ -589,8 +595,9 @@ Gramophone.prototype.changePresetValue = function(element, type){
 	}
 	var $pe = jQuery.noConflict();
 	$pe(bassTurnoverLabel).text(targetCurve.bassTurnover + "Hz");
-	$pe(bassTurnoverLabel).text(targetCurve.rolloff + "dB");
-	$pe(bassTurnoverLabel).text(targetCurve.shelving + "Hz");
+	$pe(rolloffLabel).text(targetCurve.rolloff + "dB");
+	$pe(shelvingLabel).text(targetCurve.shelving + "Hz");
+
 	this.changeAllGainValue();
 };
 
