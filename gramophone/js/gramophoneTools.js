@@ -7,6 +7,7 @@ function GramophoneTools(){
 	
 	// commands flag
 	this.rotationFlag = false;
+	this.oldEqualizationFlag = false;
 	this.equalizationFlag = false;
 	this.hornFlag = false;
 	this.singleTrack = false;
@@ -163,7 +164,18 @@ GramophoneTools.prototype.openTool = function (tool){
 			else
 				this.json = true;
 			break;
-		
+
+		// OLD equalization preset control
+		case 10:
+			$part = null;
+			$part = $ot("#oldEqualizationControl");
+			$title = $ot("#openControl10");
+			flag = this.oldEqualizationFlag;
+			if(this.oldEqualizationFlag)
+				this.oldEqualizationFlag = false;
+			else
+				this.oldEqualizationFlag = true;
+			break;
 		
 		default:
 			alert("menu open error");

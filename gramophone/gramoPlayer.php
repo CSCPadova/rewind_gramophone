@@ -120,9 +120,64 @@
 		</div>
 	</div>
 	
+	<!-- 			Equalization Preset	Old			 -->
+	<div class = "controlsSubTitle" onclick="gramTools.openTool(10)">
+		<div class ="titleSubMenuDiv" >Remove Old Equalization</div>
+		<div id = "openControl10" class = "openSubPart" ></div>
+	</div>
+	<div id = "oldEqualizationControl" class = "controlsSubMenu">
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq0" onclick="gram.changePresetEq(0)" checked = "checked">  No equalization</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq1" onclick="gram.changePresetEq(1)">  Riaa</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq2" onclick="gram.changePresetEq(2)">  Rca</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq3" onclick="gram.changePresetEq(3)">  Hmv</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq4" onclick="gram.changePresetEq(4)">  Ffrr</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq5" onclick="gram.changePresetEq(5)">  Nab</input>
+		</div>
+		<div id = "changeEqualizationFilter">
+			<div id = "customTitle">
+				<input type = "radio" name = "radioEq" id = "radioEq6" onclick="gram.changePresetEq(6)">  Custom Equalization</input>
+			</div>
+			<div id = "bassTurnover" class = "customRangeContainer">
+				<div>Bass Turnover Frequency</div>
+				<div id = "bassTurnoverLabel" class = "LabelCustom">500 Hz</div>
+				<div>
+					<input id = "bassTurnoverRange" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled">
+				</div>
+			</div>
+			<div id = "rolloff" class = "customRangeContainer">
+				<div>High Gain Rolloff</div>
+				<div id = "rolloffLabel" class = "LabelCustom">-13.7 dB</div>
+				<div>
+					<input id = "rolloffRange" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled">
+				</div>
+			</div>
+			<div id = "shelving" class = "customRangeContainer">
+				<div>LF Shelving Frequency</div>
+				<div id = "shelvingLabel" class = "LabelCustom" >50 Hz</div>
+				<div>
+					<input id = "shelvingRange" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled">
+					<input id = "shelvingEnable" type = "checkbox" disabled ="disabled" onchange = "gram.enableShelving();"></input>
+				</div>	
+			</div>
+			<div id = "normalization"></div>
+			<div id = "gain10"></div>
+		</div>
+	</div>
+
 	<!-- 			Equalization Preset				 -->
 	<div class = "controlsSubTitle" onclick="gramTools.openTool(6)">
-		<div class ="titleSubMenuDiv" >Equalization Preset</div>
+		<div class ="titleSubMenuDiv" >Add New Equalization</div>
 		<div id = "openControl2" class = "openSubPart" ></div>
 	</div>
 	<div id = "equalizationControl" class = "controlsSubMenu">
