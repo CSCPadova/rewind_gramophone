@@ -40,6 +40,23 @@ function Gramophone (context){
 	this.highTurnoverFrequency = 0;
 	this.shelving = 50;
 	this.isShelvingEnable = false;
+
+	//two curves: old and new
+	var customOldReadingCurve{
+		bassTurnover = 500;
+		rolloff = -13.7;
+		highTurnoverFrequency = 0;
+		shelving = 50;
+		isShelvingEnable = false;
+	};
+
+	var customNewReadingCurve{
+		bassTurnover = 500;
+		rolloff = -13.7;
+		highTurnoverFrequency = 0;
+		shelving = 50;
+		isShelvingEnable = false;
+	};
 	
 	// Equalization Preset Node
 	this.equalizationPreset = new Array();
@@ -530,29 +547,50 @@ Gramophone.prototype.getGain = function(freq, lowTurnoverFreq, highTurnoverFreq,
 };
 
 Gramophone.prototype.changePresetValue = function(element, type){
+
+	//change the value of to the curve i want to change: old or new based on the element i'm changing
+	var targetCurve = null;
+	var eqTarget = element.getAttribute("eqTarget");
+
+	var bassTurnoverLabel = "#bassTurnoverLabel";
+	var rolloffLabel = "#rolloffLabel";
+	var shelvingLabel = "#shelvingLabel";
+
+	if(eqTarget == "old"){
+		targetCurve = customOldReadingCurve;
+		bassTurnoverLabel += "Old";
+		rolloffLabel += "Old";
+		shelvingLabel += "Old";
+	}else{
+		targetCurve = customNewReadingCurve;
+		bassTurnoverLabel += "New";
+		rolloffLabel += "New";
+		shelvingLabel += "New";
+	}
+
 	// get range value
 	var rangeValue = element.value;
 	// bass turnover
 	if(type == 0){
-		this.bassTurnover = rangeValue;
+		targetCurve.bassTurnover = rangeValue;
 	}
 	// rolloff
 	else if(type == 1){
-		this.rolloff = rangeValue;
-		this.highTurnoverFrequency = this.getTrebleTurnover(this.rolloff); 
+		targetCurve.rolloff = rangeValue;
+		targetCurve.highTurnoverFrequency = this.getTrebleTurnover(targetCurve.rolloff); 
 	}
 	// shelving filter
 	else if(type == 2){
-		this.shelving = rangeValue;
+		targetCurve.shelving = rangeValue;
 	}
 	// error
 	else{
 		//alert("changePresetValue error");
 	}
 	var $pe = jQuery.noConflict();
-	$pe("#bassTurnoverLabel").text(this.bassTurnover + "Hz");
-	$pe("#rolloffLabel").text(this.rolloff + "dB");
-	$pe("#shelvingLabel").text(this.shelving + "Hz");
+	$pe(bassTurnoverLabel).text(targetCurve.bassTurnover + "Hz");
+	$pe(bassTurnoverLabel).text(targetCurve.rolloff + "dB");
+	$pe(bassTurnoverLabel).text(targetCurve.shelving + "Hz");
 	this.changeAllGainValue();
 };
 
@@ -573,8 +611,11 @@ Gramophone.prototype.changeAllGainValue = function(){
 	
 	// calculate not normalize gain value
 	for(var i = 0; i < 32; i++){
-		notNormalizeGain[i] = this.getGain(this.equalizationPresetFrequency[i], this.bassTurnover, 
-				this.getTrebleTurnover(this.rolloff), this.shelving);
+		notNormalizeGain[i] = this.getGain(
+									this.equalizationPresetFrequency[i], 
+									this.bassTurnover, 
+									this.getTrebleTurnover(this.rolloff), 
+									this.shelving);
 		// find the max gain value
 		if(notNormalizeGain[i] > tempMaxGain)
 			tempMaxGain = notNormalizeGain[i];

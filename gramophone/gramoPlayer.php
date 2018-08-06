@@ -150,24 +150,24 @@
 			</div>
 			<div id = "bassTurnover" class = "customRangeContainer">
 				<div>Bass Turnover Frequency</div>
-				<div id = "bassTurnoverLabel" class = "LabelCustom">500 Hz</div>
+				<div id = "bassTurnoverLabelOld" class = "LabelCustom">500 Hz</div>
 				<div>
-					<input id = "bassTurnoverRange" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled">
+					<input id = "bassTurnoverRange" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled" eqTarget="old">
 				</div>
 			</div>
 			<div id = "rolloff" class = "customRangeContainer">
 				<div>High Gain Rolloff</div>
-				<div id = "rolloffLabel" class = "LabelCustom">-13.7 dB</div>
+				<div id = "rolloffLabelOld" class = "LabelCustom">-13.7 dB</div>
 				<div>
-					<input id = "rolloffRange" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled">
+					<input id = "rolloffRange" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled" eqTarget="old">
 				</div>
 			</div>
 			<div id = "shelving" class = "customRangeContainer">
 				<div>LF Shelving Frequency</div>
-				<div id = "shelvingLabel" class = "LabelCustom" >50 Hz</div>
+				<div id = "shelvingLabelOld" class = "LabelCustom" >50 Hz</div>
 				<div>
-					<input id = "shelvingRange" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled">
-					<input id = "shelvingEnable" type = "checkbox" disabled ="disabled" onchange = "gram.enableShelving();"></input>
+					<input id = "shelvingRange" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="old">
+					<input id = "shelvingEnable" type = "checkbox" disabled ="disabled" eqTarget="old" onchange = "gram.enableShelving();"></input>
 				</div>	
 			</div>
 			<div id = "normalization"></div>
@@ -175,7 +175,7 @@
 		</div>
 	</div>
 
-	<!-- 			Equalization Preset				 -->
+	<!-- 			Equalization Preset	New			 -->
 	<div class = "controlsSubTitle" onclick="gramTools.openTool(6)">
 		<div class ="titleSubMenuDiv" >Add New Equalization</div>
 		<div id = "openControl2" class = "openSubPart" ></div>
@@ -205,24 +205,24 @@
 			</div>
 			<div id = "bassTurnover" class = "customRangeContainer">
 				<div>Bass Turnover Frequency</div>
-				<div id = "bassTurnoverLabel" class = "LabelCustom">500 Hz</div>
+				<div id = "bassTurnoverLabelNew" class = "LabelCustom">500 Hz</div>
 				<div>
-					<input id = "bassTurnoverRange" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled">
+					<input id = "bassTurnoverRange" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled" eqTarget="new">
 				</div>
 			</div>
 			<div id = "rolloff" class = "customRangeContainer">
 				<div>High Gain Rolloff</div>
-				<div id = "rolloffLabel" class = "LabelCustom">-13.7 dB</div>
+				<div id = "rolloffLabelNew" class = "LabelCustom">-13.7 dB</div>
 				<div>
-					<input id = "rolloffRange" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled">
+					<input id = "rolloffRange" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled" eqTarget="new">
 				</div>
 			</div>
 			<div id = "shelving" class = "customRangeContainer">
 				<div>LF Shelving Frequency</div>
-				<div id = "shelvingLabel" class = "LabelCustom" >50 Hz</div>
+				<div id = "shelvingLabelNew" class = "LabelCustom" >50 Hz</div>
 				<div>
-					<input id = "shelvingRange" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled">
-					<input id = "shelvingEnable" type = "checkbox" disabled ="disabled" onchange = "gram.enableShelving();"></input>
+					<input id = "shelvingRange" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="new">
+					<input id = "shelvingEnable" type = "checkbox" disabled ="disabled" eqTarget="new" onchange = "gram.enableShelving();"></input>
 				</div>	
 			</div>
 			<div id = "normalization"></div>
