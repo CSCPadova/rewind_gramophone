@@ -645,7 +645,40 @@ Gramophone.prototype.changeAllGainValue = function(){
 	
 };
 
-Gramophone.prototype.changePresetEq = function(preset) {
+Gramophone.prototype.changePresetEq = function(element, preset) {
+
+	//change the value of to the curve i want to change: old or new based on the element i'm changing
+	var targetCurve = null;
+	var eqTarget = element.getAttribute("eqTarget");
+	//html elements' id
+	var bassTurnoverLabel = "#bassTurnoverLabel";
+	var bassTurnoverRange = "#bassTurnoverRange";
+	var rolloffLabel = "#rolloffLabel";
+	var rolloffRange = "#rolloffRange";
+	var shelvingLabel = "#shelvingLabel";
+	var shelvingRange = "#shelvingRange";
+	var shelvingEnable = "#shelvingEnable";
+
+	if(eqTarget == "old"){
+		targetCurve = this.customOldReadingCurve;
+		bassTurnoverLabel += "Old";
+		bassTurnoverRange += "Old";
+		rolloffLabel += "Old";
+		rolloffRange += "Old";
+		shelvingLabel += "Old";
+		shelvingRange += "Old";
+		shelvingEnable += "Old";
+	}else{ 
+		targetCurve = this.customNewReadingCurve;
+		bassTurnoverLabel += "New";
+		bassTurnoverRange += "New";
+		rolloffLabel += "New";
+		rolloffRange += "New";
+		shelvingLabel += "New";
+		shelvingRange += "New";
+		shelvingEnable += "New";
+	}
+
 	if(this.equalizationPresetType != preset){
 		if(this.equalizationPresetType != 0){
 			this.equalizationPreset[31].disconnect();
@@ -661,13 +694,21 @@ Gramophone.prototype.changePresetEq = function(preset) {
 				// all the gain value = 0;
 				this.allGainToZero();
 				this.isShelvingEnable = false;
+
+				targetCurve.isShelvingEnable=false;
 				break;
 			// RIAA 
 			case 1:
+				//TODO NEED TO REMOVE THESE ONES, THESE REMAIN HERE JUST TO MAKE THE CODE WORK
 				this.bassTurnover = 500;
 				this.rolloff = -13,7;
 				this.shelving = 50;
 				this.isShelvingEnable = true;
+
+				targetCurve.bassTurnover = 500;
+				targetCurve.rolloff = -13,7;
+				targetCurve.shelving = 50;
+				targetCurve.isShelvingEnable = true;
 				break;
 			// RCA 1938 - 48
 			case 2:
@@ -675,24 +716,39 @@ Gramophone.prototype.changePresetEq = function(preset) {
 				this.rolloff = -12;
 				this.isShelvingEnable = false;
 				
+				targetCurve.bassTurnover = 500;
+				targetCurve.rolloff = -12;
+				targetCurve.isShelvingEnable = false;
 				break;
 			// HMV 1925 - 1946
 			case 3:
 				this.bassTurnover = 250;
 				this.rolloff = 0;
 				this.isShelvingEnable = false;
+
+				targetCurve.bassTurnover = 250;
+				targetCurve.rolloff = 0;
+				targetCurve.isShelvingEnable = false;
 				break;
 			// ffrr decca 1949
 			case 4:
 				this.bassTurnover = 250;
 				this.rolloff = -5;
 				this.isShelvingEnable = false;
+
+				targetCurve.bassTurnover = 250;
+				targetCurve.rolloff = -5;
+				targetCurve.isShelvingEnable = false;
 				break;
 			// NAB
 			case 5:
 				this.bassTurnover = 500;
 				this.rolloff = -16;
 				this.isShelvingEnable = false;
+
+				targetCurve.bassTurnover = 500;
+				targetCurve.rolloff = -16;
+				targetCurve.isShelvingEnable = false;
 				break;
 			// custom
 			case 6:
@@ -704,41 +760,45 @@ Gramophone.prototype.changePresetEq = function(preset) {
 		}
 		// block the range
 		if(this.equalizationPresetType == 0){
-			$pe("#bassTurnoverRange").attr('disabled','disabled');
-			$pe("#rolloffRange").attr('disabled','disabled');
-			$pe("#shelvingRange").attr('disabled','disabled');
-			$pe("#shelvingRange").attr('disabled','disabled');
+			$pe(bassTurnoverRange).attr('disabled','disabled');
+			$pe(rolloffRange).attr('disabled','disabled');
+			$pe(shelvingRange).attr('disabled','disabled');
 		}
 		// change the label with standard parameters 
 		else if(this.equalizationPresetType == 6){
-			$pe("#bassTurnoverRange").removeAttr('disabled');
-			$pe("#rolloffRange").removeAttr('disabled');
-			$pe("#shelvingEnable").removeAttr('disabled');
-			if (this.isShelvingEnable){
-				$pe("#shelvingRange").removeAttr('disabled');
+			$pe(bassTurnoverRange).removeAttr('disabled');
+			$pe(rolloffRange).removeAttr('disabled');
+			$pe(shelvingEnable).removeAttr('disabled');
+			if (targetCurve.isShelvingEnable){
+				$pe(shelvingRange).removeAttr('disabled');
 			}
 			else{
-				$pe("#shelvingRange").attr('disabled','disabled');
+				$pe(shelvingRange).attr('disabled','disabled');
 			}
 				
 			this.changeAllGainValue();
 		}
 		else
 		{	
-			if(this.equalizationPresetType == 1)
-				$pe("#shelvingEnable").attr('checked',true);
-			else
-				$pe("#shelvingEnable").removeAttr('checked');
-			$pe("#shelvingEnable").attr('disabled','disabled');
-			$pe("#bassTurnoverRange").attr('disabled','disabled');
-			$pe("#rolloffRange").attr('disabled','disabled');
-			$pe("#shelvingRange").attr('disabled','disabled');
-			$pe("#bassTurnoverLabel").text(this.bassTurnover + "Hz");
-			$pe("#rolloffLabel").text(this.rolloff + "dB");
-			$pe("#shelvingLabel").text(this.shelving + "Hz");
-			$pe("#bassTurnoverRange").val(this.bassTurnover);
-			$pe("#rolloffRange").val(this.rolloff);
-			$pe("#shelvingRange").val(this.shelving);
+			if(this.equalizationPresetType == 1){
+				$pe(shelvingEnable).attr('checked',true);
+			}else{
+				$pe(shelvingEnable).removeAttr('checked');
+			}
+
+			$pe(shelvingEnable).attr('disabled','disabled');
+			$pe(bassTurnoverRange).attr('disabled','disabled');
+			$pe(rolloffRange).attr('disabled','disabled');
+			$pe(shelvingRange).attr('disabled','disabled');
+
+			$pe(bassTurnoverLabel).text(targetCurve.bassTurnover + "Hz");
+			$pe(rolloffLabel).text(targetCurve.rolloff + "dB");
+			$pe(shelvingLabel).text(targetCurve.shelving + "Hz");
+
+			$pe(bassTurnoverRange).val(targetCurve.bassTurnover);
+			$pe(rolloffRange).val(targetCurve.rolloff);
+			$pe(shelvingRange).val(targetCurve.shelving);
+
 			this.changeAllGainValue();
 		}
 		
@@ -783,26 +843,39 @@ Gramophone.prototype.changePresetEq = function(preset) {
 	}
 };
 
-Gramophone.prototype.enableShelving = function(){
+Gramophone.prototype.enableShelving = function(element){
+	var targetCurve = null;
+	var eqTarget = element.getAttribute("eqTarget");
+	var shelvingRange = "#shelvingRange";
+	var shelvingEnable = "#shelvingEnable";
+	if(eqTarget == "old"){
+		targetCurve = this.customOldReadingCurve;
+		shelvingRange += "Old";
+		shelvingEnable += "Old";
+	}else{ 
+		targetCurve = this.customNewReadingCurve;
+		shelvingRange += "New";
+		shelvingEnable += "New";
+	}
 	var $es = jQuery.noConflict();
 	// disable shelving filter
-	if(this.isShelvingEnable){
+	if(targetCurve.isShelvingEnable){
 		// delete checked state
-		$es("#shelvingEnable").removeAttr("checked");
+		$es(shelvingEnable).removeAttr("checked");
 		// disable the shelving range
-		$es("#shelvingRange").attr('disabled','disabled');
+		$es(shelvingRange).attr('disabled','disabled');
 		// update the flag
-		this.isShelvingEnable = false;
+		targetCurve.isShelvingEnable = false;
 		// calculate the new gain value
 		this.changeAllGainValue();
 	}
 	else{
 		// delete checked state
-		$es("#shelvingEnable").attr("checked", true);
+		$es(shelvingEnable).attr("checked", true);
 		// disable the shelving range
-		$es("#shelvingRange").removeAttr('disabled');
+		$es(shelvingRange).removeAttr('disabled');
 		// update the flag
-		this.isShelvingEnable = true;
+		targetCurve.isShelvingEnable = true;
 		// calculate the new gain value
 		this.changeAllGainValue();
 	}

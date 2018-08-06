@@ -127,51 +127,51 @@
 	</div>
 	<div id = "oldEqualizationControl" class = "controlsSubMenu">
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq0" onclick="gram.changePresetEq(0)" checked = "checked">  No equalization</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq0Old" onclick="gram.changePresetEq(this,0)" eqTarget="old" checked = "checked">  No equalization</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq1" onclick="gram.changePresetEq(1)">  Riaa</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq1Old" onclick="gram.changePresetEq(this,1)" eqTarget="old">  Riaa</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq2" onclick="gram.changePresetEq(2)">  Rca</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq2Old" onclick="gram.changePresetEq(this,2)" eqTarget="old">  Rca</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq3" onclick="gram.changePresetEq(3)">  Hmv</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq3Old" onclick="gram.changePresetEq(this,3)" eqTarget="old">  Hmv</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq4" onclick="gram.changePresetEq(4)">  Ffrr</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq4Old" onclick="gram.changePresetEq(this,4)" eqTarget="old">  Ffrr</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq5" onclick="gram.changePresetEq(5)">  Nab</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq5Old" onclick="gram.changePresetEq(this,5)" eqTarget="old">  Nab</input>
 		</div>
 		<div id = "changeEqualizationFilter">
-			<div id = "customTitle">
-				<input type = "radio" name = "radioEq" id = "radioEq6" onclick="gram.changePresetEq(6)">  Custom Equalization</input>
+			<div id = "customTitleOld">
+				<input type = "radio" name = "radioEqOld" id = "radioEq6old" onclick="gram.changePresetEq(this,6)" eqTarget="old">  Custom Equalization</input>
 			</div>
 			<div id = "bassTurnover" class = "customRangeContainer">
 				<div>Bass Turnover Frequency</div>
 				<div id = "bassTurnoverLabelOld" class = "LabelCustom">500 Hz</div>
 				<div>
-					<input id = "bassTurnoverRange" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled" eqTarget="old">
+					<input id = "bassTurnoverRangeOld" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled" eqTarget="old">
 				</div>
 			</div>
 			<div id = "rolloff" class = "customRangeContainer">
 				<div>High Gain Rolloff</div>
 				<div id = "rolloffLabelOld" class = "LabelCustom">-13.7 dB</div>
 				<div>
-					<input id = "rolloffRange" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled" eqTarget="old">
+					<input id = "rolloffRangeOld" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled" eqTarget="old">
 				</div>
 			</div>
 			<div id = "shelving" class = "customRangeContainer">
 				<div>LF Shelving Frequency</div>
 				<div id = "shelvingLabelOld" class = "LabelCustom" >50 Hz</div>
 				<div>
-					<input id = "shelvingRange" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="old">
-					<input id = "shelvingEnable" type = "checkbox" disabled ="disabled" eqTarget="old" onchange = "gram.enableShelving();"></input>
+					<input id = "shelvingRangeOld" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="old">
+					<input id = "shelvingEnableOld" type = "checkbox" disabled ="disabled" eqTarget="old" eqTarget="old" onchange = "gram.enableShelving(this);"></input>
 				</div>	
 			</div>
-			<div id = "normalization"></div>
-			<div id = "gain10"></div>
+			<div id = "normalizationOld"></div>
+			<div id = "gain10Old"></div>
 		</div>
 	</div>
 
@@ -182,47 +182,47 @@
 	</div>
 	<div id = "equalizationControl" class = "controlsSubMenu">
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq0" onclick="gram.changePresetEq(0)" checked = "checked">  No equalization</input>
+			<input type = "radio" name = "radioEq" id = "radioEq0" onclick="gram.changePresetEq(this,0)" eqTarget="new" checked = "checked">  No equalization</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq1" onclick="gram.changePresetEq(1)">  Riaa</input>
+			<input type = "radio" name = "radioEq" id = "radioEq1" onclick="gram.changePresetEq(this,1)" eqTarget="new">  Riaa</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq2" onclick="gram.changePresetEq(2)">  Rca</input>
+			<input type = "radio" name = "radioEq" id = "radioEq2" onclick="gram.changePresetEq(this,2)" eqTarget="new">  Rca</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq3" onclick="gram.changePresetEq(3)">  Hmv</input>
+			<input type = "radio" name = "radioEq" id = "radioEq3" onclick="gram.changePresetEq(this,3)" eqTarget="new">  Hmv</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq4" onclick="gram.changePresetEq(4)">  Ffrr</input>
+			<input type = "radio" name = "radioEq" id = "radioEq4" onclick="gram.changePresetEq(this,4)" eqTarget="new">  Ffrr</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq5" onclick="gram.changePresetEq(5)">  Nab</input>
+			<input type = "radio" name = "radioEq" id = "radioEq5" onclick="gram.changePresetEq(this,5)" eqTarget="new">  Nab</input>
 		</div>
 		<div id = "changeEqualizationFilter">
 			<div id = "customTitle">
-				<input type = "radio" name = "radioEq" id = "radioEq6" onclick="gram.changePresetEq(6)">  Custom Equalization</input>
+				<input type = "radio" name = "radioEq" id = "radioEq6" onclick="gram.changePresetEq(this, 6)" eqTarget="new">  Custom Equalization</input>
 			</div>
 			<div id = "bassTurnover" class = "customRangeContainer">
 				<div>Bass Turnover Frequency</div>
 				<div id = "bassTurnoverLabelNew" class = "LabelCustom">500 Hz</div>
 				<div>
-					<input id = "bassTurnoverRange" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled" eqTarget="new">
+					<input id = "bassTurnoverRangeNew" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled" eqTarget="new">
 				</div>
 			</div>
 			<div id = "rolloff" class = "customRangeContainer">
 				<div>High Gain Rolloff</div>
 				<div id = "rolloffLabelNew" class = "LabelCustom">-13.7 dB</div>
 				<div>
-					<input id = "rolloffRange" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled" eqTarget="new">
+					<input id = "rolloffRangeNew" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled" eqTarget="new">
 				</div>
 			</div>
 			<div id = "shelving" class = "customRangeContainer">
 				<div>LF Shelving Frequency</div>
 				<div id = "shelvingLabelNew" class = "LabelCustom" >50 Hz</div>
 				<div>
-					<input id = "shelvingRange" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="new">
-					<input id = "shelvingEnable" type = "checkbox" disabled ="disabled" eqTarget="new" onchange = "gram.enableShelving();"></input>
+					<input id = "shelvingRangeNew" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="new">
+					<input id = "shelvingEnableNew" type = "checkbox" disabled ="disabled" eqTarget="new" eqTarget="new" onchange = "gram.enableShelving(this);"></input>
 				</div>	
 			</div>
 			<div id = "normalization"></div>
