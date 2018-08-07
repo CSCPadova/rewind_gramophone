@@ -43,6 +43,7 @@ function Gramophone (context){
 
 	//two curves: old and new
 	this.customOldReadingCurve = {
+		equalizationPresetType : 0,
 		bassTurnover : 500,
 		rolloff : -13.7,
 		highTurnoverFrequency : 0,
@@ -51,6 +52,7 @@ function Gramophone (context){
 	}
 
 	this.customNewReadingCurve = {
+		equalizationPresetType : 0,
 		bassTurnover : 500,
 		rolloff : -13.7,
 		highTurnoverFrequency : 0,
@@ -329,7 +331,8 @@ Gramophone.prototype.play = function(){
 	this.audioSource.buffer = currentBuffer;
 	// connect the Audio Source Node at the graph
 	// no equalizationPreset node
-	if(this.equalizationPresetType == 0){
+	//if(this.equalizationPresetType == 0){
+	if((this.customOldReadingCurve.equalizationPresetType == 0) && (this.customNewReadingCurve.equalizationPresetType == 0)){
 		// no horn node
 		if(this.hornType == 0){
 			// only equalizer
@@ -615,14 +618,39 @@ Gramophone.prototype.allGainToZero = function (){
 Gramophone.prototype.changeAllGainValue = function(){
 	var tempMaxGain = 0;
 	var notNormalizeGain = new Array();
-	
+
+	var oldCurveGain = 0;
+	var newCurveGain = 0;
+	var oldCurveMultiplier = 0; //if 0 the gain doesnt affect the equalization
+	var newCurveMultiplier = 0; //if 0 the gain doesnt affect the equalization
+	if(this.customOldReadingCurve.equalizationPresetType != 0){
+		oldCurveMultiplier = 1;
+	}
+	if(this.customNewReadingCurve.equalizationPresetType != 0){
+		newCurveMultiplier = 1;
+	}
 	// calculate not normalize gain value
 	for(var i = 0; i < 32; i++){
-		notNormalizeGain[i] = this.getGain(
+
+		//gain of the old post emphasis curve (inversed)
+		oldCurveGain = (-1)*this.getGain(this.equalizationPresetFrequency[i], 
+									this.customOldReadingCurve.bassTurnover, 
+									this.getTrebleTurnover(this.customOldReadingCurve.rolloff), 
+									this.customOldReadingCurve.shelving);
+
+		//gain of the new post emphasis curve
+		newCurveGain = this.getGain(this.equalizationPresetFrequency[i], 
+									this.customNewReadingCurve.bassTurnover, 
+									this.getTrebleTurnover(this.customNewReadingCurve.rolloff), 
+									this.customNewReadingCurve.shelving);
+
+		notNormalizeGain[i] = (oldCurveGain * oldCurveMultiplier) + (newCurveGain * newCurveMultiplier);
+
+		/*notNormalizeGain[i] = this.getGain(
 									this.equalizationPresetFrequency[i], 
 									this.bassTurnover, 
 									this.getTrebleTurnover(this.rolloff), 
-									this.shelving);
+									this.shelving);*/
 		// find the max gain value
 		if(notNormalizeGain[i] > tempMaxGain)
 			tempMaxGain = notNormalizeGain[i];
@@ -678,33 +706,27 @@ Gramophone.prototype.changePresetEq = function(element, preset) {
 		shelvingRange += "New";
 		shelvingEnable += "New";
 	}
-
-	if(this.equalizationPresetType != preset){
-		if(this.equalizationPresetType != 0){
+	//if different from the current one
+	if(targetCurve.equalizationPresetType != preset){
+		//if(this.equalizationPresetType != 0){
+		if((this.customOldReadingCurve.equalizationPresetType != 0) || (this.customNewReadingCurve.equalizationPresetType != 0)){
 			this.equalizationPreset[31].disconnect();
 		}
-		this.equalizationPresetType = preset;
-		
+		targetCurve.equalizationPresetType = preset;
+
 		var $pe = jQuery.noConflict();
 		
 		//switch
-		switch(this.equalizationPresetType){
+		switch(targetCurve.equalizationPresetType){
 			// no equalization
 			case 0:
 				// all the gain value = 0;
-				this.allGainToZero();
-				this.isShelvingEnable = false;
+				//this.allGainToZero();
 
 				targetCurve.isShelvingEnable=false;
 				break;
 			// RIAA 
 			case 1:
-				//TODO NEED TO REMOVE THESE ONES, THESE REMAIN HERE JUST TO MAKE THE CODE WORK
-				this.bassTurnover = 500;
-				this.rolloff = -13,7;
-				this.shelving = 50;
-				this.isShelvingEnable = true;
-
 				targetCurve.bassTurnover = 500;
 				targetCurve.rolloff = -13,7;
 				targetCurve.shelving = 50;
@@ -712,40 +734,24 @@ Gramophone.prototype.changePresetEq = function(element, preset) {
 				break;
 			// RCA 1938 - 48
 			case 2:
-				this.bassTurnover = 500;
-				this.rolloff = -12;
-				this.isShelvingEnable = false;
-				
 				targetCurve.bassTurnover = 500;
 				targetCurve.rolloff = -12;
 				targetCurve.isShelvingEnable = false;
 				break;
 			// HMV 1925 - 1946
 			case 3:
-				this.bassTurnover = 250;
-				this.rolloff = 0;
-				this.isShelvingEnable = false;
-
 				targetCurve.bassTurnover = 250;
 				targetCurve.rolloff = 0;
 				targetCurve.isShelvingEnable = false;
 				break;
 			// ffrr decca 1949
 			case 4:
-				this.bassTurnover = 250;
-				this.rolloff = -5;
-				this.isShelvingEnable = false;
-
 				targetCurve.bassTurnover = 250;
 				targetCurve.rolloff = -5;
 				targetCurve.isShelvingEnable = false;
 				break;
 			// NAB
 			case 5:
-				this.bassTurnover = 500;
-				this.rolloff = -16;
-				this.isShelvingEnable = false;
-
 				targetCurve.bassTurnover = 500;
 				targetCurve.rolloff = -16;
 				targetCurve.isShelvingEnable = false;
@@ -759,13 +765,18 @@ Gramophone.prototype.changePresetEq = function(element, preset) {
 				break;
 		}
 		// block the range
-		if(this.equalizationPresetType == 0){
+		if(targetCurve.equalizationPresetType == 0){
 			$pe(bassTurnoverRange).attr('disabled','disabled');
 			$pe(rolloffRange).attr('disabled','disabled');
 			$pe(shelvingRange).attr('disabled','disabled');
+
+			if((this.customOldReadingCurve.equalizationPresetType != 0) || (this.customNewReadingCurve.equalizationPresetType != 0)){
+				this.changeAllGainValue();
+			}
+			
 		}
 		// change the label with standard parameters 
-		else if(this.equalizationPresetType == 6){
+		else if(targetCurve.equalizationPresetType == 6){
 			$pe(bassTurnoverRange).removeAttr('disabled');
 			$pe(rolloffRange).removeAttr('disabled');
 			$pe(shelvingEnable).removeAttr('disabled');
@@ -780,7 +791,7 @@ Gramophone.prototype.changePresetEq = function(element, preset) {
 		}
 		else
 		{	
-			if(this.equalizationPresetType == 1){
+			if(targetCurve.equalizationPresetType == 1){
 				$pe(shelvingEnable).attr('checked',true);
 			}else{
 				$pe(shelvingEnable).removeAttr('checked');
@@ -807,7 +818,8 @@ Gramophone.prototype.changePresetEq = function(element, preset) {
 			this.audioSource.disconnect();
 			
 			// no equalization preset node
-			if(this.equalizationPresetType == 0){
+			//if(this.equalizationPresetType != 0){
+			if((this.customOldReadingCurve.equalizationPresetType == 0) && (this.customNewReadingCurve.equalizationPresetType == 0)){
 				// no horn node
 				if(this.hornType == 0){
 					// with equalizer
@@ -1008,7 +1020,8 @@ Gramophone.prototype.changeHorn = function(horn) {
 		// only if isPlaying and track is selected, otherwise all is done in the play function
 		if (this.isTrackLoaded && this.isPlaying){
 			// no equalization preset Node
-			if(this.equalizationPresetType == 0){
+			//if(this.equalizationPresetType == 0){
+			if((this.customOldReadingCurve.equalizationPresetType == 0) && (this.customNewReadingCurve.equalizationPresetType == 0)){
 				this.audioSource.disconnect();
 				// no horn node
 				if(this.hornType == 0){	
@@ -1092,7 +1105,8 @@ Gramophone.prototype.activeEqualizer = function(){
 			// no horn effect
 			if(this.hornType == 0){
 				// no equalization preset effect
-				if(this.equalizationPresetType == 0){
+				//if(this.equalizationPresetType == 0){
+				if((this.customOldReadingCurve.equalizationPresetType == 0) && (this.customNewReadingCurve.equalizationPresetType == 0)){
 					this.audioSource.disconnect();
 					this.audioSource.connect(this.volumeNode);
 				}
@@ -1112,7 +1126,8 @@ Gramophone.prototype.activeEqualizer = function(){
 			// no horn effect
 			if(this.hornType == 0){
 				// no equalization preset effect
-				if(this.equalizationPresetType == 0){
+				//if(this.equalizationPresetType == 0){
+				if((this.customOldReadingCurve.equalizationPresetType == 0) && (this.customNewReadingCurve.equalizationPresetType == 0)){
 					this.audioSource.disconnect();
 					this.audioSource.connect(this.equalizer[0]);
 				}
