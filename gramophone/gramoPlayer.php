@@ -167,7 +167,7 @@
 				<div id = "shelvingLabelOld" class = "LabelCustom" >50 Hz</div>
 				<div>
 					<input id = "shelvingRangeOld" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="old">
-					<input id = "shelvingEnableOld" type = "checkbox" disabled ="disabled" eqTarget="old" eqTarget="old" onchange = "gram.enableShelving(this);"></input>
+					<input id = "shelvingEnableOld" type = "checkbox" disabled ="disabled" eqTarget="old" onchange = "gram.enableShelving(this);"></input>
 				</div>	
 			</div>
 			<div id = "normalizationOld"></div>
@@ -222,7 +222,7 @@
 				<div id = "shelvingLabelNew" class = "LabelCustom" >50 Hz</div>
 				<div>
 					<input id = "shelvingRangeNew" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="new">
-					<input id = "shelvingEnableNew" type = "checkbox" disabled ="disabled" eqTarget="new" eqTarget="new" onchange = "gram.enableShelving(this);"></input>
+					<input id = "shelvingEnableNew" type = "checkbox" disabled ="disabled" eqTarget="new" onchange = "gram.enableShelving(this);"></input>
 				</div>	
 			</div>
 			<div id = "normalization"></div>

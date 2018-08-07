@@ -35,11 +35,11 @@ function Gramophone (context){
 	this.normalizer.connect(context.destination);
 	
 	// Equalization Preset Value
-	this.bassTurnover = 500;
+	/*this.bassTurnover = 500;
 	this.rolloff = -13.7;
 	this.highTurnoverFrequency = 0;
 	this.shelving = 50;
-	this.isShelvingEnable = false;
+	this.isShelvingEnable = false;*/
 
 	//two curves: old and new
 	this.customOldReadingCurve = {
@@ -82,7 +82,7 @@ function Gramophone (context){
 	
 	
 	// Filter type
-	this.equalizationPresetType = 0;	// 0 if there is not effect
+	//this.equalizationPresetType = 0;	// 0 if there is not effect
 	this.hornType = 0;					// 0 if there is not effect
 	
 	// Timeout
@@ -539,11 +539,11 @@ Gramophone.prototype.getTrebleTurnover = function(rolloff){
 	return tto;
 };
 
-Gramophone.prototype.getGain = function(freq, lowTurnoverFreq, highTurnoverFreq, shelvingTurnoverFreq){
+Gramophone.prototype.getGain = function(freq, lowTurnoverFreq, highTurnoverFreq, shelvingTurnoverFreq, isThisShelvingEnable){
 	var gainLF = 10 * (Math.log(1+(Math.pow(lowTurnoverFreq , 2)/Math.pow(freq , 2)))/(Math.log(10)));
 	var gainHF = (-10) * (Math.log(1+(Math.pow(freq , 2)/Math.pow(highTurnoverFreq , 2)))/(Math.log(10)));
 	var gainSHF = (-10) * (Math.log(1+(Math.pow(shelvingTurnoverFreq , 2)/Math.pow(freq , 2)))/(Math.log(10)));
-	if (this.isShelvingEnable)
+	if (isThisShelvingEnable)
 		return (gainHF + gainLF + gainSHF);
 	else
 		return (gainHF + gainLF);
@@ -636,13 +636,15 @@ Gramophone.prototype.changeAllGainValue = function(){
 		oldCurveGain = (-1)*this.getGain(this.equalizationPresetFrequency[i], 
 									this.customOldReadingCurve.bassTurnover, 
 									this.getTrebleTurnover(this.customOldReadingCurve.rolloff), 
-									this.customOldReadingCurve.shelving);
+									this.customOldReadingCurve.shelving,
+									this.customOldReadingCurve.isShelvingEnable);
 
 		//gain of the new post emphasis curve
 		newCurveGain = this.getGain(this.equalizationPresetFrequency[i], 
 									this.customNewReadingCurve.bassTurnover, 
 									this.getTrebleTurnover(this.customNewReadingCurve.rolloff), 
-									this.customNewReadingCurve.shelving);
+									this.customNewReadingCurve.shelving,
+									this.customNewReadingCurve.isShelvingEnable);
 
 		notNormalizeGain[i] = (oldCurveGain * oldCurveMultiplier) + (newCurveGain * newCurveMultiplier);
 
@@ -651,6 +653,10 @@ Gramophone.prototype.changeAllGainValue = function(){
 									this.bassTurnover, 
 									this.getTrebleTurnover(this.rolloff), 
 									this.shelving);*/
+
+		console.log("oldCurveGain[ "+i+" ]= "+oldCurveGain);
+		console.log("newCurveGain[ "+i+" ]= "+newCurveGain);
+		console.log("notNormalizeGain[ "+i+" ]= "+notNormalizeGain[i]);
 		// find the max gain value
 		if(notNormalizeGain[i] > tempMaxGain)
 			tempMaxGain = notNormalizeGain[i];
@@ -664,10 +670,12 @@ Gramophone.prototype.changeAllGainValue = function(){
 	else
 		this.normalizer.reduction.value = tempGain;
 	
+	console.log("--this.presetGain = "+this.presetGain);
 	//this.addGainToVolume();
 	// save normalized gain value 
 	for(var i = 0; i < 32; i++){
 		this.equalizationPreset[i].gain.value = notNormalizeGain[i] - this.presetGain;
+		console.log("equalizationPreset[ "+i+" ].gain.value= "+(notNormalizeGain[i] - this.presetGain));
 		//alertString += "freq:" + this.equalizationPresetFrequency[i] + " gain:" + notNormalizeGain[i] + "\n";
 	}
 	
