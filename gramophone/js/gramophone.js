@@ -95,7 +95,42 @@ function Gramophone (context){
 	this.state = "STOP";
 	this.armClick = false;
 	
-	
+	//Graph Options
+	this.options1 = {
+		xaxis: {
+			ticks: [100, 1000, 10000, 20000],
+			transform: (x) => { return Math.log(1 + x); },
+			inverseTransform: (x) => { return Math.exp(x) - 1; },
+		}
+	};
+
+	this.options2 = {
+		series:{
+			lines: {
+			show: true,
+			shadowSize: 3},
+			/*downsample : {
+				threshold: 15000
+			}*/
+		},
+		xaxis: {
+			ticks: [100, 1000, 10000, 20000],
+			transform: (x) => { return Math.log(1 + x); },
+			inverseTransform: (x) => { return Math.exp(x) - 1; },
+			//panRange: [0, 25000]
+		}/*,
+		yaxis: {
+				
+			panRange: [-30, 30]
+		},
+		zoom: {
+			interactive: true
+		},
+		pan: {
+			interactive: true
+		}*/
+	};
+
 };
 
 // <-----Load----->
@@ -901,6 +936,80 @@ Gramophone.prototype.enableShelving = function(element){
 	}
 };
 
+// <---Graph functions-------------------------------------------------------------------------------->
+
+/**
+ * Temporary function to test the graph
+ */
+Gramophone.prototype.drawGraph = function(){
+	//var curveFilters = this.createSumCurveFilters();
+	//changeChart('Union');
+
+	//plot first graph
+	var points1 = this.createPoints(this.equalizationPreset);
+	this.plotData("placeholder1", points1, this.options1);
+
+	//plot second graph
+	var points2 = this.createSumCurveFilters();
+	this.plotData("placeholder2", points2, this.options2)
+};
+
+/**
+ * Generates points to plot.
+ * @param {Array} from 
+ */
+Gramophone.prototype.createPoints = function(from){
+	
+	var points = [];
+	for(var i = 0; i < this.equalizationPresetFrequency.length; i++){
+		var xData = this.equalizationPresetFrequency[i];
+		var yData = from[i].gain.value;
+		points.push([xData, yData]);
+	}
+	return points;
+}
+
+/**
+ * Plot data in the chart.
+ * @param {} placeholder Chart to use.
+ * @param {Array} points Points to plot.
+ * @param {object} options Options for chart. 
+ */
+Gramophone.prototype.plotData = function(placeholder, points, options){
+	var placeholderElement = document.getElementById(placeholder);
+	jQuery.plot(placeholderElement, [points] , options);
+};
+
+/**
+ * Creates points of the curve calculated as the sum of all filters. 
+ */
+Gramophone.prototype.createSumCurveFilters = function(){
+	
+	var pointsFilters = [];
+
+
+	for(var k = 0; k < this.equalizationPresetFrequency[31]; k++){
+		pointsFilters[k] = 0;
+	}
+	
+	for(var i = 0; i < this.equalizationPresetFrequency.length; i++){
+		BiQuadFilter.create(3, this.equalizationPresetFrequency[i] , this.context.sampleRate, 
+								this.QFACTORPRESETVALUE, this.equalizationPreset[i].gain.value);
+
+		for(var j = this.equalizationPresetFrequency[0]; j < this.equalizationPresetFrequency[31]; j++){
+			pointsFilters[j] += BiQuadFilter.log_result(j);
+		}
+	}
+
+	var curveFilters = [];
+
+	for(var i = this.equalizationPresetFrequency[0] ; i < this.equalizationPresetFrequency[31]; i++){
+		curveFilters.push([i, pointsFilters[i]]);
+	}
+
+	return curveFilters;
+};
+// <---c-graph---------------------------------------------------------------------------------------->
 
 // <-----Rotation----->
 Gramophone.prototype.changeRotation = function(element,type){

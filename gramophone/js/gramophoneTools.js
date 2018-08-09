@@ -9,6 +9,7 @@ function GramophoneTools(){
 	this.rotationFlag = false;
 	this.oldEqualizationFlag = false;
 	this.equalizationFlag = false;
+	this.correctionCurveFlag = false;
 	this.hornFlag = false;
 	this.singleTrack = false;
 	this.json = false;
@@ -175,6 +176,18 @@ GramophoneTools.prototype.openTool = function (tool){
 				this.oldEqualizationFlag = false;
 			else
 				this.oldEqualizationFlag = true;
+			break;
+
+		// Correction Curve Graph
+		case 11:
+			$part = null;
+			$part = $ot("#correctionCurveControl");
+			$title = $ot("#openControl11");
+			flag = this.correctionCurveFlag;
+			if(this.correctionCurveFlag)
+				this.correctionCurveFlag = false;
+			else
+				this.correctionCurveFlag = true;
 			break;
 		
 		default:

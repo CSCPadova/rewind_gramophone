@@ -12,9 +12,15 @@
 <script type = "text/javascript" src = "./jquery/jquery-ui.js"></script>
 <script type = "text/javascript" src = "./jquery/jQueryRotateCompressed.js"></script>
 
+<!-- flot scripts -->
+<script type = "text/javascript" src = "./js/flot-master/jquery.flot.js"></script>
+<script type = "text/javascript" src = "./js/flot-master/jquery.flot.resize.js"></script>
+<script type = "text/javascript" src = "./js/flot-master/jquery.flot.navigate.js"></script>
+
 <script src="./js/timerlistener.js"></script>
 
 <link rel="stylesheet" href="./css/jquery-ui.css">
+<script type = "text/javascript" src="./js/BiQuadFilter.js"></script>
 <script type = "text/javascript" src = "./js/gramophone.js"></script>
 <script type = "text/javascript" src = "./js/gramophoneControl.js"></script>
 <script type = "text/javascript" src = "./js/gramophoneTools.js"></script>
@@ -229,9 +235,31 @@
 			<div id = "gain10"></div>
 		</div>
 	</div>
+
+	<!-- 			Correction Curve			 -->
+	<div class = "controlsSubTitle" onclick="gramTools.openTool(11)">
+		<div class ="titleSubMenuDiv" >Correction Curve</div>
+		<div id = "openControl11" class = "openSubPart" ></div>
+	</div>
+	<div id = "correctionCurveControl" class = "controlsSubMenu">
+		<div>
+			<div>
+				<div id="buttonGroup" style="text-align: center">
+					<br>
+					<button type="button" class="btn btn-light" id="Union" onclick="gram.drawGraph();">Union</button>
+					<button type="button" class="btn btn-light" id="Reading^(-1)" onclick="gram.drawGraph();">Reading^(-1)</button>
+					<button type="button" class="btn btn-light" id="Reading" onclick="gram.drawGraph();">Reading</button>
+				</div>
+				<br>
+				<div id="placeholder1" class="placeholder"></div>
+				<div id="placeholder2" class="placeholder"></div>
+			</div>
+		</div>
+	</div>
 	
+	<!-- Horn preset control is hidden at the moment because it doesn't work properly -->
 	<!-- 			Horn Preset				 -->
-	<div class = "controlsSubTitle" onclick="gramTools.openTool(7)">
+	<div class = "controlsSubTitle" onclick="gramTools.openTool(7)" style="display: none">
 		<div class ="titleSubMenuDiv" >Horn Preset</div>
 		<div id = "openControl3" class = "openSubPart" ></div>
 	</div>

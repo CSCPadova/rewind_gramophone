@@ -370,3 +370,15 @@ input[type='range']#playRange::-moz-range-track {
 	display:none;
 }
 
+/* Placeholder for graph */
+.placeholder{
+	width: 50%;
+	height: 300px;
+}
+
+#placeholder1{
+	float: left;
+}
+#placeholder2{
+	margin-left: 50%;
+}
