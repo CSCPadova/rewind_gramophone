@@ -238,7 +238,7 @@
 
 	<!-- 			Correction Curve			 -->
 	<div class = "controlsSubTitle" onclick="gramTools.openTool(11)">
-		<div class ="titleSubMenuDiv" >Correction Curve</div>
+		<div class ="titleSubMenuDiv" >Corrective Curve</div>
 		<div id = "openControl11" class = "openSubPart" ></div>
 	</div>
 	<div id = "correctionCurveControl" class = "controlsSubMenu">
@@ -246,9 +246,11 @@
 			<div>
 				<div id="buttonGroup" style="text-align: center">
 					<br>
-					<button type="button" class="btn btn-light" id="Union" onclick="gram.drawGraph();">Union</button>
-					<button type="button" class="btn btn-light" id="Reading^(-1)" onclick="gram.drawGraph();">Reading^(-1)</button>
-					<button type="button" class="btn btn-light" id="Reading" onclick="gram.drawGraph();">Reading</button>
+					<button type="button" class="btn btn-light" id="Union" onclick="gram.drawGraph(0);">Corrective Curve</button>
+					<button type="button" class="btn btn-light" id="Reading^(-1)" onclick="gram.drawGraph(1);">Reading^(-1)</button>
+					<button type="button" class="btn btn-light" id="Reading" onclick="gram.drawGraph(2);">Reading</button>
+					<br>
+					<span id="graphDescription"></span>
 				</div>
 				<br>
 				<div id="placeholder1" class="placeholder"></div>
