@@ -80,15 +80,12 @@ function Gramophone (context){
 	this.isPause = false;
 	this.playFinish = false;
 	
-	
 	// Filter type
 	//this.equalizationPresetType = 0;	// 0 if there is not effect
 	this.hornType = 0;					// 0 if there is not effect
 	
 	// Timeout
 	this.stopTimeout = null;
-	
-	
 
 	//State Machine and Transition Flags
 	this.previousState = "STOP";
@@ -103,7 +100,6 @@ function Gramophone (context){
 			inverseTransform: (x) => { return Math.exp(x) - 1; },
 		}
 	};
-
 	this.options2 = {
 		series:{
 			lines: {
@@ -689,21 +685,29 @@ Gramophone.prototype.changeAllGainValue = function(){
 									this.getTrebleTurnover(this.rolloff), 
 									this.shelving);*/
 
-		console.log("oldCurveGain[ "+i+" ]= "+oldCurveGain);
-		console.log("newCurveGain[ "+i+" ]= "+newCurveGain);
+		console.log("oldCurveGain[ "+i+" ]= "+(oldCurveGain * oldCurveMultiplier));
+		console.log("newCurveGain[ "+i+" ]= "+(newCurveGain * newCurveMultiplier));
 		console.log("notNormalizeGain[ "+i+" ]= "+notNormalizeGain[i]);
 		// find the max gain value
 		if(notNormalizeGain[i] > tempMaxGain)
 			tempMaxGain = notNormalizeGain[i];
 	}
 	
-	//this.removeGainToVolume();
-	this.presetGain = ( tempMaxGain - 10);
+	//if they cancel each other, i do not apply the normalizer
+	if(this.customOldReadingCurve.equalizationPresetType == this.customNewReadingCurve.equalizationPresetType){
+		this.presetGain = 0;
+	}else{
+		//this.removeGainToVolume();
+		this.presetGain = ( tempMaxGain - 10);
+	}
+
 	var tempGain = -20 + this.presetGain;
-	if(tempGain > 0)
+	if(tempGain > 0){
 		this.normalizer.reduction.value = 0;
-	else
+	}
+	else{
 		this.normalizer.reduction.value = tempGain;
+	}
 	
 	console.log("--this.presetGain = "+this.presetGain);
 	//this.addGainToVolume();
@@ -813,9 +817,10 @@ Gramophone.prototype.changePresetEq = function(element, preset) {
 			$pe(rolloffRange).attr('disabled','disabled');
 			$pe(shelvingRange).attr('disabled','disabled');
 
-			if((this.customOldReadingCurve.equalizationPresetType != 0) || (this.customNewReadingCurve.equalizationPresetType != 0)){
+			this.changeAllGainValue();
+			/*if((this.customOldReadingCurve.equalizationPresetType != 0) || (this.customNewReadingCurve.equalizationPresetType != 0)){
 				this.changeAllGainValue();
-			}
+			}*/
 			
 		}
 		// change the label with standard parameters 
