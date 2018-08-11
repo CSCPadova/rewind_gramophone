@@ -5,7 +5,8 @@
    @import url(./css/gramophoneEqualizer.css);
    /*@import url(./css/gramophoneSongDB2.css);*/
    @import url(./css/gramophoneSongDB.css); 
-   @import url(./css/gramophoneClass.css);
+   @import url(./css/gramophoneCorrectionCurve.css);
+   @import url(./css/gramophoneClass.css); 
 </style>
 
 <script type = "text/javascript" src = "./jquery/jquery-1.12.4.js"></script>
@@ -242,20 +243,16 @@
 		<div id = "openControl11" class = "openSubPart" ></div>
 	</div>
 	<div id = "correctionCurveControl" class = "controlsSubMenu">
-		<div>
-			<div>
-				<div id="buttonGroup" style="text-align: center">
-					<br>
-					<button type="button" class="btn btn-light" id="Union" onclick="gram.drawGraph(0);">Corrective Curve</button>
-					<button type="button" class="btn btn-light" id="Reading^(-1)" onclick="gram.drawGraph(1);">Reading^(-1)</button>
-					<button type="button" class="btn btn-light" id="Reading" onclick="gram.drawGraph(2);">Reading</button>
-					<br>
-					<span id="graphDescription"></span>
-				</div>
-				<br>
-				<div id="placeholder1" class="placeholder"></div>
-				<div id="placeholder2" class="placeholder"></div>
+		<div class="correctionCurveContainer">
+			<div class="btn-group">
+				<div class="buttonGraph selectedGraph" id="Union" onclick="gram.drawGraph(0);">Corrective Curve</div>
+				<div class="buttonGraph" id="Reading1" onclick="gram.drawGraph(1);">Reading^(-1)</div>
+				<div class="buttonGraph" id="Reading" onclick="gram.drawGraph(2);">Reading</div>
 			</div>
+			<div id="graphDescription" class="graphLabel"></div>
+			<br style="clear:both">
+			<div id="placeholder1" class="placeholder"></div>
+			<div id="placeholder2" class="placeholder"></div>
 		</div>
 	</div>
 	

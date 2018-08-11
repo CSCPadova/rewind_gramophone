@@ -1007,26 +1007,35 @@ Gramophone.prototype.drawGraph = function(type){
 	//changeChart('Union');
 	var $pe = jQuery.noConflict();
 	var graphDescription = $pe("#graphDescription");
+	var unionButton = $pe("#Union");
+	var reading1Button = $pe("#Reading1");
+	var readingButton = $pe("#Reading");
 	var oldEqualizationName = this.getEqualizationNameFromTypeNumber(this.customOldReadingCurve.equalizationPresetType);
 	var newEqualizationName = this.getEqualizationNameFromTypeNumber(this.customNewReadingCurve.equalizationPresetType);
 	var targetFilterArray;
 	this.showingGraph=type;
 
+	unionButton.removeClass("selectedGraph");
+	reading1Button.removeClass("selectedGraph");
+	readingButton.removeClass("selectedGraph");
 	switch(type){
 		case 0:
 			//union
 			graphDescription.text("Showing Corrective Curve: "+oldEqualizationName+"^-1 + "+newEqualizationName);
 			targetFilterArray = this.equalizationPreset;
+			unionButton.addClass("selectedGraph");
 			break;
 		case 1:
 			//reading -1
 			graphDescription.text("Showing only Reading^-1 Curve: "+oldEqualizationName+"^-1 ");
 			targetFilterArray = this.oldEqualizationPreset;
+			reading1Button.addClass("selectedGraph");
 			break;
 		case 2:
 			//reading
 			graphDescription.text("Showing only Reading Curve: "+newEqualizationName);
 			targetFilterArray = this.newEqualizationPreset;
+			readingButton.addClass("selectedGraph");
 			break;
 		default:
 			alert("drawGraph error");

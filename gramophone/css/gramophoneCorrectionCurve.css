@@ -1,0 +1,46 @@
+/* ---------- CORRECTION CURVE CSS---------- */
+
+/* Placeholder for graph */
+.placeholder{
+	width: 50%;
+	height: 300px;
+}
+#placeholder1{
+	float: left;
+}
+#placeholder2{
+	margin-left: 50%;
+}
+.btn-group .buttonGraph {
+	height: 40px;
+    background-color: #c0c0c0; /* silver */
+    border: none;
+    padding-left: 1em;
+    padding-right: 1em;
+    font-variant: small-caps;
+    text-align: center;
+    /*display: inline-block;*/
+    line-height: 40px;
+    cursor: pointer;
+    float: left;
+}
+/*
+.btn-group .buttonGraph:hover {
+    background-color: #8c8c8c;
+}*/
+
+div.correctionCurveContainer{
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+div.graphLabel{
+    height: 40px;
+    background-color: #FFA000;
+    border: none;
+    font-variant: small-caps;
+    text-align: center;
+    line-height: 40px;
+}
+.btn-group .selectedGraph{
+    background-color: #ffc107;
+}
