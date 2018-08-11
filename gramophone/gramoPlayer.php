@@ -237,7 +237,7 @@
 	</div>
 
 	<!-- 			Correction Curve			 -->
-	<div class = "controlsSubTitle" onclick="gramTools.openTool(11)">
+	<div class = "controlsSubTitle" onclick="gramTools.openTool(11);gram.toggleGraphView();">
 		<div class ="titleSubMenuDiv" >Corrective Curve</div>
 		<div id = "openControl11" class = "openSubPart" ></div>
 	</div>

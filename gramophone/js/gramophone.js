@@ -128,6 +128,8 @@ function Gramophone (context){
 			interactive: true
 		}*/
 	};
+	this.isGraphVisibile = false;
+	this.showingGraph = 0;
 
 };
 
@@ -729,7 +731,9 @@ Gramophone.prototype.changeAllGainValue = function(){
 		//alertString += "freq:" + this.equalizationPresetFrequency[i] + " gain:" + notNormalizeGain[i] + "\n";
 	}
 	
-	//this.drawGraph();
+	if(this.isGraphVisibile){
+		this.drawGraph(this.showingGraph);
+	}
 };
 
 Gramophone.prototype.changePresetEq = function(element, preset) {
@@ -986,7 +990,14 @@ Gramophone.prototype.getEqualizationNameFromTypeNumber = function(equalizationTy
 		}
 		return equalizationName;
 }
-
+Gramophone.prototype.toggleGraphView = function(){
+	if(this.isGraphVisibile){
+		this.isGraphVisibile = false;
+	}else{
+		this.isGraphVisibile = true;
+		this.drawGraph(this.showingGraph);
+	}
+}
 /**
  * Generates the view of the graph
  * @param {} number that represent the graph we want to visualize
@@ -999,6 +1010,7 @@ Gramophone.prototype.drawGraph = function(type){
 	var oldEqualizationName = this.getEqualizationNameFromTypeNumber(this.customOldReadingCurve.equalizationPresetType);
 	var newEqualizationName = this.getEqualizationNameFromTypeNumber(this.customNewReadingCurve.equalizationPresetType);
 	var targetFilterArray;
+	this.showingGraph=type;
 
 	switch(type){
 		case 0:
