@@ -18,8 +18,8 @@ function Gramophone (context){
 	this.STOPDISKANGLE = 70;
 	this.armCurrentAngle = 95;
 	this.STOPTIME = 210; //second
-	this.QFACTORVALUE = 4.32;
-	this.QFACTORPRESETVALUE = 5.76;
+	this.QFACTORVALUE = 4.32; 
+	this.QFACTORPRESETVALUE = 5.76; //original qfactor
 	this.presetGain = 0;
 	this.trackName = "";
 	this.remainingTime = 0;
@@ -64,9 +64,10 @@ function Gramophone (context){
 	
 	// Equalization Preset Node
 	this.equalizationPreset = new Array();
-	this.equalizationPresetFrequency = new Array(20, 25, 31.5, 40, 50, 63, 80, 100,
+	
+	this.equalizationPresetFrequency = new Array(20, 25, 32, 40, 50, 63, 80, 100,
 		125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 
-		3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000, 25000);
+		3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000, 24000); //24000 new - 25000 old
 	
 	// Albiswerk Equalizer
 	this.equalizer = new Array();
@@ -689,15 +690,7 @@ Gramophone.prototype.changeAllGainValue = function(){
 
 		this.oldEqualizationPreset[i].gain.value = oldCurveGain * oldCurveMultiplier;
 		this.newEqualizationPreset[i].gain.value = newCurveGain * newCurveMultiplier;
-		/*notNormalizeGain[i] = this.getGain(
-									this.equalizationPresetFrequency[i], 
-									this.bassTurnover, 
-									this.getTrebleTurnover(this.rolloff), 
-									this.shelving);*/
 
-		//console.log("oldCurveGain[ "+i+" ]= "+(oldCurveGain * oldCurveMultiplier));
-		//console.log("newCurveGain[ "+i+" ]= "+(newCurveGain * newCurveMultiplier));
-		//console.log("notNormalizeGain[ "+i+" ]= "+notNormalizeGain[i]);
 		// find the max gain value
 		if(notNormalizeGain[i] > tempMaxGain)
 			tempMaxGain = notNormalizeGain[i];
@@ -719,14 +712,13 @@ Gramophone.prototype.changeAllGainValue = function(){
 		this.normalizer.reduction.value = tempGain;
 	}
 	
-	//console.log("--this.presetGain = "+this.presetGain);
 	//this.addGainToVolume();
 	// save normalized gain value 
 	for(var i = 0; i < 32; i++){
 		this.equalizationPreset[i].gain.value = notNormalizeGain[i] - this.presetGain;
 
-		this.oldEqualizationPreset[i].gain.value -= this.presetGain;
-		this.newEqualizationPreset[i].gain.value -= this.presetGain;
+		this.oldEqualizationPreset[i].gain.value -= this.presetGain*oldCurveMultiplier;
+		this.newEqualizationPreset[i].gain.value -= this.presetGain*newCurveMultiplier;
 		//console.log("equalizationPreset[ "+i+" ].gain.value= "+(notNormalizeGain[i] - this.presetGain));
 		//alertString += "freq:" + this.equalizationPresetFrequency[i] + " gain:" + notNormalizeGain[i] + "\n";
 	}
@@ -1084,14 +1076,15 @@ Gramophone.prototype.createSumCurveFilters = function(from){
 	
 	var pointsFilters = [];
 
-
 	for(var k = 0; k < this.equalizationPresetFrequency[31]; k++){
 		pointsFilters[k] = 0;
 	}
 	
 	for(var i = 0; i < this.equalizationPresetFrequency.length; i++){
-		BiQuadFilter.create(3, this.equalizationPresetFrequency[i] , this.context.sampleRate, 
-								this.QFACTORPRESETVALUE, from[i].gain.value);
+		
+		//8*samplerate is enough for a correct graph
+		BiQuadFilter.create(3, this.equalizationPresetFrequency[i] , 8*this.context.sampleRate, 
+								this.QFACTORPRESETVALUE, from[i].gain.value);	
 
 		for(var j = this.equalizationPresetFrequency[0]; j < this.equalizationPresetFrequency[31]; j++){
 			pointsFilters[j] += BiQuadFilter.log_result(j);
@@ -1103,7 +1096,6 @@ Gramophone.prototype.createSumCurveFilters = function(from){
 	for(var i = this.equalizationPresetFrequency[0] ; i < this.equalizationPresetFrequency[31]; i++){
 		curveFilters.push([i, pointsFilters[i]]);
 	}
-
 	return curveFilters;
 };
 
