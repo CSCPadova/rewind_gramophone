@@ -19,11 +19,16 @@ function Gramophone (context){
 	this.armCurrentAngle = 95;
 	this.STOPTIME = 210; //second
 	this.QFACTORVALUE = 4.32; 
-	this.QFACTORPRESETVALUE = 5.76; //original qfactor
+	//this.QFACTORPRESETVALUE = 4; //  test
+	//this.QFACTORPRESETVALUE = 5.76; // qfactor 1/4 bandwidth
+	this.QFACTORPRESETVALUE = 4.32; // qfactor 1/3 bandwidth
 	this.presetGain = 0;
 	this.trackName = "";
 	this.remainingTime = 0;
 	this.elapsedTime = 0;
+
+	//matrix b
+	this.Bmatrix = [];
 	
 	// Nodes
 	this.audioSource = null;
@@ -62,12 +67,20 @@ function Gramophone (context){
 	}
 	this.newEqualizationPreset = new Array();
 	
+	this.theoreticalEqPreset = new Array();
+
 	// Equalization Preset Node
 	this.equalizationPreset = new Array();
 	
+	/*	32 bands
+		this.equalizationPresetFrequency = new Array(20, 25, 32, 40, 50, 63, 80, 100,
+		125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 
+		3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000, 24000); //24000 new - 25000 old*/
+
+	//  31 bands
 	this.equalizationPresetFrequency = new Array(20, 25, 32, 40, 50, 63, 80, 100,
 		125, 160, 200, 250, 315, 400, 500, 630, 800, 1000, 1250, 1600, 2000, 2500, 
-		3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000, 24000); //24000 new - 25000 old
+		3150, 4000, 5000, 6300, 8000, 10000, 12500, 16000, 20000); 
 	
 	// Albiswerk Equalizer
 	this.equalizer = new Array();
@@ -98,6 +111,7 @@ function Gramophone (context){
 	//Graph Options
 	this.options1 = {
 		xaxis: {
+			max: 20000,
 			ticks: [100, 1000, 10000, 20000],
 			transform: (x) => { return Math.log(1 + x); },
 			inverseTransform: (x) => { return Math.exp(x) - 1; },
@@ -113,6 +127,7 @@ function Gramophone (context){
 			}*/
 		},
 		xaxis: {
+			max: 20000,
 			ticks: [100, 1000, 10000, 20000],
 			transform: (x) => { return Math.log(1 + x); },
 			inverseTransform: (x) => { return Math.exp(x) - 1; },
@@ -400,17 +415,17 @@ Gramophone.prototype.play = function(){
 		if(this.hornType == 0){
 			// with equalizer
 			if(this.isEqualizerActive){
-				this.equalizationPreset[31].connect(this.equalizer[0]);
+				this.equalizationPreset[30].connect(this.equalizer[0]);
 				//this.equalizerLastNode.connect(this.volumeNode);
 			}
 			// no equalizer
 			else{
-				this.equalizationPreset[31].connect(this.volumeNode);
+				this.equalizationPreset[30].connect(this.volumeNode);
 			}
 		}
 		// with horn node
 		else{
-			this.equalizationPreset[31].connect(this.hornNode);
+			this.equalizationPreset[30].connect(this.hornNode);
 			if(this.isEqualizerActive){
 				this.hornNode.connect(this.equalizer[0]);
 				//this.equalizerLastNode.connect(this.volumeNode);
@@ -554,7 +569,7 @@ Gramophone.prototype.removeGainToVolume = function(){
 // <-----Equalization Preset----->
 Gramophone.prototype.createPresetEqualization = function(){
 	// initialize preset equalization biquad filters 
-	for (var i = 0; i < 32; i++){
+	for (var i = 0; i < 31; i++){
 		this.equalizationPreset[i] = context.createBiquadFilter();
 		this.equalizationPreset[i].type = "peaking";
 		this.equalizationPreset[i].frequency.value = this.equalizationPresetFrequency[i];
@@ -565,13 +580,19 @@ Gramophone.prototype.createPresetEqualization = function(){
 	this.createFiltersArray(this.oldEqualizationPreset);
 	this.createFiltersArray(this.newEqualizationPreset);
 
+	//create the theoretical array for displaying the graph
+	this.createFiltersArray(this.theoreticalEqPreset);
+
 	// connect the filters
-	for (var j = 0; j < 31; j++){
+	for (var j = 0; j < 30; j++){
 		this.equalizationPreset[j].connect(this.equalizationPreset[j+1]);
 	}
 	
 	// find the high turnover frequency in Riaa standard
 	this.highTurnoverFrequency = this.getTrebleTurnover(this.rolloff); 
+
+	//test
+	this.estimateMatrixB();
 };
 
 Gramophone.prototype.getTrebleTurnover = function(rolloff){
@@ -648,19 +669,34 @@ Gramophone.prototype.changePresetValue = function(element, type){
 Gramophone.prototype.allGainToZero = function (){
 	//this.removeGainToVolume();
 	this.presetGain = 0;
-	for (var i = 0; i < 32; i++){
+	for (var i = 0; i < 31; i++){
 		this.equalizationPreset[i].gain.value = 0;
 	}
 	this.normalizer.reduction.value = -20;
 };
 
+//calculate estimated gain to reduce gain boost/cut
+Gramophone.prototype.calculateOptimalGain = function(commandGain){
+	var inverseBmatrix = math.inv(this.Bmatrix);
+	var trasposedCommandGain = math.transpose(commandGain);
+	var transposedOptimalGain = math.multiply(inverseBmatrix,trasposedCommandGain);
+	var optimalGain = math.transpose(transposedOptimalGain);
+	return optimalGain.toArray();
+}
+
 // normalize with a max gain bound at +15dB
 Gramophone.prototype.changeAllGainValue = function(){
 	var tempMaxGain = 0;
 	var notNormalizeGain = new Array();
+	var notNormalizeGainT = new Array();
 
-	var oldCurveGain = 0;
-	var newCurveGain = 0;
+	var oldCurveGain = [];
+	var newCurveGain = [];
+	var optimalOldCurveGain = [];
+	var optimalNewCurveGain = [];
+	//var oldCurveGain = 0;
+	//var newCurveGain = 0;
+
 	var oldCurveMultiplier = 0; //if 0 the gain doesnt affect the equalization
 	var newCurveMultiplier = 0; //if 0 the gain doesnt affect the equalization
 	if(this.customOldReadingCurve.equalizationPresetType != 0){
@@ -669,27 +705,42 @@ Gramophone.prototype.changeAllGainValue = function(){
 	if(this.customNewReadingCurve.equalizationPresetType != 0){
 		newCurveMultiplier = 1;
 	}
-	// calculate not normalize gain value
-	for(var i = 0; i < 32; i++){
-
+	// calculate gain value of old and new curve
+	for(var i = 0; i < 31; i++){
 		//gain of the old post emphasis curve (inversed)
-		oldCurveGain = (-1)*this.getGain(this.equalizationPresetFrequency[i], 
+		oldCurveGain[i] = (-1)*this.getGain(this.equalizationPresetFrequency[i], 
 									this.customOldReadingCurve.bassTurnover, 
 									this.getTrebleTurnover(this.customOldReadingCurve.rolloff), 
 									this.customOldReadingCurve.shelving,
 									this.customOldReadingCurve.isShelvingEnable);
 
 		//gain of the new post emphasis curve
-		newCurveGain = this.getGain(this.equalizationPresetFrequency[i], 
+		newCurveGain[i] = this.getGain(this.equalizationPresetFrequency[i], 
 									this.customNewReadingCurve.bassTurnover, 
 									this.getTrebleTurnover(this.customNewReadingCurve.rolloff), 
 									this.customNewReadingCurve.shelving,
-									this.customNewReadingCurve.isShelvingEnable);
+									this.customNewReadingCurve.isShelvingEnable);	
+	}
 
-		notNormalizeGain[i] = (oldCurveGain * oldCurveMultiplier) + (newCurveGain * newCurveMultiplier);
+	optimalOldCurveGain = this.calculateOptimalGain(oldCurveGain);
+	optimalNewCurveGain = this.calculateOptimalGain(newCurveGain);
+	
+	//remember - these are not normalized
+	//console.log("newCurveGain");
+	//console.log(newCurveGain);
+	//console.log("optimalNewCurveGain");
+	//console.log(optimalNewCurveGain);
 
-		this.oldEqualizationPreset[i].gain.value = oldCurveGain * oldCurveMultiplier;
-		this.newEqualizationPreset[i].gain.value = newCurveGain * newCurveMultiplier;
+	// calculate not normalize gain value
+	for(var i = 0; i < 31; i++){	
+
+		this.oldEqualizationPreset[i].gain.value = optimalOldCurveGain[i] * oldCurveMultiplier;
+		this.newEqualizationPreset[i].gain.value = optimalNewCurveGain[i] * newCurveMultiplier;
+		
+		notNormalizeGain[i] = (optimalOldCurveGain[i] * oldCurveMultiplier) + (optimalNewCurveGain[i] * newCurveMultiplier);
+
+		//theoretical 
+		notNormalizeGainT[i] = (oldCurveGain[i] * oldCurveMultiplier) + (newCurveGain[i] * newCurveMultiplier);
 
 		// find the max gain value
 		if(notNormalizeGain[i] > tempMaxGain)
@@ -701,7 +752,7 @@ Gramophone.prototype.changeAllGainValue = function(){
 		this.presetGain = 0;
 	}else{
 		//this.removeGainToVolume();
-		this.presetGain = ( tempMaxGain - 10);
+		this.presetGain = ( tempMaxGain - 10); //-10 o -15
 	}
 
 	var tempGain = -20 + this.presetGain;
@@ -714,8 +765,11 @@ Gramophone.prototype.changeAllGainValue = function(){
 	
 	//this.addGainToVolume();
 	// save normalized gain value 
-	for(var i = 0; i < 32; i++){
+	for(var i = 0; i < 31; i++){
+
 		this.equalizationPreset[i].gain.value = notNormalizeGain[i] - this.presetGain;
+
+		this.theoreticalEqPreset[i].gain.value = notNormalizeGainT[i] - this.presetGain; //theoretical
 
 		this.oldEqualizationPreset[i].gain.value -= this.presetGain*oldCurveMultiplier;
 		this.newEqualizationPreset[i].gain.value -= this.presetGain*newCurveMultiplier;
@@ -765,7 +819,7 @@ Gramophone.prototype.changePresetEq = function(element, preset) {
 	if(targetCurve.equalizationPresetType != preset){
 		//if(this.equalizationPresetType != 0){
 		if((this.customOldReadingCurve.equalizationPresetType != 0) || (this.customNewReadingCurve.equalizationPresetType != 0)){
-			this.equalizationPreset[31].disconnect();
+			this.equalizationPreset[30].disconnect();
 		}
 		targetCurve.equalizationPresetType = preset;
 
@@ -894,14 +948,14 @@ Gramophone.prototype.changePresetEq = function(element, preset) {
 				if(this.hornType == 0){
 					// with equalizer
 					if(this.isEqualizerActive)
-						this.equalizationPreset[31].connect(this.equalizer[0]);
+						this.equalizationPreset[30].connect(this.equalizer[0]);
 					// no equalizer 
 					else
-						this.equalizationPreset[31].connect(this.volumeNode);
+						this.equalizationPreset[30].connect(this.volumeNode);
 				}
 				// with horn node
 				else{
-					this.equalizationPreset[31].connect(this.hornNode);
+					this.equalizationPreset[30].connect(this.hornNode);
 				}
 			}
 		}
@@ -1035,12 +1089,12 @@ Gramophone.prototype.drawGraph = function(type){
 	}
 
 	//plot first graph
-	var points1 = this.createPoints(targetFilterArray);
+	var points1 = this.createPoints(this.theoreticalEqPreset);
 	this.plotData("placeholder1", points1, this.options1);
 
 	//plot second graph
 	var points2 = this.createSumCurveFilters(targetFilterArray);
-	this.plotData("placeholder2", points2, this.options2)
+	this.plotData("placeholder2", points2, this.options2);
 };
 
 /**
@@ -1076,27 +1130,63 @@ Gramophone.prototype.createSumCurveFilters = function(from){
 	
 	var pointsFilters = [];
 
-	for(var k = 0; k < this.equalizationPresetFrequency[31]; k++){
+	for(var k = 0; k < this.equalizationPresetFrequency[30]; k++){
 		pointsFilters[k] = 0;
 	}
 	
 	for(var i = 0; i < this.equalizationPresetFrequency.length; i++){
 		
 		//8*samplerate is enough for a correct graph
-		BiQuadFilter.create(3, this.equalizationPresetFrequency[i] , 8*this.context.sampleRate, 
+		BiQuadFilter.create(3, this.equalizationPresetFrequency[i] , this.context.sampleRate, 
 								this.QFACTORPRESETVALUE, from[i].gain.value);	
 
-		for(var j = this.equalizationPresetFrequency[0]; j < this.equalizationPresetFrequency[31]; j++){
-			pointsFilters[j] += BiQuadFilter.log_result(j);
+		for(var j = this.equalizationPresetFrequency[0]; j < this.equalizationPresetFrequency[30]; j++){			
+			pointsFilters[j] += BiQuadFilter.log_result(j);			
 		}
 	}
 
 	var curveFilters = [];
 
-	for(var i = this.equalizationPresetFrequency[0] ; i < this.equalizationPresetFrequency[31]; i++){
+	for(var i = this.equalizationPresetFrequency[0] ; i < this.equalizationPresetFrequency[30]; i++){
 		curveFilters.push([i, pointsFilters[i]]);
 	}
 	return curveFilters;
+};
+
+//test
+Gramophone.prototype.estimateMatrixB = function(){
+	
+	var pointsFilters = [];
+	var matrixB = [];
+
+	for(var k = 0; k < this.equalizationPresetFrequency[30]; k++){
+		pointsFilters[k] = 0;
+	}
+
+	for(var k = 0; k < this.equalizationPresetFrequency.length; k++){
+	  matrixB[k] = new Array(this.equalizationPresetFrequency.length);
+	  for(var y = 0; y < this.equalizationPresetFrequency.length; y++){
+	    matrixB[k][y] = 0;
+	  }
+	}
+	
+	for(var i = 0; i < this.equalizationPresetFrequency.length; i++){
+		
+		//8*samplerate is enough for a correct graph
+		BiQuadFilter.create(3, this.equalizationPresetFrequency[i] , this.context.sampleRate, 
+								this.QFACTORPRESETVALUE, 10);	
+
+		for(var j = this.equalizationPresetFrequency[0]; j < this.equalizationPresetFrequency[30]; j++){			
+			pointsFilters[j] += BiQuadFilter.log_result(j);			
+		}
+
+		for(var j = 0; j < this.equalizationPresetFrequency.length; j++){
+			matrixB[i][j] = (BiQuadFilter.log_result(this.equalizationPresetFrequency[j]))/10;
+		}
+	}
+	this.Bmatrix = math.matrix(matrixB);
+	//console.log(this.Bmatrix);
+
 };
 
 /**
@@ -1105,7 +1195,7 @@ Gramophone.prototype.createSumCurveFilters = function(from){
  */
 Gramophone.prototype.createFiltersArray = function(array){
 	// initialize biquad filters
-	for(var i = 0; i < 32; i++){
+	for(var i = 0; i < 31; i++){
 		array[i] = context.createBiquadFilter();
 		array[i].type = "peaking";
 		array[i].frequency.value = this.equalizationPresetFrequency[i];
@@ -1270,27 +1360,27 @@ Gramophone.prototype.changeHorn = function(horn) {
 			}
 			// with equalization preset node
 			else{				
-				this.equalizationPreset[31].disconnect();
+				this.equalizationPreset[30].disconnect();
 				if(this.hornType == 0){	
 					// with equalizer node
 					if(this.isEqualizerActive){
-						this.equalizationPreset[31].connect(this.equalizer[0]);
+						this.equalizationPreset[30].connect(this.equalizer[0]);
 					}
 					// no equalizer node
 					else{
-						this.equalizationPreset[31].connect(this.volumeNode);
+						this.equalizationPreset[30].connect(this.volumeNode);
 					}
 				}
 				// with horn node
 				else{
 					// with equalizer node
 					if(this.isEqualizerActive){
-						this.equalizationPreset[31].connect(this.hornNode);
+						this.equalizationPreset[30].connect(this.hornNode);
 						this.hornNode.connect(this.equalizer[0]);
 					}
 					// no equalizer node
 					else{
-						this.equalizationPreset[31].connect(this.hornNode);
+						this.equalizationPreset[30].connect(this.hornNode);
 						this.hornNode.connect(this.volumeNode);
 					}	
 				}
@@ -1332,8 +1422,8 @@ Gramophone.prototype.activeEqualizer = function(){
 				}
 				// with equalization preset effect
 				else{
-					this.equalizationPreset[31].disconnect();
-					this.equalizationPreset[31].connect(this.volumeNode);
+					this.equalizationPreset[30].disconnect();
+					this.equalizationPreset[30].connect(this.volumeNode);
 				}
 			}
 			else{
@@ -1352,8 +1442,8 @@ Gramophone.prototype.activeEqualizer = function(){
 					this.audioSource.connect(this.equalizer[0]);
 				}
 				else{
-					this.equalizationPreset[31].disconnect();
-					this.equalizationPreset[31].connect(this.equalizer[0]);
+					this.equalizationPreset[30].disconnect();
+					this.equalizationPreset[30].connect(this.equalizer[0]);
 				}
 			}
 			else{

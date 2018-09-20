@@ -18,6 +18,10 @@
 <script type = "text/javascript" src = "./js/flot-master/jquery.flot.resize.js"></script>
 <script type = "text/javascript" src = "./js/flot-master/jquery.flot.navigate.js"></script>
 
+<!-- math js scripts -->
+<script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.1.2/math.js"></script>
+
+
 <script src="./js/timerlistener.js"></script>
 
 <link rel="stylesheet" href="./css/jquery-ui.css">
