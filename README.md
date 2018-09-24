@@ -45,6 +45,7 @@ The author of this project is [*Niccolò Pretto*](http://www.dei.unipd.it/~prett
 * _Riccardo Galiazzo_
 * _Fabio Giachelle_
 * _Luca Piazzon_
+* _Giovanni Candeo_
 
 The repository includes snippets of code and algorithms from the following repositories:
 * **getID3**: https://github.com/JamesHeinrich/getID3

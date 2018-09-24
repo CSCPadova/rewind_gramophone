@@ -5,16 +5,27 @@
    @import url(./css/gramophoneEqualizer.css);
    /*@import url(./css/gramophoneSongDB2.css);*/
    @import url(./css/gramophoneSongDB.css); 
-   @import url(./css/gramophoneClass.css);
+   @import url(./css/gramophoneCorrectionCurve.css);
+   @import url(./css/gramophoneClass.css); 
 </style>
 
 <script type = "text/javascript" src = "./jquery/jquery-1.12.4.js"></script>
 <script type = "text/javascript" src = "./jquery/jquery-ui.js"></script>
 <script type = "text/javascript" src = "./jquery/jQueryRotateCompressed.js"></script>
 
+<!-- flot scripts -->
+<script type = "text/javascript" src = "./js/flot-master/jquery.flot.js"></script>
+<script type = "text/javascript" src = "./js/flot-master/jquery.flot.resize.js"></script>
+<script type = "text/javascript" src = "./js/flot-master/jquery.flot.navigate.js"></script>
+
+<!-- math js scripts -->
+<script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.1.2/math.js"></script>
+
+
 <script src="./js/timerlistener.js"></script>
 
 <link rel="stylesheet" href="./css/jquery-ui.css">
+<script type = "text/javascript" src="./js/BiQuadFilter.js"></script>
 <script type = "text/javascript" src = "./js/gramophone.js"></script>
 <script type = "text/javascript" src = "./js/gramophoneControl.js"></script>
 <script type = "text/javascript" src = "./js/gramophoneTools.js"></script>
@@ -120,63 +131,138 @@
 		</div>
 	</div>
 	
-	<!-- 			Equalization Preset				 -->
-	<div class = "controlsSubTitle" onclick="gramTools.openTool(6)">
-		<div class ="titleSubMenuDiv" >Equalization Preset</div>
-		<div id = "openControl2" class = "openSubPart" ></div>
+	<!-- 			Equalization Preset	Old			 -->
+	<div class = "controlsSubTitle" onclick="gramTools.openTool(10)">
+		<div class ="titleSubMenuDiv" >Remove Old Equalization</div>
+		<div id = "openControl10" class = "openSubPart" ></div>
 	</div>
-	<div id = "equalizationControl" class = "controlsSubMenu">
+	<div id = "oldEqualizationControl" class = "controlsSubMenu">
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq0" onclick="gram.changePresetEq(0)" checked = "checked">  No equalization</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq0Old" onclick="gram.changePresetEq(this,0)" eqTarget="old" checked = "checked">  No equalization</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq1" onclick="gram.changePresetEq(1)">  Riaa</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq1Old" onclick="gram.changePresetEq(this,1)" eqTarget="old">  Riaa</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq2" onclick="gram.changePresetEq(2)">  Rca</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq2Old" onclick="gram.changePresetEq(this,2)" eqTarget="old">  Rca</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq3" onclick="gram.changePresetEq(3)">  Hmv</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq3Old" onclick="gram.changePresetEq(this,3)" eqTarget="old">  Hmv</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq4" onclick="gram.changePresetEq(4)">  Ffrr</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq4Old" onclick="gram.changePresetEq(this,4)" eqTarget="old">  Ffrr</input>
 		</div>
 		<div class = "eqPreset">
-			<input type = "radio" name = "radioEq" id = "radioEq5" onclick="gram.changePresetEq(5)">  Nab</input>
+			<input type = "radio" name = "radioEqOld" id = "radioEq5Old" onclick="gram.changePresetEq(this,5)" eqTarget="old">  Nab</input>
 		</div>
 		<div id = "changeEqualizationFilter">
-			<div id = "customTitle">
-				<input type = "radio" name = "radioEq" id = "radioEq6" onclick="gram.changePresetEq(6)">  Custom Equalization</input>
+			<div id = "customTitleOld">
+				<input type = "radio" name = "radioEqOld" id = "radioEq6old" onclick="gram.changePresetEq(this,6)" eqTarget="old">  Custom Equalization</input>
 			</div>
 			<div id = "bassTurnover" class = "customRangeContainer">
 				<div>Bass Turnover Frequency</div>
-				<div id = "bassTurnoverLabel" class = "LabelCustom">500 Hz</div>
+				<div id = "bassTurnoverLabelOld" class = "LabelCustom">500 Hz</div>
 				<div>
-					<input id = "bassTurnoverRange" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled">
+					<input id = "bassTurnoverRangeOld" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled" eqTarget="old">
 				</div>
 			</div>
 			<div id = "rolloff" class = "customRangeContainer">
 				<div>High Gain Rolloff</div>
-				<div id = "rolloffLabel" class = "LabelCustom">-13.7 dB</div>
+				<div id = "rolloffLabelOld" class = "LabelCustom">-13.7 dB</div>
 				<div>
-					<input id = "rolloffRange" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled">
+					<input id = "rolloffRangeOld" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled" eqTarget="old">
 				</div>
 			</div>
 			<div id = "shelving" class = "customRangeContainer">
 				<div>LF Shelving Frequency</div>
-				<div id = "shelvingLabel" class = "LabelCustom" >50 Hz</div>
+				<div id = "shelvingLabelOld" class = "LabelCustom" >50 Hz</div>
 				<div>
-					<input id = "shelvingRange" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled">
-					<input id = "shelvingEnable" type = "checkbox" disabled ="disabled" onchange = "gram.enableShelving();"></input>
+					<input id = "shelvingRangeOld" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="old">
+					<input id = "shelvingEnableOld" type = "checkbox" disabled ="disabled" eqTarget="old" onchange = "gram.enableShelving(this);"></input>
+				</div>	
+			</div>
+			<div id = "normalizationOld"></div>
+			<div id = "gain10Old"></div>
+		</div>
+	</div>
+
+	<!-- 			Equalization Preset	New			 -->
+	<div class = "controlsSubTitle" onclick="gramTools.openTool(6)">
+		<div class ="titleSubMenuDiv" >Add New Equalization</div>
+		<div id = "openControl2" class = "openSubPart" ></div>
+	</div>
+	<div id = "equalizationControl" class = "controlsSubMenu">
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq0" onclick="gram.changePresetEq(this,0)" eqTarget="new" checked = "checked">  No equalization</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq1" onclick="gram.changePresetEq(this,1)" eqTarget="new">  Riaa</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq2" onclick="gram.changePresetEq(this,2)" eqTarget="new">  Rca</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq3" onclick="gram.changePresetEq(this,3)" eqTarget="new">  Hmv</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq4" onclick="gram.changePresetEq(this,4)" eqTarget="new">  Ffrr</input>
+		</div>
+		<div class = "eqPreset">
+			<input type = "radio" name = "radioEq" id = "radioEq5" onclick="gram.changePresetEq(this,5)" eqTarget="new">  Nab</input>
+		</div>
+		<div id = "changeEqualizationFilter">
+			<div id = "customTitle">
+				<input type = "radio" name = "radioEq" id = "radioEq6" onclick="gram.changePresetEq(this, 6)" eqTarget="new">  Custom Equalization</input>
+			</div>
+			<div id = "bassTurnover" class = "customRangeContainer">
+				<div>Bass Turnover Frequency</div>
+				<div id = "bassTurnoverLabelNew" class = "LabelCustom">500 Hz</div>
+				<div>
+					<input id = "bassTurnoverRangeNew" type="range" onchange = "gram.changePresetValue(this,0);" value="500" max="1000" min="200" disabled ="disabled" eqTarget="new">
+				</div>
+			</div>
+			<div id = "rolloff" class = "customRangeContainer">
+				<div>High Gain Rolloff</div>
+				<div id = "rolloffLabelNew" class = "LabelCustom">-13.7 dB</div>
+				<div>
+					<input id = "rolloffRangeNew" type="range" onchange = "gram.changePresetValue(this,1);" value="-13.7" max="0" min="-24" step = "0.1" disabled ="disabled" eqTarget="new">
+				</div>
+			</div>
+			<div id = "shelving" class = "customRangeContainer">
+				<div>LF Shelving Frequency</div>
+				<div id = "shelvingLabelNew" class = "LabelCustom" >50 Hz</div>
+				<div>
+					<input id = "shelvingRangeNew" type="range" onchange = "gram.changePresetValue(this,2);" value="50" max="100" min="10" disabled ="disabled" eqTarget="new">
+					<input id = "shelvingEnableNew" type = "checkbox" disabled ="disabled" eqTarget="new" onchange = "gram.enableShelving(this);"></input>
 				</div>	
 			</div>
 			<div id = "normalization"></div>
 			<div id = "gain10"></div>
 		</div>
 	</div>
+
+	<!-- 			Correction Curve			 -->
+	<div class = "controlsSubTitle" onclick="gramTools.openTool(11);gram.toggleGraphView();">
+		<div class ="titleSubMenuDiv" >Corrective Curve</div>
+		<div id = "openControl11" class = "openSubPart" ></div>
+	</div>
+	<div id = "correctionCurveControl" class = "controlsSubMenu">
+		<div class="correctionCurveContainer">
+			<div class="btn-group">
+				<div class="buttonGraph selectedGraph" id="Union" onclick="gram.drawGraph(0);">Corrective Curve</div>
+				<div class="buttonGraph" id="Reading1" onclick="gram.drawGraph(1);">Reading^(-1)</div>
+				<div class="buttonGraph" id="Reading" onclick="gram.drawGraph(2);">Reading</div>
+			</div>
+			<div id="graphDescription" class="graphLabel"></div>
+			<br style="clear:both">
+			<div id="placeholder1" class="placeholder"></div>
+			<div id="placeholder2" class="placeholder"></div>
+		</div>
+	</div>
 	
+	<!-- Horn preset control is hidden at the moment because it doesn't work properly -->
 	<!-- 			Horn Preset				 -->
-	<div class = "controlsSubTitle" onclick="gramTools.openTool(7)">
+	<div class = "controlsSubTitle" onclick="gramTools.openTool(7)" style="display: none">
 		<div class ="titleSubMenuDiv" >Horn Preset</div>
 		<div id = "openControl3" class = "openSubPart" ></div>
 	</div>
@@ -456,11 +542,11 @@
 				  <option value="1 mil - 3 g">1 mil - 3 g</option>
 				  <option value="-">-</option>
 				</select> </tr>
-				<tr><th>Equalization<td>
-				<select id="singleeq" name="eqselect" class="td100">
+				<tr><th>Equalization<td><input id="singleeq" type="text" name="eqselect" class="td100" required></tr>
+				<!--select id="singleeq" name="eqselect" class="td100">
 				  <option value="flat">Flat</option>
 				  <option value="-">-</option>
-				</select></tr>
+				</select></tr-->
 				<tr><th>Copy Type<td>
 				<select id="singletype" name="typeselect" class="td100">
 				  <option value="Conservative copy">Conservative copy</option>
