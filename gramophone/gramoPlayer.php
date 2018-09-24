@@ -542,11 +542,11 @@
 				  <option value="1 mil - 3 g">1 mil - 3 g</option>
 				  <option value="-">-</option>
 				</select> </tr>
-				<tr><th>Equalization<td>
-				<select id="singleeq" name="eqselect" class="td100">
+				<tr><th>Equalization<td><input id="singleeq" type="text" name="eqselect" class="td100" required></tr>
+				<!--select id="singleeq" name="eqselect" class="td100">
 				  <option value="flat">Flat</option>
 				  <option value="-">-</option>
-				</select></tr>
+				</select></tr-->
 				<tr><th>Copy Type<td>
 				<select id="singletype" name="typeselect" class="td100">
 				  <option value="Conservative copy">Conservative copy</option>

@@ -694,8 +694,6 @@ Gramophone.prototype.changeAllGainValue = function(){
 	var newCurveGain = [];
 	var optimalOldCurveGain = [];
 	var optimalNewCurveGain = [];
-	//var oldCurveGain = 0;
-	//var newCurveGain = 0;
 
 	var oldCurveMultiplier = 0; //if 0 the gain doesnt affect the equalization
 	var newCurveMultiplier = 0; //if 0 the gain doesnt affect the equalization
@@ -724,12 +722,6 @@ Gramophone.prototype.changeAllGainValue = function(){
 
 	optimalOldCurveGain = this.calculateOptimalGain(oldCurveGain);
 	optimalNewCurveGain = this.calculateOptimalGain(newCurveGain);
-	
-	//remember - these are not normalized
-	//console.log("newCurveGain");
-	//console.log(newCurveGain);
-	//console.log("optimalNewCurveGain");
-	//console.log(optimalNewCurveGain);
 
 	// calculate not normalize gain value
 	for(var i = 0; i < 31; i++){	
@@ -1000,7 +992,6 @@ Gramophone.prototype.enableShelving = function(element){
 	}
 };
 
-// <---Graph functions-------------------------------------------------------------------------------->
 /**
  * Utility function to generate the equalization name from equalizationType number
  * @param {} equalizationType number value
@@ -1049,8 +1040,7 @@ Gramophone.prototype.toggleGraphView = function(){
  * @param {} number that represent the graph we want to visualize
  */
 Gramophone.prototype.drawGraph = function(type){
-	//var curveFilters = this.createSumCurveFilters();
-	//changeChart('Union');
+
 	var $pe = jQuery.noConflict();
 	var graphDescription = $pe("#graphDescription");
 	var unionButton = $pe("#Union");
@@ -1136,7 +1126,6 @@ Gramophone.prototype.createSumCurveFilters = function(from){
 	
 	for(var i = 0; i < this.equalizationPresetFrequency.length; i++){
 		
-		//8*samplerate is enough for a correct graph
 		BiQuadFilter.create(3, this.equalizationPresetFrequency[i] , this.context.sampleRate, 
 								this.QFACTORPRESETVALUE, from[i].gain.value);	
 
@@ -1153,15 +1142,12 @@ Gramophone.prototype.createSumCurveFilters = function(from){
 	return curveFilters;
 };
 
-//test
+/**
+ *Estimate the matrix B to models the leakage of the filters to other center frequencies
+ *when all filter gains are 1dB
+ */
 Gramophone.prototype.estimateMatrixB = function(){
-	
-	var pointsFilters = [];
 	var matrixB = [];
-
-	for(var k = 0; k < this.equalizationPresetFrequency[30]; k++){
-		pointsFilters[k] = 0;
-	}
 
 	for(var k = 0; k < this.equalizationPresetFrequency.length; k++){
 	  matrixB[k] = new Array(this.equalizationPresetFrequency.length);
@@ -1172,13 +1158,8 @@ Gramophone.prototype.estimateMatrixB = function(){
 	
 	for(var i = 0; i < this.equalizationPresetFrequency.length; i++){
 		
-		//8*samplerate is enough for a correct graph
 		BiQuadFilter.create(3, this.equalizationPresetFrequency[i] , this.context.sampleRate, 
-								this.QFACTORPRESETVALUE, 10);	
-
-		for(var j = this.equalizationPresetFrequency[0]; j < this.equalizationPresetFrequency[30]; j++){			
-			pointsFilters[j] += BiQuadFilter.log_result(j);			
-		}
+								this.QFACTORPRESETVALUE, 10);
 
 		for(var j = 0; j < this.equalizationPresetFrequency.length; j++){
 			matrixB[i][j] = (BiQuadFilter.log_result(this.equalizationPresetFrequency[j]))/10;
@@ -1202,7 +1183,7 @@ Gramophone.prototype.createFiltersArray = function(array){
 		array[i].Q.value = this.QFACTORPRESETVALUE;
 	}
 }
-// <---c-graph---------------------------------------------------------------------------------------->
+
 
 // <-----Rotation----->
 Gramophone.prototype.changeRotation = function(element,type){
