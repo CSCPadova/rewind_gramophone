@@ -22,7 +22,7 @@
 <script type = "text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.1.2/math.js"></script>
 
 
-<script src="./js/timerlistener.js"></script>
+<script type = "text/javascript" src="./js/timerListener.js"></script>
 
 <link rel="stylesheet" href="./css/jquery-ui.css">
 <script type = "text/javascript" src="./js/BiQuadFilter.js"></script>
