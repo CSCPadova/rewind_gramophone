@@ -276,6 +276,11 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 				  if (thatTools.equalizerFlag){
 					  that.activeEqualizer();
 				  }
+
+				  // from waveform.js
+				  if (that.waveform) {
+					  that.setWaveFormBuffer(currentBuffer);
+				  }
 			  },
 			  function(error) {
 				  console.error('decodeAudioData error', error);
@@ -437,6 +442,7 @@ Gramophone.prototype.play = function(){
 		}
 	}
 	
+	this.playFinish = false;
 	// set audiosource parameter
 	this.audioSource.playbackRate.value = this.playBackRate;
 	this.audioSource.loop = false;
@@ -470,7 +476,11 @@ Gramophone.prototype.play = function(){
 	this.state = "PLAY";
 	
 	this.STOPTIME = this.audioSource.buffer.duration;
-	
+
+	// from waveform.js
+	if (this.waveform) {
+		this.startWaveForm(this.startOffset);
+	}
 	
 	// calculate animation timing
 	var remainingTime = (this.STOPTIME  - (this.startOffset % this.audioSource.buffer.duration)) / this.playBackRate * 1000;
@@ -1225,6 +1235,11 @@ Gramophone.prototype.changeRotation = function(element,type){
 			var remainingTime = (this.STOPTIME - (this.startOffset % this.audioSource.buffer.duration) ) / this.playBackRate *1000;
 			this.remainingTime = remainingTime;
 			
+			// from waveform.js
+			if (this.waveform) {
+				this.startWaveForm(this.startOffset);
+			}
+
 			console.log("remainingTime:"+this.remainingTime+" elapsedTime: "+this.elapsedTime+ "buffer: "+this.audioSource.buffer.duration);
 			// restart arm movement
 			this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);

@@ -497,6 +497,11 @@ box.mousedown(function(){
 			gram.audioSource.stop();
 			console.log("stopped by arm control");
 			gram.audioSource.disconnect();
+
+			// stop also the waveform
+			if(gram.waveform){
+				gram.stopWaveForm();
+			}
 		}
 
 });
@@ -515,6 +520,15 @@ $(document).mousemove(function(e){
 		box.css({ 'transform': 'rotate(' + angle + 'deg)'});
 		gram.armCurrentAngle = angle;
 		
+		if (gram.waveform) {
+			/**
+			 * update also the waveform head
+			 */
+			var ratio = Math.abs(gram.armCurrentAngle - gram.STARTDISKANGLE)/(gram.STARTDISKANGLE - gram.STOPDISKANGLE);
+			//calculate the offset (in seconds) from which the track starts
+			const offset = ratio*gram.audioSource.buffer.duration
+			gram.setWaveFormHead(offset);
+		}
 		
 	}		
     
