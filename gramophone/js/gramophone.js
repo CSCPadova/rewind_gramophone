@@ -383,6 +383,25 @@ Gramophone.prototype.playDisk = function(){
 
 Gramophone.prototype.play = function(){
 	// create a new Audio Source Node
+	if(this.audioSource) {
+		/**
+		 * When someone changes arm position, this function will be called to
+		 * play the disk on the new audio offset.
+		 * 
+		 * Below we create a new AudioBufferSourceNode each time we invoke this
+		 * function, but the old reference is not freed yet and an `onended` 
+		 * callback is also attached, which will prematurely stop the gramophone
+		 * without stopping the music.
+		 * 
+		 * This fixes the problem temporary, to fix this problem a re-design to the
+		 * gramophone class is needed. (I think we don't need to create a new Node each time
+		 * we only need to attach different audiobuffer)
+		 * 
+		 * daohong
+		 */
+		this.audioSource.stop();
+		this.audioSource.onended = null;
+	}
 	this.audioSource = context.createBufferSource();
 	this.audioSource.buffer = currentBuffer;
 	// connect the Audio Source Node at the graph
@@ -497,6 +516,11 @@ Gramophone.prototype.play = function(){
 			+ this.playBackRate + "\n currentime: " + this.context.currentTime;
 	debugTest(message);
 	
+	/**
+	 * TODO: !!bug, this won't work, all wrong
+	 * 
+	 * (do we really need this?)
+	 */
 	// start timeout: when the timeout expired call a stop function
 	this.stopTimeout = 	setTimeout(function(){
 			if(this.remainingTime == 0)
@@ -1243,6 +1267,12 @@ Gramophone.prototype.changeRotation = function(element,type){
 			console.log("remainingTime:"+this.remainingTime+" elapsedTime: "+this.elapsedTime+ "buffer: "+this.audioSource.buffer.duration);
 			// restart arm movement
 			this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
+
+			/**
+			 * TODO: !!bug, this also won't work, all wrong
+			 * 
+			 * (do we really need this?)
+			 */
 			// restart timeout
 			this.stopTimeout = window.setTimeout(function(){
 				
