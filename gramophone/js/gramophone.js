@@ -386,16 +386,17 @@ Gramophone.prototype.play = function(){
 	if(this.audioSource) {
 		/**
 		 * When someone changes arm position, this function will be called to
-		 * play the disk on the new audio offset.
+		 * play the disk at the newest audio offset.
 		 * 
-		 * Below we create a new AudioBufferSourceNode each time we invoke this
-		 * function, but the old reference is not freed yet and an `onended` 
-		 * callback is also attached, which will prematurely stop the gramophone
-		 * without stopping the music.
+		 * Originally this method creates a new AudioBufferSourceNode on every
+		 * invocation, however the old reference is not yet freed and an `onended` 
+		 * callback is still attached, which will prematurely stop the gramophone
+		 * without stopping the music when the timeout occures.
 		 * 
-		 * This fixes the problem temporary, to fix this problem a re-design to the
-		 * gramophone class is needed. (I think we don't need to create a new Node each time
-		 * we only need to attach different audiobuffer)
+		 * This if statement fixes the problem temporary.
+		 * To fix this problem entirely a re-design to the gramophone class is needed.
+		 * (I think we don't need to create a new BufferSource everytime we invoke
+		 * this method, we only need to change the audiobuffer.)
 		 * 
 		 * daohong
 		 */

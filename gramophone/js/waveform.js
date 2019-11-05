@@ -56,6 +56,11 @@
     });
 })(peaks, gram);
 
+/**
+ * Initializes the waveform view context
+ * 
+ * @param waveform Peaks instance
+ */
 Gramophone.prototype.initWaveFormView = function (waveform) {
     if (!waveform) {
         throw new Error('WaveForm null @ waveform.js, initWaveForm()');
@@ -67,6 +72,11 @@ Gramophone.prototype.initWaveFormView = function (waveform) {
     console.log("WaveForm initialized!");
 }
 
+/**
+ * Feed the audioBuffer to the waveform view
+ * 
+ * @param audioBuffer audioBuffer to be visualized
+ */
 Gramophone.prototype.setWaveFormBuffer = function (audioBuffer) {
     if (!this.waveform) {
         throw new Error('WaveForm not initialized @ waveform.js, setWaveFormBuffer()');
@@ -85,6 +95,7 @@ Gramophone.prototype.setWaveFormBuffer = function (audioBuffer) {
         self_waveform.removeAllListeners('player_canplay');
         self_waveform.removeAllListeners('player_error');
     }
+
     function updateWaveForm() {
         reset();
         if (!options.zoomLevels) {
@@ -102,6 +113,8 @@ Gramophone.prototype.setWaveFormBuffer = function (audioBuffer) {
             split_channels: webAudioOptions.multiChannel,
             scale: webAudioOptions.scale
         };
+
+        // Generate waveform data by using WebAudioAPI, this method is async
         WaveformData.createFromAudio(webAudioBuilderOptions, function (err, waveformData) {
             if (err) {
                 alert("An error has occurred during waveform generation, see console.");
@@ -120,13 +133,17 @@ Gramophone.prototype.setWaveFormBuffer = function (audioBuffer) {
             });
             self_waveform.zoom.setZoomLevels(options.zoomLevels);
             console.log("waveform updated");
-
             self.waveLoaded = true;
         });
     }
     updateWaveForm();
 }
 
+/**
+ * Set the current head position of the waveform view
+ * 
+ * @param time offset in seconds
+ */
 Gramophone.prototype.setWaveFormHead = function (time) {
     if (!this.waveform) {
         throw new Error('WaveForm not initialized @ waveform.js, setWaveFormBuffer()');
@@ -134,6 +151,11 @@ Gramophone.prototype.setWaveFormHead = function (time) {
     this.waveform.views._overview._playheadLayer._syncPlayhead(time);
 }
 
+/**
+ * Start the waveform at the selected offset
+ * 
+ * @param time offset in seconds
+ */
 Gramophone.prototype.startWaveForm = function (time) {
     if (!this.waveform) {
         throw new Error('WaveForm not initialized @ waveform.js, setWaveFormBuffer()');
@@ -145,7 +167,8 @@ Gramophone.prototype.startWaveForm = function (time) {
         }
         console.log("starting waveform");
         this.waveTime = time;
-        this.waveform.views._overview._playheadLayer._syncPlayhead(time);
+
+        this.setWaveFormHead(time);
         const self = this;
         this.waveInterval = setInterval(function () {
             // console.log("update time: " + self.waveTime);
@@ -154,7 +177,7 @@ Gramophone.prototype.startWaveForm = function (time) {
                 self.stopWaveForm();
                 return;
             }
-            self.waveform.views._overview._playheadLayer._syncPlayhead(self.waveTime);
+            self.setWaveFormHead(self.waveTime);
         }, 100);
     }
 }
