@@ -7,6 +7,31 @@
 
 (function (Peaks, gramophone) {
     /**
+     * Create Menu Container
+     */
+    const title = document.createElement("div");
+    title.id = "waveFormTitle";
+    title.classList.add("partTitle");
+    title.setAttribute('onclick', 'gramTools.openTool(0)');
+
+    const name = document.createElement("div");
+    name.classList.add("titleMenuDiv");
+    name.innerHTML = "WaveForm";
+
+    const pads = document.createElement("div");
+    pads.classList.add("pads");
+    const open = document.createElement("div");
+    open.id = "openWaveForm";
+    open.classList.add("openPart");
+
+    title.appendChild(name);
+    title.appendChild(pads);
+    title.appendChild(open);
+
+    const menu = document.createElement("div");
+    menu.id = "waveFormMenu";
+
+    /**
      * Append Container
      */
     const container = document.createElement("div");
@@ -16,8 +41,13 @@
     overview.id = "overview-container";
     container.appendChild(overview);
 
+    // add container to the menu
+    menu.appendChild(container);
+
+    // Add Menu to the view
     const controls = document.getElementById("controlsTitle");
-    controls.parentElement.insertBefore(container, controls);
+    controls.parentElement.insertBefore(title, controls);
+    controls.parentElement.insertBefore(menu, controls);
 
     /**
      * Append dummy audio
@@ -51,6 +81,7 @@
         showPlayheadTime: true
     };
     Peaks.init(options, function (err, peaksInstance) {
+        menu.classList.add('menuControlPart');
         console.log('Peaks instance ready');
         gramophone.initWaveFormView(peaksInstance);
     });

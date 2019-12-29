@@ -16,6 +16,7 @@ This project provides the following features:
     * Import a single track;
     * Download the tracklist in JSON format;
     * Download all the tracks in a single zip file;
+* **Waveform Visualization**: during the playback of a track, it is also possible to visualize the waveform of the audio; the waveform equips a header which tells you the position of the current playback;
 
 ## Installation
 All the project files are in the "gramophone" folder. In order to install correctly the gramophone project and use it, you need to put the "gramophone" folder in any directory you prefer of the chosen web server (e.g.  if you use XAMPP (Apache) you need to put the "gramophone" folder in any subdirectory of "htdocs" directory, that under Windows is in general located at this path: "C:\xampp\htdocs\").
@@ -48,9 +49,11 @@ In this new version, several features are implemented. The developers who partec
 * _Fabio Giachelle_
 * _Luca Piazzon_
 * _Giovanni Candeo_
+* _Daohong Li_
 
 The repository includes snippets of code and algorithms from the following repositories:
 * **getID3**: https://github.com/JamesHeinrich/getID3
+* **peaks.js**: https://github.com/bbc/peaks.js
 
 ## References
 

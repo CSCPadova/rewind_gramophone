@@ -4,6 +4,7 @@ function GramophoneTools(){
 	this.equalizerFlag = false;
 	this.songDbFlag = false;
 	this.songDb2Flag = false;
+	this.waveFormFlag = false;
 	
 	// commands flag
 	this.rotationFlag = false;
@@ -63,6 +64,18 @@ GramophoneTools.prototype.openTool = function (tool){
 	var flag = false;
 	
 	switch(tool){
+		// waveform		
+        case 0:
+			$upPart = $ot("#waveFormTitle");
+			$part = $ot("#waveFormMenu");
+			$title = $ot("#openWaveForm");
+			flag = this.waveFormFlag;
+			if(this.waveFormFlag)
+				this.waveFormFlag = false;
+			else
+				this.waveFormFlag = true;
+			break;
+		
 		// commands
 		case 1:
 			$upPart = $ot("#controlsTitle");
@@ -189,7 +202,7 @@ GramophoneTools.prototype.openTool = function (tool){
 			else
 				this.correctionCurveFlag = true;
 			break;
-		
+
 		default:
 			alert("menu open error");
 			break;
