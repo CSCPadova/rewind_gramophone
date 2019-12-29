@@ -1,5 +1,5 @@
 /**
- * Basic waveform visualizzation for gramophone
+ * Basic waveform visualization for gramophone
  * 
  * Date: September 2019 - October 2019
  * Author: daohong li, daohong.li@studenti.unipd.it
@@ -28,8 +28,14 @@
     title.appendChild(pads);
     title.appendChild(open);
 
+    const empty = document.createElement("h2");
+    empty.innerHTML = "Track not loaded.";
+    empty.style.textAlign = "center";
+    empty.style.display = "none";
+
     const menu = document.createElement("div");
     menu.id = "waveFormMenu";
+    menu.appendChild(empty);
 
     /**
      * Append Container
@@ -82,6 +88,8 @@
     };
     Peaks.init(options, function (err, peaksInstance) {
         menu.classList.add('menuControlPart');
+        empty.style.display = "block";
+        container.style.display = "none";
         console.log('Peaks instance ready');
         gramophone.initWaveFormView(peaksInstance);
     });
@@ -165,6 +173,8 @@ Gramophone.prototype.setWaveFormBuffer = function (audioBuffer) {
             self_waveform.zoom.setZoomLevels(options.zoomLevels);
             console.log("waveform updated");
             self.waveLoaded = true;
+            document.getElementById("waveform-container").style.display = "block";
+            document.querySelector("#waveFormMenu > h2").style.display = "none";
         });
     }
     updateWaveForm();

@@ -100,9 +100,6 @@ function Gramophone (context){
 	//this.equalizationPresetType = 0;	// 0 if there is not effect
 	this.hornType = 0;					// 0 if there is not effect
 	
-	// Timeout
-	this.stopTimeout = null;
-
 	//State Machine and Transition Flags
 	this.previousState = "STOP";
 	this.state = "STOP";
@@ -184,8 +181,6 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 		stopVinylRotation();
 		// stop arm animation
 		stopArmAnimation();
-		// stop timeout
-		window.clearTimeout(this.stopTimeout);
 		// update flags
 		this.isPlaying = false;
 		
@@ -374,8 +369,6 @@ Gramophone.prototype.playDisk = function(){
 			stopVinylRotation();
 			// stop arm movement
 			stopArmAnimation();
-			// stop timeout
-			window.clearTimeout(this.stopTimeout);
 		}
 			
 	}
@@ -517,23 +510,6 @@ Gramophone.prototype.play = function(){
 			+ this.playBackRate + "\n currentime: " + this.context.currentTime;
 	debugTest(message);
 	
-	/**
-	 * TODO: !!bug, this won't work, all wrong
-	 * 
-	 * (do we really need this?)
-	 */
-	// start timeout: when the timeout expired call a stop function
-	this.stopTimeout = 	setTimeout(function(){
-			if(this.remainingTime == 0)
-			{
-				this.audioSource.stop();
-				this.playFinish = true;
-				this.previousState = this.state;
-				this.state = "STOP";
-				this.armCurrentAngle = this.STARTANGLE;
-			}
-		}, this.remainingTime);
-	
 	if(gramTools.equalizerFlag ){
 		this.isEqualizerActive = false;
 	}
@@ -553,8 +529,6 @@ Gramophone.prototype.stopSong = function(){
 		this.isArmEnabled = false;
 		// stop arm animation
 		stopArmAnimation();
-		// stop timeout
-		window.clearTimeout(this.stopTimeout);
 		// move the play range to pause condition
 		
 		this.elapsedTime = 0;
@@ -1248,8 +1222,6 @@ Gramophone.prototype.changeRotation = function(element,type){
 		if(this.isPlaying){
 			// stop arm movement
 			//stopArmAnimation();
-			// stop timeout
-			window.clearTimeout(this.stopTimeout);
 			// update offset with old playbackrate
 			this.startOffset += (this.context.currentTime - this.startTime) * oldPlayBackRate;
 			// update startTime
@@ -1268,24 +1240,6 @@ Gramophone.prototype.changeRotation = function(element,type){
 			console.log("remainingTime:"+this.remainingTime+" elapsedTime: "+this.elapsedTime+ "buffer: "+this.audioSource.buffer.duration);
 			// restart arm movement
 			this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
-
-			/**
-			 * TODO: !!bug, this also won't work, all wrong
-			 * 
-			 * (do we really need this?)
-			 */
-			// restart timeout
-			this.stopTimeout = window.setTimeout(function(){
-				
-				if(this.audioSource != null && this.remainingTime==0)
-				{
-					
-					this.audioSource.stop();
-				}
-				
-				
-				this.playFinish = true;
-				}, remainingTime);
 		}
 		// state 2 or 3
 		else{
@@ -1565,8 +1519,6 @@ Gramophone.prototype.moveArmOnMouseDown = function(event){
 			that.startOffset += (that.context.currentTime - that.startTime) * that.playBackRate;
 			// stop arm movement
 			stopArmAnimation();
-			// stop timeout
-			window.clearTimeout(that.stopTimeout);
 		}
 		
 		// initialize variable to tracks arm users movement
