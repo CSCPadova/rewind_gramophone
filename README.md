@@ -1,5 +1,9 @@
 # REWIND - Gramophone
 
+<p align="center">
+  <img height="300" src="img/gramophone.jpg">
+</p>
+
 ## Description
 
 This repository contains the source code of a web application that virtualizes a gramophone using the Web Audio API.
