@@ -70,6 +70,7 @@ div.partTitle{
 	display: none;
 	margin-left: 5px;
 	margin-top: 5px;
+	clear: both;
 	/*
 	-webkit-border-bottom-left-radius: 10px;
 	-moz-border-radius-bottomleft: 10px;

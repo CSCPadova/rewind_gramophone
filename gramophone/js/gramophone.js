@@ -100,9 +100,6 @@ function Gramophone (context){
 	//this.equalizationPresetType = 0;	// 0 if there is not effect
 	this.hornType = 0;					// 0 if there is not effect
 	
-	// Timeout
-	this.stopTimeout = null;
-
 	//State Machine and Transition Flags
 	this.previousState = "STOP";
 	this.state = "STOP";
@@ -184,8 +181,6 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 		stopVinylRotation();
 		// stop arm animation
 		stopArmAnimation();
-		// stop timeout
-		window.clearTimeout(this.stopTimeout);
 		// update flags
 		this.isPlaying = false;
 		
@@ -275,6 +270,11 @@ Gramophone.prototype.loadDisk = function(completePath, nameTrack, speed){
 				  
 				  if (thatTools.equalizerFlag){
 					  that.activeEqualizer();
+				  }
+
+				  // from waveform.js
+				  if (that.waveform) {
+					  that.setWaveFormBuffer(currentBuffer);
 				  }
 			  },
 			  function(error) {
@@ -369,8 +369,6 @@ Gramophone.prototype.playDisk = function(){
 			stopVinylRotation();
 			// stop arm movement
 			stopArmAnimation();
-			// stop timeout
-			window.clearTimeout(this.stopTimeout);
 		}
 			
 	}
@@ -378,6 +376,26 @@ Gramophone.prototype.playDisk = function(){
 
 Gramophone.prototype.play = function(){
 	// create a new Audio Source Node
+	if(this.audioSource) {
+		/**
+		 * When someone changes arm position, this function will be called to
+		 * play the disk at the newest audio offset.
+		 * 
+		 * Originally this method creates a new AudioBufferSourceNode on every
+		 * invocation, however the old reference is not yet freed and an `onended` 
+		 * callback is still attached, which will prematurely stop the gramophone
+		 * without stopping the music when the timeout occures.
+		 * 
+		 * This if statement fixes the problem temporary.
+		 * To fix this problem entirely a re-design to the gramophone class is needed.
+		 * (I think we don't need to create a new BufferSource everytime we invoke
+		 * this method, we only need to change the audiobuffer.)
+		 * 
+		 * daohong
+		 */
+		this.audioSource.stop();
+		this.audioSource.onended = null;
+	}
 	this.audioSource = context.createBufferSource();
 	this.audioSource.buffer = currentBuffer;
 	// connect the Audio Source Node at the graph
@@ -437,6 +455,7 @@ Gramophone.prototype.play = function(){
 		}
 	}
 	
+	this.playFinish = false;
 	// set audiosource parameter
 	this.audioSource.playbackRate.value = this.playBackRate;
 	this.audioSource.loop = false;
@@ -470,7 +489,11 @@ Gramophone.prototype.play = function(){
 	this.state = "PLAY";
 	
 	this.STOPTIME = this.audioSource.buffer.duration;
-	
+
+	// from waveform.js
+	if (this.waveform) {
+		this.startWaveForm(this.startOffset);
+	}
 	
 	// calculate animation timing
 	var remainingTime = (this.STOPTIME  - (this.startOffset % this.audioSource.buffer.duration)) / this.playBackRate * 1000;
@@ -486,18 +509,6 @@ Gramophone.prototype.play = function(){
 	var message = "remainingTime: " + remainingTime + "\n playback rate:" 
 			+ this.playBackRate + "\n currentime: " + this.context.currentTime;
 	debugTest(message);
-	
-	// start timeout: when the timeout expired call a stop function
-	this.stopTimeout = 	setTimeout(function(){
-			if(this.remainingTime == 0)
-			{
-				this.audioSource.stop();
-				this.playFinish = true;
-				this.previousState = this.state;
-				this.state = "STOP";
-				this.armCurrentAngle = this.STARTANGLE;
-			}
-		}, this.remainingTime);
 	
 	if(gramTools.equalizerFlag ){
 		this.isEqualizerActive = false;
@@ -518,8 +529,6 @@ Gramophone.prototype.stopSong = function(){
 		this.isArmEnabled = false;
 		// stop arm animation
 		stopArmAnimation();
-		// stop timeout
-		window.clearTimeout(this.stopTimeout);
 		// move the play range to pause condition
 		
 		this.elapsedTime = 0;
@@ -1213,8 +1222,6 @@ Gramophone.prototype.changeRotation = function(element,type){
 		if(this.isPlaying){
 			// stop arm movement
 			//stopArmAnimation();
-			// stop timeout
-			window.clearTimeout(this.stopTimeout);
 			// update offset with old playbackrate
 			this.startOffset += (this.context.currentTime - this.startTime) * oldPlayBackRate;
 			// update startTime
@@ -1225,21 +1232,14 @@ Gramophone.prototype.changeRotation = function(element,type){
 			var remainingTime = (this.STOPTIME - (this.startOffset % this.audioSource.buffer.duration) ) / this.playBackRate *1000;
 			this.remainingTime = remainingTime;
 			
+			// from waveform.js
+			if (this.waveform) {
+				this.startWaveForm(this.startOffset);
+			}
+
 			console.log("remainingTime:"+this.remainingTime+" elapsedTime: "+this.elapsedTime+ "buffer: "+this.audioSource.buffer.duration);
 			// restart arm movement
 			this.moveArm(this.armCurrentAngle, this.STOPDISKANGLE, remainingTime, 0);
-			// restart timeout
-			this.stopTimeout = window.setTimeout(function(){
-				
-				if(this.audioSource != null && this.remainingTime==0)
-				{
-					
-					this.audioSource.stop();
-				}
-				
-				
-				this.playFinish = true;
-				}, remainingTime);
 		}
 		// state 2 or 3
 		else{
@@ -1519,8 +1519,6 @@ Gramophone.prototype.moveArmOnMouseDown = function(event){
 			that.startOffset += (that.context.currentTime - that.startTime) * that.playBackRate;
 			// stop arm movement
 			stopArmAnimation();
-			// stop timeout
-			window.clearTimeout(that.stopTimeout);
 		}
 		
 		// initialize variable to tracks arm users movement

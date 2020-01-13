@@ -603,5 +603,10 @@
 			}
 </script>
 <script type = "text/javascript" src = "./js/uploader.js"></script>
+
+<!-- for waveform -->
+<script type = "text/javascript" src="./js/peaks.js"></script>
+<script type = "text/javascript" src="./js/waveform-data.min.js"></script>
+<script type = "text/javascript" src="./js/waveform.js"></script>
 </body>
 

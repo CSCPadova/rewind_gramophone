@@ -4,6 +4,7 @@ function GramophoneTools(){
 	this.equalizerFlag = false;
 	this.songDbFlag = false;
 	this.songDb2Flag = false;
+	this.waveFormFlag = false;
 	
 	// commands flag
 	this.rotationFlag = false;
@@ -14,33 +15,17 @@ function GramophoneTools(){
 	this.singleTrack = false;
 	this.json = false;
 	this.info = false;
-	this.playState = false;
 };
 
 
 
 GramophoneTools.prototype.play = function(){
-	
-	var $a  = jQuery.noConflict();
-	
-	// Check playback status
-		if(!this.playState)
-		{ 
-			// If gramophone status is NOT "PLAY", then turn into "PLAY"
-			pauseToPlay();
-			gram.playDisk();
-			
-		}
-		else
-		{	
-			// If gramophone status is "PLAY", then turn into "PAUSE"
-			playToPause();
-			stopArmAnimation();
-			
-		}
-		
-	
-	
+	/**
+	 * Modified behavior, a state machine start/stop
+	 * is already implemented in gram, here we don't need
+	 * another state machine
+	 */
+	gram.playDisk();
 };
 
 GramophoneTools.prototype.openInfo = function(){
@@ -63,6 +48,18 @@ GramophoneTools.prototype.openTool = function (tool){
 	var flag = false;
 	
 	switch(tool){
+		// waveform		
+        case 0:
+			$upPart = $ot("#waveFormTitle");
+			$part = $ot("#waveFormMenu");
+			$title = $ot("#openWaveForm");
+			flag = this.waveFormFlag;
+			if(this.waveFormFlag)
+				this.waveFormFlag = false;
+			else
+				this.waveFormFlag = true;
+			break;
+		
 		// commands
 		case 1:
 			$upPart = $ot("#controlsTitle");
@@ -189,7 +186,7 @@ GramophoneTools.prototype.openTool = function (tool){
 			else
 				this.correctionCurveFlag = true;
 			break;
-		
+
 		default:
 			alert("menu open error");
 			break;
@@ -384,29 +381,17 @@ stopVinylRotation = function(){
 
 
 playToPause = function(){
-	
-	
-	var $a = jQuery.noConflict();
-	
-	
 	setTimeout(function (){	
 		var $a = jQuery.noConflict();
 		$a("#play").rotate({animateTo:0});
 	},500);
-	this.playState = false;
-	
-	console.log("pause");
-
+	console.log("pause, stop rotation");
 };
 
 pauseToPlay = function(){
-			
 	var $a = jQuery.noConflict();		
-
 	$a("#play").rotate({animateTo:75, center: ["100%", "0%"]});
-	this.playState = true;
-	console.log("play");
-
+	console.log("play, start rotation");
 };
 
 stopArmAnimation = function(){
